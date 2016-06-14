@@ -32,10 +32,7 @@ std::vector<std::string> TextReader::getUrls()
 	std::ifstream file(_filePath);
 	std::string url;
 
-	std::regex urlRegex (
-			    R"(^(([^:\/?#]+):)?(//([^\/?#]*))?([^?#]*)(\?([^#]*))?(#(.*))?)",
-			    std::regex::extended
-			  );
+	std::regex urlRegex(".*\\..*");
 
 	std::smatch urlMatchResult;
 
