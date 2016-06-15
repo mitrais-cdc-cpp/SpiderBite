@@ -5,7 +5,7 @@ namespace Mitrais
 namespace util
 {
 
-BaseResponse::BaseResponse()
+BaseResponse::BaseResponse() : _status(false)
 {
 
 }

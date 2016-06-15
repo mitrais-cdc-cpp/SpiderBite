@@ -26,9 +26,9 @@ void TextReader::setFilePath(std::string filePath)
 	_filePath = filePath;
 }
 
-std::vector<std::string> TextReader::getUrls()
+std::vector<UrlTarget> TextReader::getUrls()
 {
-	std::vector<std::string> urls;
+	std::vector<UrlTarget> urls;
 
 	bool isFileExist = isExist(_filePath);
 
@@ -40,9 +40,9 @@ std::vector<std::string> TextReader::getUrls()
 	return urls;
 }
 
-std::vector<std::string> TextReader::getUrls(BaseResponse& response)
+std::vector<UrlTarget> TextReader::getUrls(BaseResponse& response)
 {
-	std::vector<std::string> urls;
+	std::vector<UrlTarget> urls;
 
 	try
 	{
@@ -50,7 +50,7 @@ std::vector<std::string> TextReader::getUrls(BaseResponse& response)
 
 		if (!isFileExist)
 		{
-			response.addMessage("The file : "+_filePath +" does not exist");
+			response.addMessage("The file : "+ _filePath +" does not exist");
 			response.updateStatus(false);
 			return urls;
 		}
@@ -69,14 +69,14 @@ std::vector<std::string> TextReader::getUrls(BaseResponse& response)
 	return urls;
 }
 
-std::vector<std::string> TextReader::getUrls(std::string filePath)
+std::vector<UrlTarget> TextReader::getUrls(std::string filePath)
 {
 	setFilePath(filePath);
 
 	return getUrls();
 }
 
-std::vector<std::string> TextReader::getUrls(std::string filePath, BaseResponse& response)
+std::vector<UrlTarget> TextReader::getUrls(std::string filePath, BaseResponse& response)
 {
 	setFilePath(filePath);
 
@@ -89,22 +89,28 @@ bool TextReader::isExist(std::string filePath)
 	 return (stat (filePath.c_str(), &buffer) == 0);
 }
 
-std::vector<std::string> TextReader::readFile()
+std::vector<UrlTarget> TextReader::readFile()
 {
-	std::vector<std::string> urls;
+	std::vector<UrlTarget> urls;
 
 	std::ifstream file(_filePath);
 	std::string url;
 
-	std::regex urlRegex(".*\\..*");
+	boost::regex urlRegex{".*\\..*"};
 
-	std::smatch urlMatchResult;
+	boost::smatch urlMatchResult;
 
 	while (std::getline(file, url))
 	{
-		if (std::regex_match(url, urlMatchResult, urlRegex))
+		if (boost::regex_match(url, urlMatchResult, urlRegex))
 		{
-			urls.push_back(url);
+			UrlTarget target;
+
+			target.Url = url;
+			target.LatestUrlPosition = url;
+			target.Status = NONE;
+
+			urls.push_back(target);
 		}
 	}
 

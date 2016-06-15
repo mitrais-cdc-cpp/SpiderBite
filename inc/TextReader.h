@@ -4,11 +4,12 @@
 #include <iostream>
 #include <string>
 #include <fstream>
-#include <regex>
+#include <boost/regex.hpp>
 #include <vector>
 #include <sys/stat.h>
 
 #include "BaseResponse.h"
+#include "UrlTarget.h"
 
 using namespace std;
 
@@ -26,15 +27,15 @@ public:
 	~TextReader();
 
 	void setFilePath(std::string filePath);
-	std::vector<std::string> getUrls();
-	std::vector<std::string> getUrls(BaseResponse& response);
-	std::vector<std::string> getUrls(std::string filePath);
-	std::vector<std::string> getUrls(std::string filePath, BaseResponse& response);
+	std::vector<UrlTarget> getUrls();
+	std::vector<UrlTarget> getUrls(BaseResponse& response);
+	std::vector<UrlTarget> getUrls(std::string filePath);
+	std::vector<UrlTarget> getUrls(std::string filePath, BaseResponse& response);
 
 private:
 	std::string _filePath;
 	bool isExist(std::string filePath);
-	std::vector<std::string> readFile();
+	std::vector<UrlTarget> readFile();
 };
 
 }
