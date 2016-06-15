@@ -32,12 +32,10 @@ std::vector<std::string> TextReader::getUrls()
 
 	bool isFileExist = isExist(_filePath);
 
-	if (!isFileExist)
+	if (isFileExist)
 	{
-		return urls;
+		urls = readFile();
 	}
-
-	urls = readFile();
 
 	return urls;
 }
