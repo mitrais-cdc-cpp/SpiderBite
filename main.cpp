@@ -9,15 +9,20 @@
 #include <fstream>
 #include <string>
 #include <boost/asio.hpp>
+#include "inc/MainUI.h"
 
 using namespace std;
 using namespace boost::asio;
+using namespace Mitrais::UI;
 using boost::asio::ip::tcp;
 
 int main(int argc, char* argv[])
 {
 	string serverName = "www.mitrais.com";
 	string pathName = "/en/about";
+
+	MainUI ab;
+	ab.activateUI(argc, argv);
 
 	try {
 		boost::asio::io_service io_service;
