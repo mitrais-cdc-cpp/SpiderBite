@@ -9,7 +9,7 @@
 #include <fstream>
 #include <string>
 #include <boost/asio.hpp>
-#include "inc/MainUI.h"
+#include "inc/ui/MainUI.h"
 
 using namespace std;
 using namespace boost::asio;

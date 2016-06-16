@@ -5,7 +5,7 @@
  *      Author: adityo_w
  */
 
-#include "../inc/MainUI.h"
+#include "../../inc/ui/MainUI.h"
 
 namespace Mitrais
 {
