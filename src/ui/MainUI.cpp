@@ -105,7 +105,7 @@ namespace Mitrais
 						}
 						else
 						{
-							url = "Socket connection into "+ target.Url + " is open\n"+
+							url = "Socket connection into "+ target.Url + " is close\n"+
 									"Skip " + target.Url +" this url target\n"+
 									"----------------------------------------------------------------------------\n";
 						}
