@@ -19,6 +19,8 @@ namespace Mitrais
 		{
 		}
 
+		GtkWidget *window;
+
 		/* Callback for start button */
 		static void onStartClicked (GtkWidget *button, GtkTextBuffer *buffer)
 		{
@@ -48,7 +50,25 @@ namespace Mitrais
 		/* Callback for open menu */
 		static void onOpenClicked(GtkWidget *widget)
 		{
-			g_print("File -> Open activated.\n");
+			GtkWidget *dialog;
+
+			dialog = gtk_file_chooser_dialog_new ("Chose file..",
+			     GTK_WINDOW(window),
+			     GTK_FILE_CHOOSER_ACTION_OPEN,
+			     GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+			     GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
+			     NULL);
+
+			   if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT)
+			   {
+			    char *filename;
+
+			    filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
+			    g_print(filename);
+			    g_free (filename);
+			   }
+
+			   gtk_widget_destroy (dialog);
 		}
 
 		/* Callback for quit menu */
@@ -60,7 +80,6 @@ namespace Mitrais
 
 		void MainUI::activateUI(int argc, char *argv[])
 		{
-			GtkWidget *window;
 			GtkWidget *vbox;
 			GtkWidget *hbtn_box;
 			GtkWidget *text_view;
@@ -103,7 +122,7 @@ namespace Mitrais
 			gtk_box_pack_start(GTK_BOX(vbox), menubar, FALSE, FALSE, 3);
 
 			//Connects GCallback function open_activated to "activate" signal for "open" menu item
-			g_signal_connect(G_OBJECT(open), "activate", G_CALLBACK(onOpenClicked), NULL);
+			g_signal_connect(G_OBJECT(open), "activate", G_CALLBACK(onOpenClicked), window);
 			//Connects GCallback function quit_activated to "activate" signal for "quit" menu item
 			g_signal_connect(G_OBJECT(quit), "activate", G_CALLBACK(onQuitClicked), NULL);
 
