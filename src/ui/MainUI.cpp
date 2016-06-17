@@ -11,6 +11,12 @@ namespace Mitrais
 {
 	namespace UI
 	{
+		GtkWidget *window;
+		GtkWidget *_start_btn;
+		GtkWidget *_stop_btn;
+
+		std::string _filePath;
+		
 		/**
 		 * Default constructor of MainUI
 		 */
@@ -25,6 +31,21 @@ namespace Mitrais
 		{
 		}
 
+		static void setButtonDisability()
+		{
+			if (_filePath.empty())
+			{
+				// enable start button
+				gtk_widget_set_sensitive (_start_btn, FALSE);
+				gtk_widget_set_sensitive (_stop_btn, FALSE);
+			}
+			else
+			{
+				gtk_widget_set_sensitive (_start_btn, TRUE);
+				gtk_widget_set_sensitive (_stop_btn, FALSE);
+			}
+		}
+		
 		/**
 		 * Callback method for start button
 		 * params button a GtkWidget pointer
@@ -32,10 +53,66 @@ namespace Mitrais
 		 */
 		static void onStartClicked (GtkWidget *button, GtkTextBuffer *buffer)
 		{
-			GtkTextIter ei;
+			// disable start button
+			gtk_widget_set_sensitive (button, FALSE);
 
-			gtk_text_buffer_get_end_iter(buffer, &ei);
-			gtk_text_buffer_insert(buffer, &ei, "basdbasbdapod", -1);
+			// check if the _filePath is empty or not
+			if (_filePath.empty())
+			{
+				// enable start button
+				gtk_widget_set_sensitive (button, TRUE);
+
+				return;
+			}
+
+			util::TextReader reader(_filePath);
+			util::BaseResponse response;
+			vector<util::UrlTarget> targets = reader.getUrls(response);
+
+			if (response.getStatus())
+			{
+				if (targets.size() > 0)
+				{
+					for(auto const& target: targets)
+					{
+						util::SocketConnection conn(target.Url);
+						bool isOpen = conn.isSocketOpen();
+
+						if (isOpen)
+						{
+							// TODO : Adit, please show info or message into text box like this:
+							// "Socket connection into "+ target.Url + " is open/n";
+
+							// TODO : Azis
+							// Call WebCrawler class and display the result into text box
+						}
+						else
+						{
+							// TODO : Adit, please show info or message into text box like this:
+							// "Socket connection into "+ target.Url + " is open/n";
+							// "Skip " + target.Url +" this url target/n".
+						}
+					}
+				}
+				else
+				{
+					// TODO : Adit, please show info or message into text box like this:
+					// "There is no URL records on " + _filePath + " file/n";
+				}
+			}
+			else
+			{
+				// TODO : Adit, please show info or message into text box like this:
+				// "Could not open " + _filePath + " file with the following error(s) : /n";
+				for(auto const& message: response.getMessages())
+				{
+					// TODO : Adit, please show info or message into text box like this:
+					// message;
+				}
+			}
+
+			// enable stop button
+			gtk_widget_set_sensitive (_stop_btn, TRUE);
 		}
 
 		/**
