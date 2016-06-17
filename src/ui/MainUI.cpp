@@ -41,16 +41,20 @@ namespace Mitrais
 			return cstr;
 		}
 
+		/*
+		 * Set enable or disable button based on file path (empty or not)
+		 */
 		static void setButtonDisability()
 		{
 			if (_filePath.empty())
 			{
-				// enable start button
+				// disable start and stop button
 				gtk_widget_set_sensitive (_start_btn, FALSE);
 				gtk_widget_set_sensitive (_stop_btn, FALSE);
 			}
 			else
 			{
+				// enable start and stop button
 				gtk_widget_set_sensitive (_start_btn, TRUE);
 				gtk_widget_set_sensitive (_stop_btn, FALSE);
 			}
@@ -149,6 +153,13 @@ namespace Mitrais
 		 */
 		static void onStopClicked (GtkWidget *button, GtkTextBuffer *buffer)
 		{
+			// disable stop button
+			gtk_widget_set_sensitive (button, FALSE);
+
+			// TODO : Azis, stop the web crawler process and update the status
+
+			// enable start button
+			gtk_widget_set_sensitive (_start_btn, TRUE);
 		}
 
 		/**
