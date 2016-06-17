@@ -52,9 +52,8 @@ namespace Mitrais
 		 * Callback method for open menu
 		 * params button a GtkWidget pointer
 		 */
-		static void onOpenClicked(GtkWidget *widget)
+		static void onOpenClicked(GtkWidget *widget, GtkWidget *window)
 		{
-
 			GtkWidget *dialog;
 
 			dialog = gtk_file_chooser_dialog_new ("Chose file..",
@@ -135,7 +134,7 @@ namespace Mitrais
 			gtk_box_pack_start(GTK_BOX(vbox), menubar, FALSE, FALSE, 3);
 
 			//Connects GCallback function open_activated to "activate" signal for "open" menu item
-			g_signal_connect(G_OBJECT(open), "activate", G_CALLBACK(onOpenClicked), NULL);
+			g_signal_connect(G_OBJECT(open), "activate", G_CALLBACK(onOpenClicked), window);
 			//Connects GCallback function quit_activated to "activate" signal for "quit" menu item
 			g_signal_connect(G_OBJECT(quit), "activate", G_CALLBACK(onQuitClicked), NULL);
 
