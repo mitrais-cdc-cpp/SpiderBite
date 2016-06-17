@@ -38,6 +38,12 @@ namespace Mitrais
 			 * params argv an array of chars pointer
 			 */
 			void activateUI(int argc, char *argv[]);
+
+			/**
+			 * convert std string to char pointer
+			 * params str an std string
+			 */
+			char* convertStringToPChar(string str);
 		};
 	}
 } //namespace Mitrais::UI
