@@ -11,6 +11,12 @@ namespace Mitrais
 {
 	namespace UI
 	{
+		GtkWidget *window;
+		GtkWidget *_start_btn;
+		GtkWidget *_stop_btn;
+
+		std::string _filePath;
+
 		MainUI::MainUI()
 		{
 		}
@@ -19,27 +25,84 @@ namespace Mitrais
 		{
 		}
 
-		GtkWidget *window;
+		static void setButtonDisability()
+		{
+			if (_filePath.empty())
+			{
+				// enable start button
+				gtk_widget_set_sensitive (_start_btn, FALSE);
+				gtk_widget_set_sensitive (_stop_btn, FALSE);
+			}
+			else
+			{
+				gtk_widget_set_sensitive (_start_btn, TRUE);
+				gtk_widget_set_sensitive (_stop_btn, FALSE);
+			}
+		}
 
 		/* Callback for start button */
 		static void onStartClicked (GtkWidget *button, GtkTextBuffer *buffer)
 		{
-			GtkTextIter start;
-			GtkTextIter end;
+			// disable start button
+			gtk_widget_set_sensitive (button, FALSE);
 
-			gchar *text;
+			// check if the _filePath is empty or not
+			if (_filePath.empty())
+			{
+				// enable start button
+				gtk_widget_set_sensitive (button, TRUE);
 
-			/* Obtain iters for the start and end of points of the buffer */
-			gtk_text_buffer_get_start_iter (buffer, &start);
-			gtk_text_buffer_get_end_iter (buffer, &end);
+				return;
+			}
 
-			/* Get the entire buffer text. */
-			text = gtk_text_buffer_get_text (buffer, &start, &end, FALSE);
+			util::TextReader reader(_filePath);
+			util::BaseResponse response;
+			vector<util::UrlTarget> targets = reader.getUrls(response);
 
-			/* Print the text */
-			g_print ("%s\n", text);
+			if (response.getStatus())
+			{
+				if (targets.size() > 0)
+				{
+					for(auto const& target: targets)
+					{
+						util::SocketConnection conn(target.Url);
+						bool isOpen = conn.isSocketOpen();
 
-			g_free (text);
+						if (isOpen)
+						{
+							// TODO : Adit, please show info or message into text box like this:
+							// "Socket connection into "+ target.Url + " is open/n";
+
+							// TODO : Azis
+							// Call WebCrawler class and display the result into text box
+						}
+						else
+						{
+							// TODO : Adit, please show info or message into text box like this:
+							// "Socket connection into "+ target.Url + " is open/n";
+							// "Skip " + target.Url +" this url target/n".
+						}
+					}
+				}
+				else
+				{
+					// TODO : Adit, please show info or message into text box like this:
+					// "There is no URL records on " + _filePath + " file/n";
+				}
+			}
+			else
+			{
+				// TODO : Adit, please show info or message into text box like this:
+				// "Could not open " + _filePath + " file with the following error(s) : /n";
+				for(auto const& message: response.getMessages())
+				{
+					// TODO : Adit, please show info or message into text box like this:
+					// message;
+				}
+			}
+
+			// enable stop button
+			gtk_widget_set_sensitive (_stop_btn, TRUE);
 		}
 
 		/*Callback for stop button*/
@@ -59,16 +122,18 @@ namespace Mitrais
 			     GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
 			     NULL);
 
-			   if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT)
-			   {
-			    char *filename;
+		   if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT)
+		   {
+				char *filename;
 
-			    filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
-			    g_print(filename);
-			    g_free (filename);
-			   }
+				filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
+				_filePath = string(filename);
+				g_free (filename);
+		   }
 
-			   gtk_widget_destroy (dialog);
+		   setButtonDisability();
+
+		   gtk_widget_destroy (dialog);
 		}
 
 		/* Callback for quit menu */
@@ -77,22 +142,17 @@ namespace Mitrais
 			gtk_main_quit ();
 		}
 
-
 		void MainUI::activateUI(int argc, char *argv[])
 		{
 			GtkWidget *vbox;
 			GtkWidget *hbtn_box;
 			GtkWidget *text_view;
-			GtkWidget *start_btn;
-			GtkWidget *stop_btn;
 			GtkTextBuffer *buffer;
-
 			GtkWidget *menubar;
 			GtkWidget *filemenu;
 			GtkWidget *file;
 			GtkWidget *open;
 			GtkWidget *quit;
-
 
 			gtk_init (&argc, &argv);
 
@@ -135,7 +195,7 @@ namespace Mitrais
 			/* Obtaining the buffer associated with the widget. */
 			buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (text_view));
 			/* Set the default buffer text. */
-			gtk_text_buffer_set_text (buffer, "Hello Text View!", -1);
+			gtk_text_buffer_set_text (buffer, "Test", -1);
 
 			/* Create a horizontal button box */
 			hbtn_box = gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
@@ -143,18 +203,20 @@ namespace Mitrais
 			gtk_container_add (GTK_CONTAINER (vbox), hbtn_box);
 
 			/* Create a start button. */
-			start_btn = gtk_button_new_with_label ("Start");
-			gtk_box_pack_start (GTK_BOX (hbtn_box), start_btn, TRUE, FALSE, 0);
-			g_signal_connect (G_OBJECT (start_btn), "clicked",
+			_start_btn = gtk_button_new_with_label ("Start");
+			gtk_box_pack_start (GTK_BOX (hbtn_box), _start_btn, TRUE, FALSE, 0);
+			g_signal_connect (G_OBJECT (_start_btn), "clicked",
 							G_CALLBACK (onStartClicked),
 							buffer);
 
 			/* Create a stop button. */
-			stop_btn = gtk_button_new_with_label ("Stop");
-			gtk_box_pack_start (GTK_BOX (hbtn_box), stop_btn, TRUE, FALSE, 0);
-			g_signal_connect (G_OBJECT (stop_btn), "clicked",
+			_stop_btn = gtk_button_new_with_label ("Stop");
+			gtk_box_pack_start (GTK_BOX (hbtn_box), _stop_btn, TRUE, FALSE, 0);
+			g_signal_connect (G_OBJECT (_stop_btn), "clicked",
 							G_CALLBACK (onStopClicked),
 							buffer);
+
+			setButtonDisability();
 
 			gtk_widget_show_all (window);
 

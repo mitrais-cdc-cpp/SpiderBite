@@ -10,6 +10,11 @@
 
 #include <gtk/gtk.h>
 
+#include "../TextReader.h"
+#include "../SocketConnection.h"
+
+using namespace Mitrais;
+
 namespace Mitrais
 {
 	namespace UI
