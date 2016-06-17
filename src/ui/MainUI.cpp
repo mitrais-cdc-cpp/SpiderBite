@@ -38,8 +38,6 @@ namespace Mitrais
 			g_print ("%s\n", text);
 
 			g_free (text);
-
-			gtk_main_quit ();
 		}
 
 		/*Callback for stop button*/
@@ -56,8 +54,9 @@ namespace Mitrais
 		/* Callback for quit menu */
 		static void onQuitClicked (GtkWidget *widget, gpointer data)
 		{
-		  gtk_main_quit ();
+			gtk_main_quit ();
 		}
+
 
 		void MainUI::activateUI(int argc, char *argv[])
 		{
