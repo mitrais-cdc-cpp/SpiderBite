@@ -11,53 +11,66 @@ namespace Mitrais
 {
 	namespace UI
 	{
+		/**
+		 * Default constructor of MainUI
+		 */
 		MainUI::MainUI()
 		{
 		}
 
+		/**
+		 * Destroyer of MainUI
+		 */
 		MainUI::~MainUI()
 		{
 		}
 
-		/* Callback for start button */
+		/**
+		 * Callback method for start button
+		 * params button a GtkWidget pointer
+		 * params buffer a GtkTextBuffer pointer
+		 */
 		static void onStartClicked (GtkWidget *button, GtkTextBuffer *buffer)
 		{
-			GtkTextIter start;
-			GtkTextIter end;
+			GtkTextIter ei;
 
-			gchar *text;
-
-			/* Obtain iters for the start and end of points of the buffer */
-			gtk_text_buffer_get_start_iter (buffer, &start);
-			gtk_text_buffer_get_end_iter (buffer, &end);
-
-			/* Get the entire buffer text. */
-			text = gtk_text_buffer_get_text (buffer, &start, &end, FALSE);
-
-			/* Print the text */
-			g_print ("%s\n", text);
-
-			g_free (text);
+			gtk_text_buffer_get_end_iter(buffer, &ei);
+			gtk_text_buffer_insert(buffer, &ei, "basdbasbdapod", -1);
 		}
 
-		/*Callback for stop button*/
+		/**
+		 * Callback method for stop button
+		 * params button a GtkWidget pointer
+		 * params buffer a GtkTextBuffer pointer
+		 */
 		static void onStopClicked (GtkWidget *button, GtkTextBuffer *buffer)
 		{
+			g_print("Stop activated.\n");
 		}
 
-		/* Callback for open menu */
+		/**
+		 * Callback method for open menu
+		 * params button a GtkWidget pointer
+		 */
 		static void onOpenClicked(GtkWidget *widget)
 		{
-			g_print("File -> Open activated.\n");
+
 		}
 
-		/* Callback for quit menu */
-		static void onQuitClicked (GtkWidget *widget, gpointer data)
+		/**
+		 * Callback method for quit menu
+		 * params widget a GtkWidget pointer
+		 */
+		static void onQuitClicked (GtkWidget *widget)
 		{
 			gtk_main_quit ();
 		}
 
-
+		/**
+		 * Activates the UI
+		 * params argc an integer
+		 * params argv an array of chars pointer
+		 */
 		void MainUI::activateUI(int argc, char *argv[])
 		{
 			GtkWidget *window;
@@ -116,7 +129,7 @@ namespace Mitrais
 			/* Obtaining the buffer associated with the widget. */
 			buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (text_view));
 			/* Set the default buffer text. */
-			gtk_text_buffer_set_text (buffer, "Hello Text View!", -1);
+			gtk_text_buffer_set_text (buffer, "22Hello!", -1);
 
 			/* Create a horizontal button box */
 			hbtn_box = gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);

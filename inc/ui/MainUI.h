@@ -17,10 +17,22 @@ namespace Mitrais
 		class MainUI
 		{
 			public:
-				MainUI();
-				~MainUI();
+			/**
+			 * Default constructor of MainUI
+			 */
+			MainUI();
 
-				void activateUI(int argc, char *argv[]);
+			/**
+			 * Destroyer of MainUI
+			 */
+			~MainUI();
+
+			/**
+			 * Activates the UI
+			 * params argc an integer
+			 * params argv an array of chars pointer
+			 */
+			void activateUI(int argc, char *argv[]);
 		};
 	}
 } //namespace Mitrais::UI
