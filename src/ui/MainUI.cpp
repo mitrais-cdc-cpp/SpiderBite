@@ -221,6 +221,13 @@ namespace Mitrais
 
 			gtk_init (&argc, &argv);
 
+			// check the number of argument, if the argument is more than 1
+			if (argc > 1)
+			{
+				// set the second argument as file path
+				_filePath = string(argv[1]);
+			}
+
 			/* Create a Window. */
 			window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 			gtk_window_set_title (GTK_WINDOW (window), "Spiderbite");
