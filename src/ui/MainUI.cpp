@@ -72,6 +72,9 @@ namespace Mitrais
 			gchar* text;
 			GtkTextIter ei;
 
+			// clear the buffer before begin the process
+			gtk_text_buffer_set_text (buffer, "", -1);
+
 			// disable start button
 			gtk_widget_set_sensitive (button, FALSE);
 
