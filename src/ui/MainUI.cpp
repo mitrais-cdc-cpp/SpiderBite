@@ -13,6 +13,7 @@ namespace Mitrais
 	{
 		GtkWidget *_start_btn;
 		GtkWidget *_stop_btn;
+		GtkTextBuffer *_buffer;
 
 		std::string _filePath;
 
@@ -28,21 +29,6 @@ namespace Mitrais
 		 */
 		MainUI::~MainUI()
 		{
-		}
-
-		/**
-		 * check the parameter
-		 * @param int argc (number of parameter that to be passed)
-		 * @param char* argv (the parameter value that be passed)
-		 */
-		void checkParameter(int argc, char* argv[])
-		{
-			// check the number of argument, if the argument is more than 1
-			if (argc > 1)
-			{
-				// set the second argument as file path
-				_filePath = string(argv[1]);
-			}
 		}
 
 		/**
@@ -217,6 +203,24 @@ namespace Mitrais
 		}
 
 		/**
+		 * check the parameter
+		 * @param int argc (number of parameter that to be passed)
+		 * @param char* argv (the parameter value that be passed)
+		 */
+		void checkParameter(int argc, char* argv[])
+		{
+			// check the number of argument, if the argument is more than 1
+			if (argc > 1)
+			{
+				// set the second argument as file path
+				_filePath = string(argv[1]);
+
+				// press start button
+				onStartClicked(_start_btn, _buffer);
+			}
+		}
+
+		/**
 		 * Activates the UI
 		 * params argc an integer
 		 * params argv an array of chars pointer
@@ -227,7 +231,6 @@ namespace Mitrais
 			GtkWidget *vbox;
 			GtkWidget *hbtn_box;
 			GtkWidget *text_view;
-			GtkTextBuffer *buffer;
 			GtkWidget *menubar;
 			GtkWidget *filemenu;
 			GtkWidget *file;
@@ -235,8 +238,6 @@ namespace Mitrais
 			GtkWidget *quit;
 
 			gtk_init (&argc, &argv);
-
-			checkParameter(argc, argv);
 
 			/* Create a Window. */
 			window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
@@ -275,9 +276,9 @@ namespace Mitrais
 			gtk_box_pack_start (GTK_BOX (vbox), text_view, TRUE, TRUE, 0);
 
 			/* Obtaining the buffer associated with the widget. */
-			buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (text_view));
+			_buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (text_view));
 			/* Set the default buffer text. */
-			gtk_text_buffer_set_text (buffer, "", -1);
+			gtk_text_buffer_set_text (_buffer, "", -1);
 
 			/* Create a horizontal button box */
 			hbtn_box = gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
@@ -289,16 +290,18 @@ namespace Mitrais
 			gtk_box_pack_start (GTK_BOX (hbtn_box), _start_btn, TRUE, FALSE, 0);
 			g_signal_connect (G_OBJECT (_start_btn), "clicked",
 							G_CALLBACK (onStartClicked),
-							buffer);
+							_buffer);
 
 			/* Create a stop button. */
 			_stop_btn = gtk_button_new_with_label ("Stop");
 			gtk_box_pack_start (GTK_BOX (hbtn_box), _stop_btn, TRUE, FALSE, 0);
 			g_signal_connect (G_OBJECT (_stop_btn), "clicked",
 							G_CALLBACK (onStopClicked),
-							buffer);
+							_buffer);
 
 			setButtonDisability();
+
+			checkParameter(argc, argv);
 
 			gtk_widget_show_all (window);
 
