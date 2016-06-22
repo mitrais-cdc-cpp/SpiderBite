@@ -8,11 +8,11 @@ set(_ECLIPSE_VERSION "4.5")
 ###############################################################################
 
 file(GLOB SOURCES
-	main.cpp
-	inc/*.h
-	inc/ui/*.h
-	src/*.cpp
-	src/ui/*.cpp)
+ main.cpp
+ inc/*.h
+ inc/ui/*.h
+ src/*.cpp
+ src/ui/*.cpp)
 
 #to take control which files are used, dont go recursive through
 #file(GLOB_RECURSE SOURCES src/*.cpp inc/*.h)
@@ -55,6 +55,14 @@ set_property(TARGET SpiderBite PROPERTY CXX_STANDARD_REQUIRED ON)
 ## dependencies ###############################################################
 ###############################################################################
 
+# Curl
+include(FindCURL)
+find_package(CURL REQUIRED)
+
+if (NOT CURL_FOUND)
+  message (FATAL_ERROR "Curl is not supported")
+endif (NOT CURL_FOUND)
+
 # GTK+
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(GTK3 REQUIRED gtk+-3.0)
@@ -70,7 +78,6 @@ find_package(Boost 1.61 EXACT COMPONENTS system regex REQUIRED)
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads REQUIRED)
 
-
-include_directories(${GTK3_INCLUDE_DIRS} ${Boost_INCLUDE_DIRS})
-link_directories(${GTK3_LIBRARY_DIRS} ${Boost_LIBRARIES})
-target_link_libraries(SpiderBite ${GTK3_LIBRARIES} ${Boost_LIBRARIES} Threads::Threads)
+include_directories(${GTK3_INCLUDE_DIRS} ${Boost_INCLUDE_DIRS} ${CURL_INCLUDE_DIRS})
+link_directories(${GTK3_LIBRARY_DIRS} ${Boost_LIBRARIES} ${Curl_LIBRARIES})
+target_link_libraries(SpiderBite ${GTK3_LIBRARIES} ${Boost_LIBRARIES} ${CURL_LIBRARIES} Threads::Threads)

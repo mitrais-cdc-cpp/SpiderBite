@@ -194,6 +194,8 @@ namespace Mitrais
 		   setButtonDisability();
 
 		   gtk_widget_destroy (dialog);
+
+
 		}
 
 		/**

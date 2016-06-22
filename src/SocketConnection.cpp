@@ -20,9 +20,10 @@ SocketConnection::SocketConnection()
  * @serverName: the server name
  */
 
-SocketConnection::SocketConnection(std::string serverName)
+SocketConnection::SocketConnection(std::string serverName) :
+		_serverName(serverName)
 {
-	_serverName = serverName;
+
 }
 
 /**
@@ -94,9 +95,9 @@ bool SocketConnection::isSocketOpen()
 
 bool SocketConnection::isSocketOpen(std::string serverName)
 {
-	SocketConnection::setServerName(serverName);
+	setServerName(serverName);
 
-	return SocketConnection::isSocketOpen();
+	return isSocketOpen();
 }
 
 }}/* namespace Mitrais::util */
