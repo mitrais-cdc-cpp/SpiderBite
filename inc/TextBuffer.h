@@ -20,15 +20,37 @@ namespace Mitrais
 		class TextBuffer
 		{
 			public:
-
+				/**
+				 * Default constructor of TextBuffer class
+				 */
 				TextBuffer();
+
+				/**
+				 * Default destroyer of TextBuffer class
+				 */
 				~TextBuffer();
 
+				/**
+				 * Insert the stored string to a buffer
+				 *
+				 * @str the stored text
+				 */
 				void insertContentToBuffer(string str);
+
+				/**
+				 * Get the full content of text which stored in the buffer
+				 */
 				string getFullContent();
 
 			private:
+				/**
+				 * The iterator
+				 */
 				vector<string>::iterator it;
+
+				/**
+				 * The collection of string as a buffer
+				 */
 				vector<string> _stringBuffer;
 		};
 	}
