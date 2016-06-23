@@ -1,30 +1,17 @@
-/*
- * TestSocketConnection.cpp
- *
- *  Created on: Jun 16, 2016
- *      Author: Ari Suarkadipa
- */
-
 #include "TestSocketConnection.h"
+#include "../inc/SocketConnection.h"
 
-namespace Mitrais
+
+void TestSocketConnection::testSocketConnectionOne()
 {
-namespace test
-{
-	/**
-	 * Constructor of test socket connection
-	 */
-	TestSocketConnection::TestSocketConnection()
-	{
-
-	}
-
-	/**
-	 * Destructor of test socket connection
-	 */
-	TestSocketConnection::~TestSocketConnection()
-	{
-
-	}
+	Mitrais::util::SocketConnection test("www.google.com");
+	bool isOpen = test.isSocketOpen();
+	CPPUNIT_ASSERT(isOpen==true);
 }
+
+void TestSocketConnection::testSocketConnectionTwo()
+{
+	Mitrais::util::SocketConnection test("http://www.google.com");
+	bool isOpen = test.isSocketOpen();
+	CPPUNIT_ASSERT(isOpen==false);
 }
