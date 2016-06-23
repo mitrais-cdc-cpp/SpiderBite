@@ -8,36 +8,22 @@
 #ifndef TEST_TEXTBUFFERTEST_H_
 #define TEST_TEXTBUFFERTEST_H_
 
-#include <cppunit/TestCase.h>
+#include <cppunit/TestFixture.h>
+#include <cppunit/extensions/HelperMacros.h>
 #include "../inc/TextBuffer.h"
 
-using namespace Mitrais::util;
-
-namespace Mitrais
+class TextBufferTest : public CppUnit::TestFixture
 {
-namespace test
-{
-	class TextBufferTest : public CppUnit::TestCase
-	{
-		public:
-			TextBufferTest();
-			~TextBufferTest();
+	public:
+		CPPUNIT_TEST_SUITE(TextBufferTest);
+		CPPUNIT_TEST(testTextBufferOne);
+		CPPUNIT_TEST(testTextBufferTwo);
+		CPPUNIT_TEST_SUITE_END();
 
-			void runTest()
-			{
-				string test_data1="This is the first paragraph";
-				string test_data2="This is the second paragraph";
-				TextBuffer buffer;
-
-				string result = test_data1.append(test_data2);
-				buffer.insertContentToBuffer(test_data1);
-				buffer.insertContentToBuffer(test_data2);
-
-				CPPUNIT_ASSERT(buffer.getFullContent() == result);
-			}
-	};
-
-}
-}
+	private:
+		void testTextBufferOne();
+		void testTextBufferTwo();
+};
+CPPUNIT_TEST_SUITE_REGISTRATION( TextBufferTest );
 
 #endif /* TEST_TEXTBUFFERTEST_H_ */
