@@ -258,9 +258,9 @@ namespace Mitrais
 			text = gtk_text_buffer_get_text(_buffer, start, end, TRUE);
 
 			//TODO: save to file -->error
-			//util::TextWriter writer(_filePath, text);
-			//util::BaseResponse response;
-			//writer.writeToFile(response);
+//			Mitrais::util::TextWriter writer(_filePath, "makan");
+//			Mitrais::util::BaseResponse response;
+//			writer.writeToFile(response);
 
 		}
 

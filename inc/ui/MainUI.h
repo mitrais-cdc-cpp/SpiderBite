@@ -13,8 +13,10 @@
 #include "../TextReader.h"
 #include "../TextBuffer.h"
 #include "../SocketConnection.h"
+#include "../TextWriter.h"
 
 using namespace Mitrais;
+using namespace Mitrais::util;
 
 namespace Mitrais
 {

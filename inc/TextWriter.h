@@ -11,6 +11,9 @@
 #include <iostream>
 #include <fstream>
 #include "BaseResponse.h"
+#include <sys/stat.h>
+
+using namespace std;
 
 namespace Mitrais {
 namespace util {

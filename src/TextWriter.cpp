@@ -5,84 +5,82 @@
  *      Author: Andi_y
  */
 
-#include "inc/TextWriter.h"
-
-using namespace std;
+#include "../inc/TextWriter.h"
 
 namespace Mitrais {
-namespace util {
+	namespace util {
 
-ofstream fileStream;
+		std::ofstream fileStream;
 
-TextWriter::TextWriter()
-{
-
-}
-
-TextWriter::TextWriter(string filepath)
-{
-	_file(filepath);
-}
-
-TextWriter::TextWriter(string filepath, string content)
-{
-	_file(filepath);
-	_content(content);
-}
-
-void TextWriter::setContent(string value)
-{
-	_content(value);
-}
-
-void TextWriter::setFilePath(string value)
-{
-	_file(value);
-}
-
-void TextWriter::writeToFile(BaseResponse& response)
-{
-	if (isFileExist())
-	{
-		try
+		TextWriter::TextWriter()
 		{
-			fileStream.open(_file.c_str(), ios::trunc);
 
-			if(fileStream.is_open())
-			{
-				fileStream << _content;
-				fileStream.close();
+		}
 
-				response.updateStatus(true);
-				response.addSuccessMessage();
-			}
-			else
+		TextWriter::TextWriter(std::string filepath) :
+				_file(filepath)
+		{
+
+		}
+
+		TextWriter::TextWriter(std::string filepath, std::string content) :
+				_file(filepath),
+					_content(content)
+		{
+
+		}
+
+		void TextWriter::setContent(std::string value)
+		{
+			_content = value;
+		}
+
+		void TextWriter::setFilePath(std::string value)
+		{
+			_file = value;
+		}
+
+		void TextWriter::writeToFile(BaseResponse& response)
+		{
+			if (isFileExist())
 			{
-				response.addMessage("Unable to open " + _file);
-				response.updateStatus(false);
+				try
+				{
+					fileStream.open(_file.c_str(), std::ios::trunc);
+
+					if(fileStream.is_open())
+					{
+						fileStream << _content;
+						fileStream.close();
+
+						response.updateStatus(true);
+						response.addSuccessMessage();
+					}
+					else
+					{
+						response.addMessage("Unable to open " + _file);
+						response.updateStatus(false);
+					}
+				}
+				catch (std::exception& ex)
+				{
+					response.addMessage(ex.what());
+					response.updateStatus(false);
+				}
 			}
 		}
-		catch (std::exception& ex)
+
+		bool TextWriter::isFileExist()
 		{
-			response.addMessage(ex.what());
-			response.updateStatus(false);
+			if (!_file.empty())
+			{
+				struct stat buffer;
+				return (stat(_file.c_str(), &buffer) == 0);
+			}
+
+			return false;
 		}
 	}
-}
-
-bool TextWriter::isFileExist()
-{
-	if (!_file.empty())
-	{
-		struct stat buffer;
-		return (stat(_file.c_str(), &buffer) == 0);
-	}
-
-	return false;
-}
-
-
-}
 }
 
 
