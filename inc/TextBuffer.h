@@ -26,6 +26,13 @@ namespace Mitrais
 				TextBuffer();
 
 				/**
+				 * Constructor of TextBuffer class
+				 *
+				 * @buffer The string buffer
+				 */
+				TextBuffer(vector<string> buffer);
+
+				/**
 				 * Default destroyer of TextBuffer class
 				 */
 				~TextBuffer();

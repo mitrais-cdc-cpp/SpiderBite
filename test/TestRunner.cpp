@@ -19,6 +19,8 @@ namespace test
 		CppUnit::TextUi::TestRunner runner;
 		runner.addTest(new TestSocketConnection());
 		runner.addTest(new TextReaderTest());
+		runner.addTest(new TextBufferTest());
+
 		runner.run();
 
 		return 0;
