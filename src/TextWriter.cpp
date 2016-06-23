@@ -17,6 +17,11 @@ namespace Mitrais {
 
 		}
 
+		TextWriter::~TextWriter()
+		{
+
+		}
+
 		TextWriter::TextWriter(std::string filepath) :
 				_file(filepath)
 		{
@@ -69,6 +74,36 @@ namespace Mitrais {
 				}
 			}
 		}
+
+		void TextWriter::writeAsHtmlFile(BaseResponse& response)
+				{
+					if (isFileExist())
+					{
+						try
+						{
+							fileStream.open(_file.c_str(), std::ios::trunc);
+
+							if(fileStream.is_open())
+							{
+								fileStream << _content;
+								fileStream.close();
+
+								response.updateStatus(true);
+								response.addSuccessMessage();
+							}
+							else
+							{
+								response.addMessage("Unable to open " + _file);
+								response.updateStatus(false);
+							}
+						}
+						catch (std::exception& ex)
+						{
+							response.addMessage(ex.what());
+							response.updateStatus(false);
+						}
+					}
+				}
 
 		bool TextWriter::isFileExist()
 		{
