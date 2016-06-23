@@ -4,6 +4,8 @@
 
 #include "TestSocketConnection.h"
 #include "../inc/SocketConnection.h"
+#include "TestTextReader.h"
+#include "../inc/TextReader.h"
 
 using namespace Mitrais::util;
 
