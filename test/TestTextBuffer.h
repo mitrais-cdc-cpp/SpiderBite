@@ -5,17 +5,17 @@
  *      Author: developer
  */
 
-#ifndef TEST_TEXTBUFFERTEST_H_
-#define TEST_TEXTBUFFERTEST_H_
+#ifndef TEST_TESTTEXTBUFFER_H_
+#define TEST_TESTTEXTBUFFER_H_
 
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include "../inc/TextBuffer.h"
 
-class TextBufferTest : public CppUnit::TestFixture
+class TestTextBuffer : public CppUnit::TestFixture
 {
 	public:
-		CPPUNIT_TEST_SUITE(TextBufferTest);
+		CPPUNIT_TEST_SUITE(TestTextBuffer);
 		CPPUNIT_TEST(testTextBufferOne);
 		CPPUNIT_TEST(testTextBufferTwo);
 		CPPUNIT_TEST_SUITE_END();
@@ -24,6 +24,6 @@ class TextBufferTest : public CppUnit::TestFixture
 		void testTextBufferOne();
 		void testTextBufferTwo();
 };
-CPPUNIT_TEST_SUITE_REGISTRATION( TextBufferTest );
+CPPUNIT_TEST_SUITE_REGISTRATION( TestTextBuffer );
 
-#endif /* TEST_TEXTBUFFERTEST_H_ */
+#endif /* TEST_TESTTEXTBUFFER_H_ */

@@ -5,10 +5,10 @@
  *      Author: developer
  */
 
-#include "TextBufferTest.h"
 #include "../inc/TextBuffer.h"
+#include "TestTextBuffer.h"
 
-void TextBufferTest::testTextBufferOne()
+void TestTextBuffer::testTextBufferOne()
 {
 	string test_data1="This is the first paragraph";
 	string test_data2="This is the second paragraph";
@@ -20,10 +20,11 @@ void TextBufferTest::testTextBufferOne()
 	string result = test_data1.append(test_data2);
 	string content = buffer.getFullContent();
 
-	CPPUNIT_ASSERT(content == result);
+	bool isTrue = content.compare(result);
+	CPPUNIT_ASSERT(isTrue == 0);
 }
 
-void TextBufferTest::testTextBufferOne()
+void TestTextBuffer::testTextBufferTwo()
 {
 	string test_data1="This is the first paragraph";
 	string test_data2="This is the second paragraph";
@@ -34,6 +35,7 @@ void TextBufferTest::testTextBufferOne()
 	string result = test_data1.append(test_data2);
 	string content = buffer.getFullContent();
 
-	CPPUNIT_ASSERT(content != result);
+	bool isFalse = content.compare(result);
+	CPPUNIT_ASSERT(isFalse == 1);
 }
 
