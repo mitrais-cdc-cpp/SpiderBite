@@ -14,6 +14,8 @@ namespace Mitrais
 		GtkWidget *_start_btn;
 		GtkWidget *_stop_btn;
 		GtkTextBuffer *_buffer;
+		GtkWidget *text_view;
+		GtkWidget *save;
 
 		std::string _filePath;
 
@@ -25,7 +27,7 @@ namespace Mitrais
 		}
 
 		/**
-		 * Destroyer of MainUI
+		 * Destroyer of MainUIl
 		 */
 		MainUI::~MainUI()
 		{
@@ -61,6 +63,36 @@ namespace Mitrais
 			}
 		}
 
+
+		/**
+		* Display file content to UI
+		*/
+		void displayFileContent()
+		{
+			//set textview editable
+			gtk_text_view_set_editable (GTK_TEXT_VIEW (text_view), TRUE);
+			gtk_text_view_set_cursor_visible (GTK_TEXT_VIEW (text_view), TRUE);
+
+			// clear the buffer before begin the process
+			gtk_text_buffer_set_text (_buffer, "", -1);
+
+			util::TextReader reader(_filePath);
+			util::BaseResponse response;
+			vector<util::UrlTarget> targets = reader.getUrls(response);
+
+			gchar* text;
+			string url;
+
+			for(auto const& target: targets) {
+				url += (target.Url + "\n");
+			}
+
+			text = convertStringToPChar(url);
+			_buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (text_view));
+			gtk_text_buffer_set_text (_buffer, text, -1);
+
+		}
+
 		/**
 		 * Callback method for start button
 		 * params button a GtkWidget pointer
@@ -71,6 +103,10 @@ namespace Mitrais
 			string url;
 			gchar* text;
 			GtkTextIter ei;
+
+			//set textview readonly
+			gtk_text_view_set_editable (GTK_TEXT_VIEW (text_view), FALSE);
+			gtk_text_view_set_cursor_visible (GTK_TEXT_VIEW (text_view), FALSE);
 
 			// clear the buffer before begin the process
 			gtk_text_buffer_set_text (buffer, "", -1);
@@ -192,6 +228,7 @@ namespace Mitrais
 		   }
 
 		   setButtonDisability();
+		   displayFileContent();
 
 		   gtk_widget_destroy (dialog);
 
@@ -205,6 +242,26 @@ namespace Mitrais
 		static void onQuitClicked (GtkWidget *widget, gpointer data)
 		{
 			gtk_main_quit ();
+		}
+
+		static void onSaveClicked(GtkWidget *widget, gpointer data)
+		{
+			_buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (text_view));
+			GtkTextIter *start;
+			GtkTextIter *end;
+			gchar *text;
+
+			gtk_text_buffer_get_start_iter(_buffer, start);
+			gtk_text_buffer_get_end_iter(_buffer, end);
+
+
+			text = gtk_text_buffer_get_text(_buffer, start, end, TRUE);
+
+			//TODO: save to file -->error
+			//util::TextWriter writer(_filePath, text);
+			//util::BaseResponse response;
+			//writer.writeToFile(response);
+
 		}
 
 		/**
@@ -235,7 +292,7 @@ namespace Mitrais
 			GtkWidget *window;
 			GtkWidget *vbox;
 			GtkWidget *hbtn_box;
-			GtkWidget *text_view;
+
 			GtkWidget *menubar;
 			GtkWidget *filemenu;
 			GtkWidget *file;
@@ -262,11 +319,17 @@ namespace Mitrais
 			filemenu = gtk_menu_new();
 			file = gtk_menu_item_new_with_label("File");
 			open = gtk_menu_item_new_with_label("Open");
+			save = gtk_menu_item_new_with_label("Save");
 			quit = gtk_menu_item_new_with_label("Quit");
+
+
+
 			gtk_menu_shell_append(GTK_MENU_SHELL(filemenu), open);
 			gtk_menu_shell_append(GTK_MENU_SHELL(filemenu), quit);
 			gtk_menu_item_set_submenu(GTK_MENU_ITEM(file), filemenu);
 			gtk_menu_shell_append(GTK_MENU_SHELL(menubar), file);
+			gtk_menu_shell_append(GTK_MENU_SHELL(filemenu), save);
+
 			gtk_box_pack_start(GTK_BOX(vbox), menubar, FALSE, FALSE, 3);
 
 			//Connects GCallback function open_activated to "activate" signal for "open" menu item
@@ -304,6 +367,9 @@ namespace Mitrais
 							G_CALLBACK (onStopClicked),
 							_buffer);
 
+			// create save button event
+			g_signal_connect(G_OBJECT(save), "activate", G_CALLBACK(onSaveClicked), NULL);
+
 			setButtonDisability();
 
 			checkParameter(argc, argv);
@@ -312,5 +378,7 @@ namespace Mitrais
 
 			gtk_main ();
 		}
+
+
 	}
 }
