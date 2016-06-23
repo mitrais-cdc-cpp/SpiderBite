@@ -26,6 +26,16 @@ namespace Mitrais
 		}
 
 		/**
+		 * Constructor of TextBuffer class
+		 *
+		 * @buffer The string buffer
+		 */
+		TextBuffer::TextBuffer(vector<string> buffer) :
+				_stringBuffer(buffer)
+		{
+		}
+
+		/**
 		 * Insert the stored string to a buffer
 		 *
 		 * @str the stored text
