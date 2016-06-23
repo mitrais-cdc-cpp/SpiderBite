@@ -28,6 +28,7 @@ public:
 	TextWriter(std::string filepath, std::string content);
 	~TextWriter();
 	void writeToFile(BaseResponse& response);
+	void writeAsHtmlFile(BaseResponse& response);
 
 private:
 	std::string _content;
