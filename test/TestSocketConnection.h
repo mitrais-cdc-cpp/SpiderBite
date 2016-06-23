@@ -8,32 +8,30 @@
 #ifndef TEST_TESTSOCKETCONNECTION_H_
 #define TEST_TESTSOCKETCONNECTION_H_
 
-#include <cppunit/TestCase.h>
+#include <cppunit/TestFixture.h>
+#include <cppunit/extensions/HelperMacros.h>
+
 #include "../inc/SocketConnection.h"
 
-namespace Mitrais
+
+class TestSocketConnection: public CppUnit::TestFixture
 {
-namespace test
-{
-	class TestSocketConnection: public CppUnit::TestCase
-	{
-	public:
-		TestSocketConnection();
-		~TestSocketConnection();
+public:
 
-		void runTest()
-		{
-			Mitrais::util::SocketConnection socket;
+	CPPUNIT_TEST_SUITE(TestSocketConnection);
+	CPPUNIT_TEST(testSocketConnectionOne);
+	CPPUNIT_TEST(testSocketConnectionTwo);
+	CPPUNIT_TEST_SUITE_END();
 
-			socket.setServerName("www.google.com");
-			CPPUNIT_ASSERT(socket.isSocketOpen()==true);
 
-			socket.setServerName("http://www.google.com");
-			CPPUNIT_ASSERT(socket.isSocketOpen()==false);
-		}
-	};
-}
-}
+private:
+	void testSocketConnectionOne();
+	void testSocketConnectionTwo();
+
+};
+
+CPPUNIT_TEST_SUITE_REGISTRATION( TestSocketConnection );
+
 
 
 
