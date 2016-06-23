@@ -11,6 +11,7 @@
 #include <gtk/gtk.h>
 
 #include "../TextReader.h"
+#include "../TextBuffer.h"
 #include "../SocketConnection.h"
 
 using namespace Mitrais;
