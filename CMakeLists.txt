@@ -35,6 +35,9 @@ set(CMAKE_BUILD_TYPE Debug)
 # just for example add some compiler flags
 #target_compile_options(SpiderBite PUBLIC -Wextra)
 
+# no SSL support for urdl since we missing the Libs/Header
+add_definitions(-DURDL_DISABLE_SSL=1)
+
 
 ###############################################################################
 ## compiler definitions########################################################
@@ -64,12 +67,25 @@ add_definitions(${GTK3_CFLAGS_OTHER})
 set(Boost_USE_STATIC_LIBS OFF) 
 set(Boost_USE_MULTITHREADED ON)  
 set(Boost_USE_STATIC_RUNTIME OFF) 
-find_package(Boost 1.61 EXACT COMPONENTS system regex REQUIRED)
+find_package(Boost 1.61 EXACT COMPONENTS system regex date_time REQUIRED)
 
 # THREADS
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads REQUIRED)
 
-include_directories(${GTK3_INCLUDE_DIRS} ${Boost_INCLUDE_DIRS})
-link_directories(${GTK3_LIBRARY_DIRS} ${Boost_LIBRARIES})
-target_link_libraries(SpiderBite ${GTK3_LIBRARIES} ${Boost_LIBRARIES} Threads::Threads)
+
+set(URDL_LIBRARY_DIRS ${CMAKE_CURRENT_LIST_DIR}/env/urdl/lib)
+set(URDL_INCLUDE_DIRS ${CMAKE_CURRENT_LIST_DIR}/env/urdl/inc)
+
+find_library(
+    URDL_LIBRARIES
+    NAMES urdl
+    PATHS ${CMAKE_CURRENT_LIST_DIR}/env/urdl
+    PATH_SUFFIXES "lib"
+    NO_DEFAULT_PATH
+)
+
+
+include_directories(${GTK3_INCLUDE_DIRS} ${Boost_INCLUDE_DIRS} ${URDL_INCLUDE_DIRS})
+link_directories(${GTK3_LIBRARY_DIRS} ${Boost_LIBRARIES} ${URDL_LIBRARY_DIRS})
+target_link_libraries(SpiderBite ${GTK3_LIBRARIES} ${Boost_LIBRARIES} Threads::Threads ${URDL_LIBRARIES} )
