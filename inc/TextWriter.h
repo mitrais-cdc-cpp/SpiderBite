@@ -11,7 +11,6 @@
 #include <iostream>
 #include <fstream>
 #include "BaseResponse.h"
-#include <sys/stat.h>
 
 using namespace std;
 
@@ -27,14 +26,11 @@ public:
 	TextWriter(std::string filepath);
 	TextWriter(std::string filepath, std::string content);
 	~TextWriter();
-	void writeToFile(BaseResponse& response);
-	void writeAsHtmlFile(BaseResponse& response);
+	void writeToFile(BaseResponse& response, bool isSaveAsHtml);
 
 private:
 	std::string _content;
 	std::string _file;
-	bool isFileExist();
-
 };
 
 }

@@ -45,75 +45,36 @@ namespace Mitrais {
 			_file = value;
 		}
 
-		void TextWriter::writeToFile(BaseResponse& response)
+		void TextWriter::writeToFile(BaseResponse& response, bool isSaveAsHtml)
 		{
-			if (isFileExist())
+			try
 			{
-				try
-				{
-					fileStream.open(_file.c_str(), std::ios::trunc);
-
-					if(fileStream.is_open())
-					{
-						fileStream << _content;
-						fileStream.close();
-
-						response.updateStatus(true);
-						response.addSuccessMessage();
-					}
-					else
-					{
-						response.addMessage("Unable to open " + _file);
-						response.updateStatus(false);
-					}
+				std::string fileName = _file;
+				if (isSaveAsHtml) {
+					fileName = _file + ".html";
 				}
-				catch (std::exception& ex)
+
+				fileStream.open(fileName.c_str(), std::ios::trunc);
+
+				if(fileStream.is_open())
 				{
-					response.addMessage(ex.what());
+					fileStream << _content;
+					fileStream.close();
+
+					response.updateStatus(true);
+					response.addSuccessMessage();
+				}
+				else
+				{
+					response.addMessage("Unable to open " + _file);
 					response.updateStatus(false);
 				}
 			}
-		}
-
-		void TextWriter::writeAsHtmlFile(BaseResponse& response)
-				{
-					if (isFileExist())
-					{
-						try
-						{
-							fileStream.open(_file.c_str(), std::ios::trunc);
-
-							if(fileStream.is_open())
-							{
-								fileStream << _content;
-								fileStream.close();
-
-								response.updateStatus(true);
-								response.addSuccessMessage();
-							}
-							else
-							{
-								response.addMessage("Unable to open " + _file);
-								response.updateStatus(false);
-							}
-						}
-						catch (std::exception& ex)
-						{
-							response.addMessage(ex.what());
-							response.updateStatus(false);
-						}
-					}
-				}
-
-		bool TextWriter::isFileExist()
-		{
-			if (!_file.empty())
+			catch (std::exception& ex)
 			{
-				struct stat buffer;
-				return (stat(_file.c_str(), &buffer) == 0);
+				response.addMessage(ex.what());
+				response.updateStatus(false);
 			}
-
-			return false;
 		}
 	}
 }
