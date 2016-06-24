@@ -270,7 +270,7 @@ namespace Mitrais
 
 			Mitrais::util::TextWriter writer(filenameString, textString);
 			Mitrais::util::BaseResponse response;
-			writer.writeToFile(response, FALSE);
+			writer.writeToFile(response, false);
 		}
 
 		/**
