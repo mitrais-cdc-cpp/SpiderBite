@@ -138,6 +138,18 @@ namespace Mitrais
 				{
 					for(auto const& target: targets)
 					{
+						//point to jump in....
+						WebCrawler crawler;
+
+						TextBuffer buf;
+						TextWriter writer;
+						//crawler.getContent(target.Url, buf);
+
+						//buf.clean();
+						writer.setContent(buf.getFullContent());
+						writer.setFilePath("./" + target.Url);
+
+
 						util::SocketConnection conn(target.Url);
 						bool isOpen = conn.isSocketOpen();
 
