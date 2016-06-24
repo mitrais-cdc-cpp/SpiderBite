@@ -247,20 +247,18 @@ namespace Mitrais
 		static void onSaveClicked(GtkWidget *widget, gpointer data)
 		{
 			_buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (text_view));
-			GtkTextIter *start;
-			GtkTextIter *end;
+
+			GtkTextIter start, end;
 			gchar *text;
 
-			gtk_text_buffer_get_start_iter(_buffer, start);
-			gtk_text_buffer_get_end_iter(_buffer, end);
+			gtk_text_buffer_get_bounds(_buffer, &start, &end);
 
-
-			text = gtk_text_buffer_get_text(_buffer, start, end, TRUE);
+			text = gtk_text_buffer_get_text(_buffer, &start, &end, TRUE);
 
 			//TODO: save to file -->error
-//			Mitrais::util::TextWriter writer(_filePath, "makan");
-//			Mitrais::util::BaseResponse response;
-//			writer.writeToFile(response);
+			Mitrais::util::TextWriter writer(_filePath, text);
+			Mitrais::util::BaseResponse response;
+			writer.writeToFile(response);
 
 		}
 
