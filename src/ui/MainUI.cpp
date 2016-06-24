@@ -374,8 +374,6 @@ namespace Mitrais
 			save = gtk_menu_item_new_with_label("Save");
 			quit = gtk_menu_item_new_with_label("Quit");
 
-
-
 			gtk_menu_shell_append(GTK_MENU_SHELL(filemenu), open);
 			gtk_menu_shell_append(GTK_MENU_SHELL(filemenu), save);
 			gtk_menu_shell_append(GTK_MENU_SHELL(filemenu), quit);
