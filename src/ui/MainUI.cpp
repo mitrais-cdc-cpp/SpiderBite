@@ -136,23 +136,35 @@ namespace Mitrais
 			{
 				if (targets.size() > 0)
 				{
+					util::TextBuffer buff;
+					WebCrawler crawler;
+
 					for(auto const& target: targets)
 					{
-						util::SocketConnection conn(target.Url);
-						bool isOpen = conn.isSocketOpen();
+						//util::SocketConnection conn(target.Url);
+						//bool isOpen = conn.isSocketOpen();
 
-						if (isOpen)
+						// crawl the web and save into buffer
+						buff = crawler.getContent(target.Url);
+
+						// save into file writer
+						util::TextWriter writer("./"+target.Url, buff.getFullContent());
+
+						util::BaseResponse responseWrite;
+
+						// save into file
+						writer.writeToFile(responseWrite, true);
+
+						// check the response status
+						if (responseWrite.getStatus())
 						{
-							url = "Socket connection into "+ target.Url + " is open\n"+
-									"----------------------------------------------------------------------------\n";
-
-							// TODO : Azis
-							// Call WebCrawler class and display the result into text box
+							url = "The "+ target.Url + " has been crawled\n"+
+								  "The "+ target.Url + " has been save into "+ target.Url +".html on current application folder\n";
 						}
 						else
 						{
 							url = "Socket connection into "+ target.Url + " is close\n"+
-									"Skip " + target.Url +" this url target\n"+
+								   "Skip " + target.Url +" this url target\n"+
 									"----------------------------------------------------------------------------\n";
 						}
 
