@@ -17,8 +17,8 @@ public:
 	CPPUNIT_TEST_SUITE(TestTextLexer);
 	CPPUNIT_TEST(testTextLexerStatusTrue);
 	CPPUNIT_TEST(testTextLexerMessageSuccess);
-	CPPUNIT_TEST(testTextLexerResultOne);
-	CPPUNIT_TEST(testTextLexerResultTwo);
+//	CPPUNIT_TEST(testTextLexerResultOne);
+//	CPPUNIT_TEST(testTextLexerResultTwo);
 	CPPUNIT_TEST_SUITE_END();
 
 private:
