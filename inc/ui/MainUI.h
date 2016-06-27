@@ -14,6 +14,7 @@
 #include "../TextBuffer.h"
 #include "../SocketConnection.h"
 #include "../TextWriter.h"
+#include "../WebCrawler.h"
 
 using namespace Mitrais;
 using namespace Mitrais::util;
