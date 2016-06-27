@@ -8,7 +8,7 @@ set(_ECLIPSE_VERSION "4.5")
 ###############################################################################
 
 file(GLOB SOURCES
-	TestRunner.cpp	
+	main.cpp	
 	*.h
 	*.cpp
 	../inc/*.h
@@ -96,6 +96,17 @@ target_link_libraries(${PROJECT_NAME} ${Boost_LIBRARIES} Threads::Threads ${CPPU
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads REQUIRED)
 
-include_directories(${GTK3_INCLUDE_DIRS} ${Boost_INCLUDE_DIRS})
-link_directories(${GTK3_LIBRARY_DIRS} ${Boost_LIBRARIES})
-target_link_libraries(SpiderBiteTest ${GTK3_LIBRARIES} ${Boost_LIBRARIES} ${CPPUNIT_LIBRARY} ${CMAKE_DL_LIBS} Threads::Threads)
+set(URDL_LIBRARY_DIRS ${CMAKE_CURRENT_LIST_DIR}../../env/urdl/lib)
+set(URDL_INCLUDE_DIRS ${CMAKE_CURRENT_LIST_DIR}../../env/urdl/inc)
+
+find_library(
+    URDL_LIBRARIES
+    NAMES urdl
+    PATHS ${CMAKE_CURRENT_LIST_DIR}../../env/urdl
+    PATH_SUFFIXES "lib"
+    NO_DEFAULT_PATH
+)
+
+include_directories(${GTK3_INCLUDE_DIRS} ${Boost_INCLUDE_DIRS} ${URDL_INCLUDE_DIRS})
+link_directories(${GTK3_LIBRARY_DIRS} ${Boost_LIBRARIES} ${URDL_LIBRARY_DIRS})
+target_link_libraries(SpiderBiteTest ${GTK3_LIBRARIES} ${Boost_LIBRARIES} ${CPPUNIT_LIBRARY} ${CMAKE_DL_LIBS} Threads::Threads ${URDL_LIBRARIES})
