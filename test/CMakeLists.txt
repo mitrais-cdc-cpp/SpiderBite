@@ -63,7 +63,9 @@ add_definitions(${GTK3_CFLAGS_OTHER})
 set(Boost_USE_STATIC_LIBS OFF) 
 set(Boost_USE_MULTITHREADED ON)  
 set(Boost_USE_STATIC_RUNTIME OFF) 
-find_package(Boost 1.61 EXACT COMPONENTS system regex REQUIRED)
+find_package(Boost 1.61 EXACT COMPONENTS system regex log log_setup REQUIRED)
+
+ADD_DEFINITIONS(-DBOOST_LOG_DYN_LINK)
 
 # CPPUNIT
 find_library(CPPUNIT_LIBRARY_DEBUG NAMES cppunit cppunit_dll cppunitd cppunitd_dll
