@@ -14,6 +14,8 @@ using namespace std;
 
 int main(int argc, char* argv[])
 {
+	// logger example
+	LOG_INFO << "Program started";
 	MainUI ab;
 	ab.activateUI(argc, argv);
 

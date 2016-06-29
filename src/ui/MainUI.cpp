@@ -258,6 +258,7 @@ namespace Mitrais
 		 */
 		static void onQuitClicked (GtkWidget *widget, gpointer data)
 		{
+			LOG_INFO << "Program terminated";
 			gtk_main_quit ();
 		}
 
@@ -353,6 +354,7 @@ namespace Mitrais
 		 */
 		void MainUI::activateUI(int argc, char *argv[])
 		{
+			LOG_INFO << "UI activated";
 			GtkWidget *window;
 			GtkWidget *vbox;
 			GtkWidget *hbtn_box;
