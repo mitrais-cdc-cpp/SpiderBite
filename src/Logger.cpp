@@ -26,9 +26,9 @@ BOOST_LOG_GLOBAL_LOGGER_INIT(spiderbite_logger, logger_t)
 		(
 			expr::stream
 			<< "[" << expr::attr< boost::log::trivial::severity_level >("Severity") << "]: "
-			<< expr::format_date_time< boost::posix_time::ptime >("TimeStamp", "%Y-%m-%d %H:%M:%S ")
-			<< '[Filename: '   << expr::attr<std::string>("File")
-			<< ' Line: ' << expr::attr<int>("Line") << "] "
+			<< expr::format_date_time< boost::posix_time::ptime >("TimeStamp", "%Y-%m-%d %H:%M:%S.%f ")
+			 << '['   << expr::attr<std::string>("File")
+			 << ':' << expr::attr<int>("Line") << "] "
 			<< expr::smessage
 		)
     );
