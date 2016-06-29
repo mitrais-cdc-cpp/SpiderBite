@@ -16,6 +16,8 @@ namespace Mitrais
 		GtkTextBuffer *_buffer;
 		GtkWidget *text_view;
 		GtkWidget *save;
+		GtkWidget *status_bar;// = gtk_statusbar_new();
+		gint context_id;// = gtk_statusbar_get_context_id(GTK_STATUSBAR (status_bar), "Status bar");
 
 		std::string _filePath;
 
@@ -96,6 +98,8 @@ namespace Mitrais
 			text = convertStringToPChar(url);
 			_buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (text_view));
 			gtk_text_buffer_set_text (_buffer, text, -1);
+
+			gtk_statusbar_push (GTK_STATUSBAR (status_bar), GPOINTER_TO_INT (context_id), _filePath.c_str());
 
 		}
 
@@ -248,8 +252,6 @@ namespace Mitrais
 		   displayFileContent();
 
 		   gtk_widget_destroy (dialog);
-
-
 		}
 
 		/**
@@ -267,6 +269,9 @@ namespace Mitrais
 		 */
 		void saveToFile(char *filename)
 		{
+			const char *message = "Saving....";
+			gtk_statusbar_push (GTK_STATUSBAR (status_bar), GPOINTER_TO_INT (context_id), message);
+
 			GtkTextIter start;
 			GtkTextIter end;
 			gchar *text;
@@ -282,6 +287,8 @@ namespace Mitrais
 			Mitrais::util::TextWriter writer(filenameString, textString);
 			Mitrais::util::BaseResponse response;
 			writer.writeToFile(response, false);
+
+			gtk_statusbar_pop (GTK_STATUSBAR (status_bar), GPOINTER_TO_INT (context_id));
 		}
 
 		/**
@@ -361,6 +368,9 @@ namespace Mitrais
 			GtkWidget *file;
 			GtkWidget *open;
 			GtkWidget *quit;
+			GtkWidget *scrolled_window;
+
+			//gint context_id;
 
 			gtk_init (&argc, &argv);
 
@@ -430,8 +440,17 @@ namespace Mitrais
 							G_CALLBACK (onStopClicked),
 							_buffer);
 
+
 			// set button and menu disability
 			setButtonAndMenuDisability();
+
+			/* Create status bar */
+			status_bar = gtk_statusbar_new();
+			gtk_box_pack_start (GTK_BOX (vbox), status_bar, FALSE, FALSE, 0);
+			gtk_widget_show (status_bar);
+
+			context_id = gtk_statusbar_get_context_id(GTK_STATUSBAR (status_bar), "Status bar");
+
 
 			checkParameter(argc, argv);
 
