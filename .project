@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+	<name>SpiderBite-Debug@spiderbite</name>
+	<comment></comment>
+	<projects>
+	</projects>
+	<buildSpec>
+		<buildCommand>
+			<name>org.eclipse.cdt.make.core.makeBuilder</name>
+			<triggers>clean,full,incremental,</triggers>
+			<arguments>
+				<dictionary>
+					<key>org.eclipse.cdt.make.core.cleanBuildTarget</key>
+					<value>clean</value>
+				</dictionary>
+				<dictionary>
+					<key>org.eclipse.cdt.make.core.enableCleanBuild</key>
+					<value>true</value>
+				</dictionary>
+				<dictionary>
+					<key>org.eclipse.cdt.make.core.append_environment</key>
+					<value>true</value>
+				</dictionary>
+				<dictionary>
+					<key>org.eclipse.cdt.make.core.stopOnError</key>
+					<value>true</value>
+				</dictionary>
+				<dictionary>
+					<key>org.eclipse.cdt.make.core.enabledIncrementalBuild</key>
+					<value>true</value>
+				</dictionary>
+				<dictionary>
+					<key>org.eclipse.cdt.make.core.build.command</key>
+					<value>/usr/bin/make</value>
+				</dictionary>
+				<dictionary>
+					<key>org.eclipse.cdt.make.core.contents</key>
+					<value>org.eclipse.cdt.make.core.activeConfigSettings</value>
+				</dictionary>
+				<dictionary>
+					<key>org.eclipse.cdt.make.core.build.target.inc</key>
+					<value>all</value>
+				</dictionary>
+				<dictionary>
+					<key>org.eclipse.cdt.make.core.build.arguments</key>
+					<value></value>
+				</dictionary>
+				<dictionary>
+					<key>org.eclipse.cdt.make.core.buildLocation</key>
+					<value>/home/developer/workspace/spiderbite</value>
+				</dictionary>
+				<dictionary>
+					<key>org.eclipse.cdt.make.core.useDefaultBuildCmd</key>
+					<value>false</value>
+				</dictionary>
+				<dictionary>
+					<key>org.eclipse.cdt.make.core.environment</key>
+					<value>VERBOSE=1|CMAKE_NO_VERBOSE=1|</value>
+				</dictionary>
+				<dictionary>
+					<key>org.eclipse.cdt.make.core.enableFullBuild</key>
+					<value>true</value>
+				</dictionary>
+				<dictionary>
+					<key>org.eclipse.cdt.make.core.build.target.auto</key>
+					<value>all</value>
+				</dictionary>
+				<dictionary>
+					<key>org.eclipse.cdt.make.core.enableAutoBuild</key>
+					<value>false</value>
+				</dictionary>
+				<dictionary>
+					<key>org.eclipse.cdt.make.core.build.target.clean</key>
+					<value>clean</value>
+				</dictionary>
+				<dictionary>
+					<key>org.eclipse.cdt.make.core.fullBuildTarget</key>
+					<value>all</value>
+				</dictionary>
+				<dictionary>
+					<key>org.eclipse.cdt.make.core.buildArguments</key>
+					<value></value>
+				</dictionary>
+				<dictionary>
+					<key>org.eclipse.cdt.make.core.build.location</key>
+					<value>/home/developer/workspace/spiderbite</value>
+				</dictionary>
+				<dictionary>
+					<key>org.eclipse.cdt.make.core.autoBuildTarget</key>
+					<value>all</value>
+				</dictionary>
+				<dictionary>
+					<key>org.eclipse.cdt.core.errorOutputParser</key>
+					<value>org.eclipse.cdt.core.GmakeErrorParser;org.eclipse.cdt.core.GCCErrorParser;org.eclipse.cdt.core.GASErrorParser;org.eclipse.cdt.core.GLDErrorParser;</value>
+				</dictionary>
+			</arguments>
+		</buildCommand>
+		<buildCommand>
+			<name>org.eclipse.cdt.make.core.ScannerConfigBuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+	</buildSpec>
+	<natures>
+		<nature>org.eclipse.cdt.make.core.makeNature</nature>
+		<nature>org.eclipse.cdt.make.core.ScannerConfigNature</nature>
+		<nature>org.eclipse.cdt.core.ccnature</nature>
+		<nature>org.eclipse.cdt.core.cnature</nature>
+	</natures>
+	<linkedResources>
+		<link>
+			<name>[Subprojects]</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] SpiderBite</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] SpiderBite/</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] SpiderBite/Source Files</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] SpiderBite/Source Files/main.cpp</name>
+			<type>1</type>
+			<location>/home/developer/workspace/spiderbite/main.cpp</location>
+		</link>
+		<link>
+			<name>[Targets]/[exe] SpiderBite/Source Files/TextReader.cpp</name>
+			<type>1</type>
+			<location>/home/developer/workspace/spiderbite/src/TextReader.cpp</location>
+		</link>
+		<link>
+			<name>[Targets]/[exe] SpiderBite/Source Files/BaseResponse.cpp</name>
+			<type>1</type>
+			<location>/home/developer/workspace/spiderbite/src/BaseResponse.cpp</location>
+		</link>
+		<link>
+			<name>[Targets]/[exe] SpiderBite/Source Files/Logger.cpp</name>
+			<type>1</type>
+			<location>/home/developer/workspace/spiderbite/src/Logger.cpp</location>
+		</link>
+		<link>
+			<name>[Targets]/[exe] SpiderBite/Source Files/TextBuffer.cpp</name>
+			<type>1</type>
+			<location>/home/developer/workspace/spiderbite/src/TextBuffer.cpp</location>
+		</link>
+		<link>
+			<name>[Targets]/[exe] SpiderBite/Source Files/TextLexer.cpp</name>
+			<type>1</type>
+			<location>/home/developer/workspace/spiderbite/src/TextLexer.cpp</location>
+		</link>
+		<link>
+			<name>[Targets]/[exe] SpiderBite/Source Files/WebCrawler.cpp</name>
+			<type>1</type>
+			<location>/home/developer/workspace/spiderbite/src/WebCrawler.cpp</location>
+		</link>
+		<link>
+			<name>[Targets]/[exe] SpiderBite/Source Files/SocketConnection.cpp</name>
+			<type>1</type>
+			<location>/home/developer/workspace/spiderbite/src/SocketConnection.cpp</location>
+		</link>
+		<link>
+			<name>[Targets]/[exe] SpiderBite/Source Files/TextWriter.cpp</name>
+			<type>1</type>
+			<location>/home/developer/workspace/spiderbite/src/TextWriter.cpp</location>
+		</link>
+		<link>
+			<name>[Targets]/[exe] SpiderBite/Source Files/MainUI.cpp</name>
+			<type>1</type>
+			<location>/home/developer/workspace/spiderbite/src/ui/MainUI.cpp</location>
+		</link>
+		<link>
+			<name>[Targets]/[exe] SpiderBite/Source Files/TextBoxUI.cpp</name>
+			<type>1</type>
+			<location>/home/developer/workspace/spiderbite/src/ui/TextBoxUI.cpp</location>
+		</link>
+		<link>
+			<name>[Targets]/[exe] SpiderBite/Header Files</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] SpiderBite/Header Files/TextReader.h</name>
+			<type>1</type>
+			<location>/home/developer/workspace/spiderbite/inc/TextReader.h</location>
+		</link>
+		<link>
+			<name>[Targets]/[exe] SpiderBite/Header Files/TextWriter.h</name>
+			<type>1</type>
+			<location>/home/developer/workspace/spiderbite/inc/TextWriter.h</location>
+		</link>
+		<link>
+			<name>[Targets]/[exe] SpiderBite/Header Files/TextBuffer.h</name>
+			<type>1</type>
+			<location>/home/developer/workspace/spiderbite/inc/TextBuffer.h</location>
+		</link>
+		<link>
+			<name>[Targets]/[exe] SpiderBite/Header Files/UrlTarget.h</name>
+			<type>1</type>
+			<location>/home/developer/workspace/spiderbite/inc/UrlTarget.h</location>
+		</link>
+		<link>
+			<name>[Targets]/[exe] SpiderBite/Header Files/Logger.h</name>
+			<type>1</type>
+			<location>/home/developer/workspace/spiderbite/inc/Logger.h</location>
+		</link>
+		<link>
+			<name>[Targets]/[exe] SpiderBite/Header Files/SocketConnection.h</name>
+			<type>1</type>
+			<location>/home/developer/workspace/spiderbite/inc/SocketConnection.h</location>
+		</link>
+		<link>
+			<name>[Targets]/[exe] SpiderBite/Header Files/UrlTargetStatus.h</name>
+			<type>1</type>
+			<location>/home/developer/workspace/spiderbite/inc/UrlTargetStatus.h</location>
+		</link>
+		<link>
+			<name>[Targets]/[exe] SpiderBite/Header Files/WebCrawler.h</name>
+			<type>1</type>
+			<location>/home/developer/workspace/spiderbite/inc/WebCrawler.h</location>
+		</link>
+		<link>
+			<name>[Targets]/[exe] SpiderBite/Header Files/TextLexer.h</name>
+			<type>1</type>
+			<location>/home/developer/workspace/spiderbite/inc/TextLexer.h</location>
+		</link>
+		<link>
+			<name>[Targets]/[exe] SpiderBite/Header Files/BaseResponse.h</name>
+			<type>1</type>
+			<location>/home/developer/workspace/spiderbite/inc/BaseResponse.h</location>
+		</link>
+		<link>
+			<name>[Targets]/[exe] SpiderBite/Header Files/MainUI.h</name>
+			<type>1</type>
+			<location>/home/developer/workspace/spiderbite/inc/ui/MainUI.h</location>
+		</link>
+		<link>
+			<name>[Targets]/[exe] SpiderBite/Header Files/TextBoxUI.h</name>
+			<type>1</type>
+			<location>/home/developer/workspace/spiderbite/inc/ui/TextBoxUI.h</location>
+		</link>
+		<link>
+			<name>[Targets]/[exe] SpiderBite/CMake Rules</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] SpiderBite/Resources</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>[Targets]/[exe] SpiderBite/Object Files</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+	</linkedResources>
+</projectDescription>
