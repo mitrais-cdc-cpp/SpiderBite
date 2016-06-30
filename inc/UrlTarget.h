@@ -14,6 +14,11 @@ struct UrlTarget {
 	std::string LatestUrlPosition;
 	UrlTargerStatus Status;
 
+	const std::string& getUrl()
+	{
+		return Url;
+	}
+
 };
 
 } /* namespace util */

@@ -168,6 +168,12 @@ std::vector<UrlTarget> TextReader::readFile()
 			{
 				UrlTarget target;
 
+				if (!url.empty() && url[url.size() - 1] == '\r')
+					url.erase(url.size() - 1);
+
+				if (!url.empty() && url[url.size() - 1] == '\n')
+					url.erase(url.size() - 1);
+
 				target.Url = url;
 				target.LatestUrlPosition = url;
 				target.Status = NONE;

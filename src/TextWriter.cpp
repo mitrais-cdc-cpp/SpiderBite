@@ -81,14 +81,23 @@ void TextWriter::writeToFile(BaseResponse& response, bool isSaveAsHtml)
 	{
 		std::string fileName = _file;
 
-		fileName = replaceFirst(fileName, "http://", "");
-		fileName = replaceFirst(fileName, "www.", "");
-		fileName = replaceAll(fileName, "/", "_");
+		// fill blanks if we find http:// or https://
+		if(fileName.find("http://") != std::string::npos)
+			fileName = replaceFirst(fileName, "http://", "");
+
+		if(fileName.find("https://") != std::string::npos)
+			fileName = replaceFirst(fileName, "https://", "");
+
+		// fill blanks if we find www.
+		if(fileName.find("www.") != std::string::npos)
+			fileName = replaceFirst(fileName, "www.", "");
+
+		// replace / with _
+		if(fileName.find("/") != std::string::npos)
+			fileName = replaceAll(fileName, "/", "_");
 
 		if (isSaveAsHtml)
-		{
 			fileName += ".html";
-		}
 
 		_fileStream.open(fileName.c_str(), std::ios::trunc);
 
