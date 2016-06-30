@@ -1,0 +1,5 @@
+[info]: 2016-06-30 15:19:35.544147 [main.cpp : int main(int, char**) : 18] Program started
+[info]: 2016-06-30 15:19:35.544322 [MainUI.cpp : void Mitrais::UI::MainUI::activateUI(int, char**) : 379] UI activated
+[info]: 2016-06-30 15:20:13.908532 [MainUI.cpp : void Mitrais::UI::onStartClicked(GtkWidget*, GtkTextBuffer*) : 121] Crawling web started
+[info]: 2016-06-30 15:20:22.237079 [MainUI.cpp : void Mitrais::UI::onStopClicked(GtkWidget*, GtkTextBuffer*) : 236] Web crawling stopped
+[info]: 2016-06-30 15:20:24.701939 [MainUI.cpp : void Mitrais::UI::onQuitClicked(GtkWidget*, gpointer) : 276] Program terminated
