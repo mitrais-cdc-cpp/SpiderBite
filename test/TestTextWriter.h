@@ -13,19 +13,30 @@
 #include "../inc/TextWriter.h"
 #include <sys/stat.h>
 
+namespace Mitrais{
+namespace test{
+
 class TestTextWriter : public CppUnit::TestFixture
 {
 	public:
 		CPPUNIT_TEST_SUITE(TestTextWriter);
 		CPPUNIT_TEST(testTextWriterOne);
 		CPPUNIT_TEST(testTextWriterTwo);
+		CPPUNIT_TEST(testReplaceAll);
+		CPPUNIT_TEST(testReplaceFirst);
 		CPPUNIT_TEST_SUITE_END();
-
 	private:
 		void testTextWriterOne();
 		void testTextWriterTwo();
-		bool isExist(string filePath);
+		void testReplaceAll();
+		void testReplaceFirst();
+		bool isExist(std::string filePath);
 };
-CPPUNIT_TEST_SUITE_REGISTRATION( TestTextWriter );
+
+}}
+
+
+
+CPPUNIT_TEST_SUITE_REGISTRATION(Mitrais::test::TestTextWriter );
 
 #endif /* TEST_TESTTEXTWRITER_H_ */

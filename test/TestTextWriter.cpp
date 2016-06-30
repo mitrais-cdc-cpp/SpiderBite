@@ -1,26 +1,18 @@
-/*
- * TestTextWriter.cpp
- *
- *  Created on: Jun 24, 2016
- *      Author: Ari Suarkadipa
- */
-
-#include "../inc/TextWriter.h"
 #include "TestTextWriter.h"
 
-bool TestTextWriter::isExist(string filePath)
+bool Mitrais::test::TestTextWriter::isExist(std::string filePath)
 {
 	 struct stat buffer;
 	 return (stat (filePath.c_str(), &buffer) == 0);
 }
 
-void TestTextWriter::testTextWriterOne()
+void Mitrais::test::TestTextWriter::testTextWriterOne()
 {
 	Mitrais::util::TextWriter writer;
 	Mitrais::util::BaseResponse response;
 
-	string filePath = "./test writer one";
-	string content = "www.google.com";
+	std::string filePath = "./test writer one";
+	std::string content = "www.google.com";
 
 	writer.setFilePath(filePath);
 	writer.setContent(content);
@@ -32,18 +24,18 @@ void TestTextWriter::testTextWriterOne()
 	CPPUNIT_ASSERT(result == actual);
 }
 
-void TestTextWriter::testTextWriterTwo()
+void Mitrais::test::TestTextWriter::testTextWriterTwo()
 {
 	Mitrais::util::TextWriter writer;
 	Mitrais::util::BaseResponse response;
 
-	string filePath = "./test writer one";
-	string actual = "www.google.com";
+	std::string filePath = "./test writer one";
+	std::string actual = "www.google.com";
 
 	// read the file
 	std::ifstream file(filePath);
 
-	string result;
+	std::string result;
 
 	if (file.is_open())
 	{
@@ -56,4 +48,21 @@ void TestTextWriter::testTextWriterTwo()
 	CPPUNIT_ASSERT(isEqual == 0);
 }
 
+void Mitrais::test::TestTextWriter::testReplaceAll()
+{
+	const std::string& old_ = "/";
+	const std::string& new_ = "_";
+	Mitrais::util::TextWriter writer;
+	CPPUNIT_ASSERT(writer.replaceAll("test/test/test/test", "/", "_") == "test_test_test_test");
+	CPPUNIT_ASSERT(writer.replaceAll("google.com/eu/path/to/whatever", "/", "_") == "google.com_eu_path_to_whatever");
+}
 
+void Mitrais::test::TestTextWriter::testReplaceFirst()
+{
+	Mitrais::util::TextWriter writer;
+	CPPUNIT_ASSERT(writer.replaceFirst("wenn hinter fliegen fliegen fliegen, fliegen fliegen fliegen hinterher!", "fliegen", "test")
+			== "wenn hinter test fliegen fliegen, fliegen fliegen fliegen hinterher!");
+	CPPUNIT_ASSERT(writer.replaceFirst("http://www.google.com", "http://", "") == "www.google.com");
+	CPPUNIT_ASSERT(writer.replaceFirst("www.google.com", "www.", "") == "google.com");
+	CPPUNIT_ASSERT(writer.replaceFirst("www.google.com", "", "test") == "www.google.com");
+}
