@@ -17,6 +17,7 @@ BOOST_LOG_GLOBAL_LOGGER_INIT(spiderbite_logger, logger_t)
 	(
 		keywords::file_name = SYS_LOGFILE,
 		keywords::open_mode = std::ios_base::app,
+		keywords::auto_flush = true,
 		keywords::rotation_size = 10*1024*1204,   // rotate files every 10 MiB...
 		keywords::time_based_rotation = sinks::file::rotation_at_time_point(0, 0, 0), //or at midnight
 		keywords::format =
