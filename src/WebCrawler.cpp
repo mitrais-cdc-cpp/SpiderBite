@@ -10,46 +10,43 @@ Mitrais::util::WebCrawler::~WebCrawler()
 
 }
 
+std::string data;
+
+static size_t writeCallback(char* buf, size_t size, size_t nmemb, void* up)
+{
+	//callback must have this declaration
+	//buf is a pointer to the data that curl has for us
+	//size*nmemb is the size of the buffer
+
+	for (int c = 0; c<size*nmemb; c++)
+	{
+	   data.push_back(buf[c]);
+	}
+
+	return size*nmemb; //tell curl how many bytes we handled
+}
+
 Mitrais::util::TextBuffer Mitrais::util::WebCrawler::getContent(std::string strURL_)
 {
 	Mitrais::util::TextBuffer buf;
-	boost::system::error_code ec;
-	boost::asio::io_service io_service;
 
-	try
-	{
-		urdl::read_stream stream(io_service);
-		stream.open(strURL_);
+    CURL* curl;
+    curl_global_init(CURL_GLOBAL_ALL); //pretty obvious
+    curl = curl_easy_init();
 
-		if(!stream.is_open())
-		{
-			ec = boost::asio::error::not_connected;
-			throw boost::system::system_error(ec);
-		}
+    curl_easy_setopt(curl, CURLOPT_URL, strURL_);
+    curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, &writeCallback);
+    //curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L); //tell curl to output its progress
 
-		while (true) //endless loop until eof or error
-		{
-			char data[1024];
-			std::size_t length = stream.read_some(boost::asio::buffer(data), ec);
+    curl_easy_perform(curl);
 
-			if (ec == boost::asio::error::eof)
-			{
-				break;
-			}
+    //cout << endl << data << endl;
 
-			if (ec)
-			{
-				throw boost::system::system_error(ec);
-			}
+    // fill buffer
+	buf.insertContentToBuffer(data);
 
-			string str(data);
-			buf.insertContentToBuffer(data);
-		}
-	}
-	catch (std::exception& ex)
-	{
-	  std::cerr << "Exception: " << ex.what() << std::endl;
-	}
+    curl_easy_cleanup(curl);
+    curl_global_cleanup();
 
 	return buf;
 }

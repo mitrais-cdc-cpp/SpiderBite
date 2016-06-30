@@ -10,9 +10,14 @@
 
 #include <iostream>
 #include <fstream>
+#include <regex>
+
 #include "BaseResponse.h"
 
-using namespace std;
+namespace Mitrais{
+namespace test{
+	class TestTextWriter;
+}}
 
 namespace Mitrais {
 namespace util {
@@ -20,6 +25,7 @@ namespace util {
 class TextWriter {
 
 public:
+
 	/**
 	 * Set Content method
 	 *
@@ -67,9 +73,18 @@ public:
 	 */
 	void writeToFile(BaseResponse& response, bool isSaveAsHtml);
 
+	friend class Mitrais::test::TestTextWriter;
+
 private:
 	std::string _content;
 	std::string _file;
+
+	std::ofstream _fileStream;
+
+	std::string replaceAll(std::string subject_, const std::string& old_, const std::string& new_);
+	std::string replaceFirst(std::string subject_, const std::string& old_, const std::string& new_);
+
+
 };
 
 }

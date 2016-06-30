@@ -15,6 +15,7 @@
 #include "../SocketConnection.h"
 #include "../TextWriter.h"
 #include "../WebCrawler.h"
+#include "../Logger.h"
 
 using namespace Mitrais;
 using namespace Mitrais::util;

@@ -9,7 +9,7 @@
 #define INC_WEBCRAWLER_H_
 
 #include <iostream>
-#include <urdl/read_stream.hpp>
+#include <curl/curl.h>
 
 #include "TextBuffer.h"
 
@@ -17,7 +17,6 @@ using namespace std;
 
 namespace Mitrais{
 namespace util{
-
 
 class WebCrawler
 {
@@ -28,6 +27,9 @@ public:
 	Mitrais::util::TextBuffer getContent(std::string strURL_);
 
 private:
+
+	// Callback for cURL
+	//static size_t writeCallback(char* buf, size_t size, size_t nmemb, void* up);
 };
 
 }} // namespace Mitrais::util
