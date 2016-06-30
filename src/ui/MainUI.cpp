@@ -106,6 +106,7 @@ namespace Mitrais
 		 */
 		static void onStartClicked (GtkWidget *button, GtkTextBuffer *buffer)
 		{
+			LOG_INFO << "Crawling web started";
 			string url;
 			gchar* text;
 			GtkTextIter ei;
@@ -175,7 +176,7 @@ namespace Mitrais
 				else
 				{
 					url = "There is no URL records on " + _filePath + " file\n";
-
+					LOG_WARN << url;
 					text = convertStringToPChar(url);
 					gtk_text_buffer_get_end_iter(buffer, &ei);
 					gtk_text_buffer_insert(buffer, &ei, text, -1);
@@ -184,7 +185,7 @@ namespace Mitrais
 			else
 			{
 				url = "Could not open " + _filePath + " file with the following error(s) : \n";
-
+				LOG_ERROR << url;
 				text = convertStringToPChar(url);
 				gtk_text_buffer_get_end_iter(buffer, &ei);
 				gtk_text_buffer_insert(buffer, &ei, text, -1);
@@ -217,6 +218,7 @@ namespace Mitrais
 
 			// enable start button
 			gtk_widget_set_sensitive (_start_btn, TRUE);
+			LOG_INFO << "Web crawling stopped";
 		}
 
 		/**
@@ -283,6 +285,7 @@ namespace Mitrais
 			Mitrais::util::TextWriter writer(filenameString, textString);
 			Mitrais::util::BaseResponse response;
 			writer.writeToFile(response, false);
+			LOG_INFO << "Save file: " + filenameString;
 		}
 
 		/**
