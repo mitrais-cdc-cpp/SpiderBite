@@ -11,10 +11,6 @@ BOOST_LOG_GLOBAL_LOGGER_INIT(spiderbite_logger, logger_t)
 {
     logger_t lg;
 
-    // New attributes that hold filename and line number
-    logging::core::get()->add_global_attribute("File", attrs::mutable_constant<std::string>(""));
-    logging::core::get()->add_global_attribute("Line", attrs::mutable_constant<int>(0));
-
     logging::add_common_attributes();
 
     logging::add_file_log
@@ -27,8 +23,6 @@ BOOST_LOG_GLOBAL_LOGGER_INIT(spiderbite_logger, logger_t)
 			expr::stream
 			<< "[" << expr::attr< boost::log::trivial::severity_level >("Severity") << "]: "
 			<< expr::format_date_time< boost::posix_time::ptime >("TimeStamp", "%Y-%m-%d %H:%M:%S.%f ")
-			 << '['   << expr::attr<std::string>("File")
-			 << ':' << expr::attr<int>("Line") << "] "
 			<< expr::smessage
 		)
     );
