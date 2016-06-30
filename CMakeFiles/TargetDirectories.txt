@@ -1,0 +1,3 @@
+/home/developer/workspace/spiderbite/CMakeFiles/rebuild_cache.dir
+/home/developer/workspace/spiderbite/CMakeFiles/edit_cache.dir
+/home/developer/workspace/spiderbite/CMakeFiles/SpiderBite.dir
