@@ -46,6 +46,15 @@ namespace Mitrais
 			return cstr;
 		}
 
+		/**
+		 * Push text message to status bar.
+		 * @Params message a message to display
+		 */
+		void pushMessage(std::string message)
+		{
+			gtk_statusbar_push (GTK_STATUSBAR (status_bar), GPOINTER_TO_INT (context_id), convertStringToPChar(message));
+		}
+
 		/*
 		 * Set enable or disable button based on file path (empty or not)
 		 */
@@ -99,14 +108,13 @@ namespace Mitrais
 			_buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (text_view));
 			gtk_text_buffer_set_text (_buffer, text, -1);
 
-			gtk_statusbar_push (GTK_STATUSBAR (status_bar), GPOINTER_TO_INT (context_id), _filePath.c_str());
-
+			pushMessage(_filePath);
 		}
 
 		/**
 		 * Callback method for start button
-		 * params button a GtkWidget pointer
-		 * params buffer a GtkTextBuffer pointer
+		 * @params button a GtkWidget pointer
+		 * @params buffer a GtkTextBuffer pointer
 		 */
 		static void onStartClicked (GtkWidget *button, GtkTextBuffer *buffer)
 		{
@@ -145,6 +153,7 @@ namespace Mitrais
 
 					for(auto const& target: targets)
 					{
+
 						WebCrawler crawler;
 
 						// crawl the web and save into buffer
@@ -205,6 +214,8 @@ namespace Mitrais
 
 			// enable stop button
 			gtk_widget_set_sensitive (_stop_btn, TRUE);
+
+			//gtk_statusbar_pop (GTK_STATUSBAR (status_bar), GPOINTER_TO_INT (context_id));
 		}
 
 		/**
@@ -269,8 +280,7 @@ namespace Mitrais
 		 */
 		void saveToFile(char *filename)
 		{
-			const char *message = "Saving....";
-			gtk_statusbar_push (GTK_STATUSBAR (status_bar), GPOINTER_TO_INT (context_id), message);
+			pushMessage("Saving..");
 
 			GtkTextIter start;
 			GtkTextIter end;
@@ -353,6 +363,8 @@ namespace Mitrais
 			}
 		}
 
+
+
 		/**
 		 * Activates the UI
 		 * params argc an integer
@@ -429,16 +441,12 @@ namespace Mitrais
 			/* Create a start button. */
 			_start_btn = gtk_button_new_with_label ("Start");
 			gtk_box_pack_start (GTK_BOX (hbtn_box), _start_btn, TRUE, FALSE, 0);
-			g_signal_connect (G_OBJECT (_start_btn), "clicked",
-							G_CALLBACK (onStartClicked),
-							_buffer);
+			g_signal_connect (G_OBJECT (_start_btn), "clicked",G_CALLBACK (onStartClicked),_buffer);
 
 			/* Create a stop button. */
 			_stop_btn = gtk_button_new_with_label ("Stop");
 			gtk_box_pack_start (GTK_BOX (hbtn_box), _stop_btn, TRUE, FALSE, 0);
-			g_signal_connect (G_OBJECT (_stop_btn), "clicked",
-							G_CALLBACK (onStopClicked),
-							_buffer);
+			g_signal_connect (G_OBJECT (_stop_btn), "clicked",G_CALLBACK (onStopClicked),_buffer);
 
 
 			// set button and menu disability
@@ -450,7 +458,6 @@ namespace Mitrais
 			gtk_widget_show (status_bar);
 
 			context_id = gtk_statusbar_get_context_id(GTK_STATUSBAR (status_bar), "Status bar");
-
 
 			checkParameter(argc, argv);
 
