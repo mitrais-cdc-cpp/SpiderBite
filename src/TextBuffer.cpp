@@ -58,5 +58,10 @@ namespace Mitrais
 
 			return content;
 		}
+
+		void TextBuffer::clearBuffer()
+		{
+			_stringBuffer.clear();
+		}
 	}
 }

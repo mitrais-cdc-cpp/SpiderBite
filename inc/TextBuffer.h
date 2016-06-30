@@ -45,6 +45,11 @@ namespace Mitrais
 				void insertContentToBuffer(string str);
 
 				/**
+				 * Clear whole content within buffer.
+				 */
+				void clearBuffer();
+
+				/**
 				 * Get the full content of text which stored in the buffer
 				 */
 				string getFullContent();

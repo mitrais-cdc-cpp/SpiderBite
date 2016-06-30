@@ -35,10 +35,6 @@ set(CMAKE_BUILD_TYPE Debug)
 # just for example add some compiler flags
 #target_compile_options(SpiderBite PUBLIC -Wextra)
 
-# no SSL support for urdl since we missing the Libs/Header
-add_definitions(-DURDL_DISABLE_SSL=1)
-
-
 ###############################################################################
 ## compiler definitions########################################################
 ###############################################################################

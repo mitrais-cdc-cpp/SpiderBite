@@ -155,13 +155,18 @@ namespace Mitrais
 					for(auto const& target: targets)
 					{
 
-						WebCrawler crawler;
+						// clear data
+						buff.clearBuffer();
+						string data = "";
 
 						// crawl the web and save into buffer
-						buff = crawler.getContent(target.Url);
+						crawler.getContent(target.Url, data);
+						//insert into buffer
+						buff.insertContentToBuffer(data);
+
 
 						// save into file writer
-						util::TextWriter writer("./"+target.Url, buff.getFullContent());
+						util::TextWriter writer(target.Url, buff.getFullContent());
 
 						util::BaseResponse responseWrite;
 

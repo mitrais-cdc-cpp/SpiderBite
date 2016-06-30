@@ -12,6 +12,7 @@
 #include <curl/curl.h>
 
 #include "TextBuffer.h"
+#include "Logger.h"
 
 using namespace std;
 
@@ -24,7 +25,7 @@ public:
 	WebCrawler();
 	~WebCrawler();
 
-	Mitrais::util::TextBuffer getContent(std::string strURL_);
+	void getContent(const std::string& strURL_, std::string& result);
 
 private:
 

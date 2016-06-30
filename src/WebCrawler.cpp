@@ -10,43 +10,31 @@ Mitrais::util::WebCrawler::~WebCrawler()
 
 }
 
-std::string data;
-
-static size_t writeCallback(char* buf, size_t size, size_t nmemb, void* up)
+static size_t writeCallback(void *ptr, size_t size, size_t nmemb, std::string stream)
 {
-	//callback must have this declaration
-	//buf is a pointer to the data that curl has for us
-	//size*nmemb is the size of the buffer
-
-	for (int c = 0; c<size*nmemb; c++)
-	{
-	   data.push_back(buf[c]);
-	}
-
-	return size*nmemb; //tell curl how many bytes we handled
+    string temp(static_cast<const char*>(ptr), size * nmemb);
+    stream = temp;
+    return size*nmemb;
 }
 
-Mitrais::util::TextBuffer Mitrais::util::WebCrawler::getContent(std::string strURL_)
+void Mitrais::util::WebCrawler::getContent(const std::string& strURL_, std::string& result)
 {
-	Mitrais::util::TextBuffer buf;
-
     CURL* curl;
     curl_global_init(CURL_GLOBAL_ALL); //pretty obvious
     curl = curl_easy_init();
 
-    curl_easy_setopt(curl, CURLOPT_URL, strURL_);
+    curl_easy_setopt(curl, CURLOPT_URL, strURL_.c_str());//strURL_);
+    curl_easy_setopt(curl, CURLOPT_WRITEDATA, result);
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, &writeCallback);
-    //curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L); //tell curl to output its progress
+    curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L); //tell curl to output its progress
 
     curl_easy_perform(curl);
 
-    //cout << endl << data << endl;
+    LOG_DEBUG << result;
 
     // fill buffer
-	buf.insertContentToBuffer(data);
+	//buf.insertContentToBuffer(data);
 
     curl_easy_cleanup(curl);
     curl_global_cleanup();
-
-	return buf;
 }
