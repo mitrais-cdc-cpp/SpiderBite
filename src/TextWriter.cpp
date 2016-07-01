@@ -125,12 +125,22 @@ void TextWriter::writeToFile(BaseResponse& response, bool isSaveAsHtml)
 	}
 }
 
+/**
+ * Method to replace in a given string ALL appearances
+ * @param subject_ target string
+ * @param old_ substring as old appearance
+ * @param new_ substring as new replace
+ * @return
+ */
 std::string TextWriter::replaceAll(std::string subject_, const std::string& old_, const std::string& new_)
 {
+	// do nothing if old string is empty
 	if(!old_.empty())
 	{
 		std::size_t pos = 0;
 
+		// iterate through target string until reached npos
+		// if appearance is found, replace it
 		while ((pos = subject_.find(old_, pos)) != std::string::npos)
 		{
 			subject_.replace(pos, old_.length(), new_);
@@ -141,6 +151,13 @@ std::string TextWriter::replaceAll(std::string subject_, const std::string& old_
 	return subject_;
 }
 
+/**
+ *  * Method to replace in a given string the FIRST appearances
+ * @param subject_ target string
+ * @param old_ substring as old appearance
+ * @param new_ substring as new replace
+ * @return
+ */
 std::string TextWriter::replaceFirst(std::string subject_, const std::string& old_, const std::string& new_)
 {
 	if(!old_.empty())

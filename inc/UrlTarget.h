@@ -9,7 +9,9 @@
 namespace Mitrais {
 namespace util {
 
-struct UrlTarget {
+
+struct UrlTarget
+{
 	std::string Url;
 	std::string LatestUrlPosition;
 	UrlTargerStatus Status;

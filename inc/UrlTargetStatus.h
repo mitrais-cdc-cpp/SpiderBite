@@ -4,13 +4,17 @@
 namespace Mitrais {
 namespace util {
 
+/**
+ * Enumeration to show the status of the
+ * crawling process for a given URL address
+ */
 enum UrlTargerStatus {
-	NONE,
-	START,
-	CRAWLING,
-	PAUSE,
-	STOP,
-	DONE
+	NONE,    //!< NONE
+	START,   //!< START
+	CRAWLING,//!< CRAWLING
+	PAUSE,   //!< PAUSE
+	STOP,    //!< STOP
+	DONE     //!< DONE
 };
 
 } /* namespace util */

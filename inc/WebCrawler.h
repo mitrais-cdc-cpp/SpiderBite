@@ -19,6 +19,10 @@ using namespace std;
 namespace Mitrais{
 namespace util{
 
+/**
+ * Class to create a HTML GET command with help of CURL.
+ * Used to crawl web content by a given URL.
+ */
 class WebCrawler
 {
 public:
@@ -28,9 +32,6 @@ public:
 	void getContent(const std::string& strURL_, std::string& result);
 
 private:
-
-	// Callback for cURL
-	//static size_t writeCallback(char* buf, size_t size, size_t nmemb, void* up);
 };
 
 }} // namespace Mitrais::util
