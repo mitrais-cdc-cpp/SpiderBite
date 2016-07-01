@@ -13,6 +13,7 @@
 #include <regex>
 
 #include "BaseResponse.h"
+#include "Logger.h"
 
 namespace Mitrais{
 namespace test{

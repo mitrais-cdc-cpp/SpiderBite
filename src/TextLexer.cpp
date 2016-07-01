@@ -76,13 +76,16 @@ std::vector<std::string> TextLexer::findUrls(BaseResponse& response)
 
 		if (isContentEmpty)
 		{
+			std::string message = "The content is empty";
+
 			// add response message
-			response.addMessage("The content is empty");
+			response.addMessage(message);
 
 			// update the status into glase
 			response.updateStatus(false);
 
-			return urls;
+			// log error message
+			//LOG_ERROR << message;
 		}
 
 		// read the file
@@ -93,14 +96,22 @@ std::vector<std::string> TextLexer::findUrls(BaseResponse& response)
 
 		// add success message
 		response.addSuccessMessage();
+
+		// log success message
+		//LOG_INFO << "Success find all urls from the content";
 	}
 	catch (std::exception& ex)
 	{
 		// catch the exception
-		response.addMessage(ex.what());
+		std::string message = string(ex.what());
+		
+		response.addMessage(message);
 
 		// set the status to be false
 		response.updateStatus(false);
+
+		// log error message
+		//LOG_ERROR << message;
 	}
 
 	return urls;

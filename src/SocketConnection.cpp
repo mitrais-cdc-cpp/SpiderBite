@@ -69,7 +69,7 @@ bool SocketConnection::isSocketOpen()
 
 			if(socket.is_open())
 			{
-				cout << "socket is open" << endl;
+				LOG_INFO << _serverName + ": socket is open";
 				result = true;
 				break;
 			}
@@ -77,7 +77,8 @@ bool SocketConnection::isSocketOpen()
 	}
 	catch(std::exception& e)
 	{
-		std::cout << "Exception: " << e.what() << "\n";
+		std::string message = string(e.what());
+		LOG_ERROR << message;
 		result = false;
 	}
 

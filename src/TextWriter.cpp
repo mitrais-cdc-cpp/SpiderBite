@@ -33,7 +33,8 @@ TextWriter::~TextWriter()
 TextWriter::TextWriter(std::string filepath) :
 		_file(filepath)
 {
-
+	// log info
+	LOG_INFO << "Set the file path to be save the web crawler result into "+ _file;
 }
 
 /**
@@ -46,7 +47,8 @@ TextWriter::TextWriter(std::string filepath, std::string content) :
 		_file(filepath),
 			_content(content)
 {
-
+	// log info
+	LOG_INFO << "Set the file path to be save the web crawler result into "+ _file;
 }
 
 /**
@@ -111,17 +113,31 @@ void TextWriter::writeToFile(BaseResponse& response, bool isSaveAsHtml)
 
 			response.updateStatus(true);
 			response.addSuccessMessage();
+
+			// log info
+			LOG_INFO << "Successed save the result into "+ fileName;
 		}
 		else
 		{
-			response.addMessage("Unable to open " + _file);
+			std::string message = "Unable to open " + _file;
+
+			response.addMessage(message);
 			response.updateStatus(false);
+
+			// log error
+			LOG_ERROR << message;
 		}
 	}
 	catch (std::exception& ex)
 	{
-		response.addMessage(ex.what());
+		// catch the exception
+		std::string message = std::string(ex.what());
+
+		response.addMessage(message);
 		response.updateStatus(false);
+
+		// log error
+		LOG_ERROR << message;
 	}
 }
 
@@ -166,4 +182,3 @@ std::string TextWriter::replaceFirst(std::string subject_, const std::string& ol
 	}
 	return subject_;
 }
-

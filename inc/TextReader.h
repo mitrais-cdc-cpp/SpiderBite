@@ -10,6 +10,7 @@
 
 #include "BaseResponse.h"
 #include "UrlTarget.h"
+#include "Logger.h"
 
 using namespace std;
 

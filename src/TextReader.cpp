@@ -20,7 +20,8 @@ TextReader::TextReader()
 TextReader::TextReader(std::string filePath) :
 		_filePath(filePath)
 {
-
+    // log info
+	LOG_INFO << "Set file that contains URL records at : " + _filePath;
 }
 
 /*
@@ -39,6 +40,9 @@ void TextReader::setFilePath(std::string filePath)
 {
 	// set the file path
 	_filePath = filePath;
+
+	// log info
+	LOG_INFO << "Set file that contains URL records at : " + _filePath;
 }
 
 /*
@@ -76,11 +80,16 @@ std::vector<UrlTarget> TextReader::getUrls(BaseResponse& response)
 
 		if (!isFileExist)
 		{
+			std::string message = "The file : "+ _filePath +" does not exist";
+
 			// add response message
-			response.addMessage("The file : "+ _filePath +" does not exist");
+			response.addMessage(message);
 
 			// update the status into glase
 			response.updateStatus(false);
+
+			// log the error message
+			LOG_ERROR << message;
 
 			return urls;
 		}
@@ -93,14 +102,22 @@ std::vector<UrlTarget> TextReader::getUrls(BaseResponse& response)
 
 		// add success message
 		response.addSuccessMessage();
+
+		// log success read the text reader
+		LOG_INFO << "Success get all URLs record from "+ _filePath;
 	}
 	catch (std::exception& ex)
 	{
 		// catch the exception
-		response.addMessage(ex.what());
+		std::string message = string(ex.what());
+		
+		response.addMessage(message);
 
 		// set the status to be false
 		response.updateStatus(false);
+
+		// log the error message
+		LOG_ERROR << message;
 	}
 
 	return urls;

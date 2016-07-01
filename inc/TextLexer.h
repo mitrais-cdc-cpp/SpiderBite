@@ -14,6 +14,8 @@
 #include <vector>
 #include <regex>
 
+#include "Logger.h"
+
 #include "BaseResponse.h"
 
 using namespace std;

@@ -6,6 +6,8 @@
 #include <string>
 #include <boost/asio.hpp>
 
+#include "Logger.h"
+
 using namespace std;
 
 namespace Mitrais
