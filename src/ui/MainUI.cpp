@@ -20,6 +20,7 @@ namespace Mitrais
 		gint context_id;// = gtk_statusbar_get_context_id(GTK_STATUSBAR (status_bar), "Status bar");
 
 		std::string _filePath;
+		vector<util::UrlTarget> _targets;
 
 		/**
 		 * Default constructor of MainUI
@@ -95,12 +96,12 @@ namespace Mitrais
 
 			util::TextReader reader(_filePath);
 			util::BaseResponse response;
-			vector<util::UrlTarget> targets = reader.getUrls(response);
+			_targets = reader.getUrls(response);
 
 			gchar* text;
 			string url;
 
-			for(auto const& target: targets) {
+			for(auto const& target: _targets) {
 				url += (target.Url + "\n");
 			}
 
@@ -142,75 +143,42 @@ namespace Mitrais
 				return;
 			}
 
-			util::TextReader reader(_filePath);
-			util::BaseResponse response;
-			vector<util::UrlTarget> targets = reader.getUrls(response);
-			if (response.getStatus())
+			if (_targets.size() > 0)
 			{
-				if (targets.size() > 0)
-				{
-					util::TextBuffer buff;
-					WebCrawler crawler;
+				util::TextBuffer buff;
+				WebCrawler crawler;
 
-					for(auto const& target: targets)
+				for(auto const& target: _targets)
+				{
+					// clear data
+					buff.clearBuffer();
+					string data = "";
+
+					// crawl the web and save into buffer
+					crawler.getContent(target.Url, data);
+					//insert into buffer
+					buff.insertContentToBuffer(data);
+
+					// save into file writer
+					util::TextWriter writer(target.Url, buff.getFullContent());
+
+					util::BaseResponse responseWrite;
+
+					// save into file
+					writer.writeToFile(responseWrite, true);
+
+					// check the response status
+					if (responseWrite.getStatus())
 					{
-
-						// clear data
-						buff.clearBuffer();
-						string data = "";
-
-						// crawl the web and save into buffer
-						crawler.getContent(target.Url, data);
-						//insert into buffer
-						buff.insertContentToBuffer(data);
-
-
-						// save into file writer
-						util::TextWriter writer(target.Url, buff.getFullContent());
-
-						util::BaseResponse responseWrite;
-
-						// save into file
-						writer.writeToFile(responseWrite, true);
-
-						// check the response status
-						if (responseWrite.getStatus())
-						{
-							url = "The "+ target.Url + " has been crawled\n"+
-								  "The "+ target.Url + " has been save into "+ target.Url +".html on current application folder\n";
-						}
-						else
-						{
-							url = "Socket connection into "+ target.Url + " is close\n"+
-								   "Skip " + target.Url +" this url target\n"+
-									"----------------------------------------------------------------------------\n";
-						}
-
-						text = convertStringToPChar(url);
-						gtk_text_buffer_get_end_iter(buffer, &ei);
-						gtk_text_buffer_insert(buffer, &ei, text, -1);
+						url = "The "+ target.Url + " has been crawled\n"+
+							  "The "+ target.Url + " has been save into "+ target.Url +".html on current application folder\n";
 					}
-				}
-				else
-				{
-					url = "There is no URL records on " + _filePath + " file\n";
-					LOG_WARN << url;
-					text = convertStringToPChar(url);
-					gtk_text_buffer_get_end_iter(buffer, &ei);
-					gtk_text_buffer_insert(buffer, &ei, text, -1);
-				}
-			}
-			else
-			{
-				url = "Could not open " + _filePath + " file with the following error(s) : \n";
-				LOG_ERROR << url;
-				text = convertStringToPChar(url);
-				gtk_text_buffer_get_end_iter(buffer, &ei);
-				gtk_text_buffer_insert(buffer, &ei, text, -1);
-
-				for(auto const& message: response.getMessages())
-				{
-					url = message+"\n";
+					else
+					{
+						url = "Socket connection into "+ target.Url + " is close\n"+
+							   "Skip " + target.Url +" this url target\n"+
+								"----------------------------------------------------------------------------\n";
+					}
 
 					text = convertStringToPChar(url);
 					gtk_text_buffer_get_end_iter(buffer, &ei);
@@ -307,7 +275,6 @@ namespace Mitrais
 			writer.writeToFile(response, false);
 
 			LOG_INFO << "Save file: " + filenameString;
-
 		}
 
 		/**
