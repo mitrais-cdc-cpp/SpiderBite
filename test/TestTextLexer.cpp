@@ -77,10 +77,9 @@ void TestTextLexer::testTextLexerResultOne()
 	Mitrais::util::BaseResponse response;
 	std::vector<std::string> results = findUrls(response);
 
-	std::string actualResult = "http://www.w3.org/MarkUp/DTD/xhtml-rdfa-1.dtd";
+	std::string actualResult = "https://www.linkedin.com/company/mitrais";
 
 	int isEqual = results.at(0).compare(actualResult);
-	std::cout << results.at(0);
 
 	CPPUNIT_ASSERT(isEqual == 0);
 }
@@ -93,7 +92,7 @@ void TestTextLexer::testTextLexerResultTwo()
 	Mitrais::util::BaseResponse response;
 	std::vector<std::string> results = findUrls(response);
 
-	std::string actualResult = "http://www.w3.org/1999/xhtml";
+	std::string actualResult = "https://www.facebook.com/Mitrais";
 
 	int isEqual = results.at(1).compare(actualResult);
 

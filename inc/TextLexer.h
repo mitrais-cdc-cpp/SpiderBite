@@ -13,8 +13,7 @@
 #include <boost/regex.hpp>
 #include <vector>
 #include <regex>
-
-#include "Logger.h"
+#include <iterator>
 
 #include "BaseResponse.h"
 
@@ -42,6 +41,7 @@ public:
 private:
 	std::string _content;
 	std::vector<string> readContent();
+	std::string getUrl(std::string hyperlink);
 };
 
 }
