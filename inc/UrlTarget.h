@@ -9,13 +9,19 @@
 namespace Mitrais {
 namespace util {
 
-
+/**
+ * Structure to hold a valid URL address and related properties
+ */
 struct UrlTarget
 {
-	std::string Url;
-	std::string LatestUrlPosition;
-	UrlTargerStatus Status;
+	std::string Url;				// valid URL address as string
+	std::string LatestUrlPosition;	// TBD
+	UrlTargerStatus Status;			// current status of crawling process for URL address
 
+	/**
+	 * Get current URL
+	 * @return URL
+	 */
 	const std::string& getUrl()
 	{
 		return Url;
