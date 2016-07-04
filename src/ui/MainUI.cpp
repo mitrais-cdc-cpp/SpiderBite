@@ -101,15 +101,14 @@ namespace Mitrais
 			gchar* text;
 			string url;
 
-			for(auto const& target: _targets) {
+			for(auto const& target: _targets)
+			{
 				url += (target.Url + "\n");
 			}
 
 			text = convertStringToPChar(url);
 			_buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (text_view));
 			gtk_text_buffer_set_text (_buffer, text, -1);
-
-			pushMessage(_filePath);
 		}
 
 		/**
@@ -123,6 +122,7 @@ namespace Mitrais
 			string url;
 			gchar* text;
 			GtkTextIter ei;
+			std::string msg = "";
 
 			//set textview readonly
 			gtk_text_view_set_editable (GTK_TEXT_VIEW (text_view), FALSE);
@@ -134,15 +134,6 @@ namespace Mitrais
 			// disable start button
 			gtk_widget_set_sensitive (button, FALSE);
 
-			// check if the _filePath is empty or not
-			if (_filePath.empty())
-			{
-				// enable start button
-				gtk_widget_set_sensitive (button, TRUE);
-
-				return;
-			}
-
 			if (_targets.size() > 0)
 			{
 				util::TextBuffer buff;
@@ -150,6 +141,9 @@ namespace Mitrais
 
 				for(auto const& target: _targets)
 				{
+					msg = target.Url + " started crawling...!";
+					LOG_INFO << msg;
+
 					// clear data
 					buff.clearBuffer();
 					string data = "";
@@ -170,14 +164,20 @@ namespace Mitrais
 					// check the response status
 					if (responseWrite.getStatus())
 					{
-						url = "The "+ target.Url + " has been crawled\n"+
-							  "The "+ target.Url + " has been save into "+ target.Url +".html on current application folder\n";
+						url = "The "+ target.Url + " done!\n"+
+							  "The "+ target.Url + " saved: "+ target.Url +".html on current application folder\n";
+
+						msg = target.Url + " Saved!";
+						LOG_INFO << msg;
 					}
 					else
 					{
-						url = "Socket connection into "+ target.Url + " is close\n"+
-							   "Skip " + target.Url +" this url target\n"+
+						url = "Can't connect to: "+ target.Url + "n"+
+							   "Skip " + target.Url +" target\n"+
 								"----------------------------------------------------------------------------\n";
+
+						msg = "Can't connect to: "+ target.Url;
+						LOG_ERROR << msg;
 					}
 
 					text = convertStringToPChar(url);
@@ -185,11 +185,17 @@ namespace Mitrais
 					gtk_text_buffer_insert(buffer, &ei, text, -1);
 				}
 			}
+			else
+			{
+				pushMessage("File loaded but no URL targets found.");
+
+				msg = "File loaded but no URL targets to crawl.";
+				LOG_WARN << msg;
+			}
 
 			// enable stop button
 			gtk_widget_set_sensitive (_stop_btn, TRUE);
-
-			//gtk_statusbar_pop (GTK_STATUSBAR (status_bar), GPOINTER_TO_INT (context_id));
+			pushMessage("Crawling stopped.");
 		}
 
 		/**
@@ -199,6 +205,8 @@ namespace Mitrais
 		 */
 		static void onStopClicked (GtkWidget *button, GtkTextBuffer *buffer)
 		{
+			LOG_INFO << "Stop clicked";
+
 			// disable stop button
 			gtk_widget_set_sensitive (button, FALSE);
 
@@ -216,6 +224,8 @@ namespace Mitrais
 		 */
 		static void onOpenClicked(GtkWidget *widget, GtkWidget *window)
 		{
+			LOG_INFO << "Open menu clicked";
+
 			GtkWidget *dialog;
 
 			dialog = gtk_file_chooser_dialog_new ("Chose file..",
@@ -232,6 +242,9 @@ namespace Mitrais
 				filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
 				_filePath = string(filename);
 				g_free (filename);
+
+				LOG_INFO << "URL file loaded:" +_filePath;
+				pushMessage("File loaded:" + _filePath);
 		   }
 
 		   setButtonAndMenuDisability();
@@ -284,6 +297,8 @@ namespace Mitrais
 		 */
 		static void onSaveClicked(GtkWidget *widget, GtkWidget *window)
 		{
+			LOG_INFO << "Save Clicked";
+
 			GtkWidget *dialog;
 			GtkFileChooser *chooser;
 			GtkFileChooserAction action = GTK_FILE_CHOOSER_ACTION_SAVE;
