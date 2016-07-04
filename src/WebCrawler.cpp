@@ -1,11 +1,11 @@
 #include "../inc/WebCrawler.h"
+#include "../inc/TextLexer.h"
 
 /**
  * Ctor
  */
 Mitrais::util::WebCrawler::WebCrawler()
 {
-
 }
 
 /**
@@ -38,6 +38,8 @@ static size_t writeCallback(void *ptr, size_t size, size_t nmemb, std::string st
  */
 void Mitrais::util::WebCrawler::getContent(const std::string& strURL_, std::string& result_)
 {
+	int deepness = 2;
+
     CURL* curl;
     curl_global_init(CURL_GLOBAL_ALL); //pretty obvious
     curl = curl_easy_init();
@@ -50,9 +52,6 @@ void Mitrais::util::WebCrawler::getContent(const std::string& strURL_, std::stri
     curl_easy_perform(curl);
 
     LOG_DEBUG << result_;
-
-    // fill buffer
-	//buf.insertContentToBuffer(data);
 
     curl_easy_cleanup(curl);
     curl_global_cleanup();

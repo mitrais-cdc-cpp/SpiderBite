@@ -1,5 +1,5 @@
-#ifndef SPIDERBITE_INC_TEXTLEXER_H_
-#define SPIDERBITE_INC_TEXTLEXER_H_
+#ifndef SPIDERBITE_INC_LOGGER_H_
+#define SPIDERBITE_INC_LOGGER_H_
 
 #include <boost/log/expressions.hpp>
 #include <boost/log/sources/global_logger_storage.hpp>
@@ -27,4 +27,4 @@ typedef boost::log::sources::severity_logger_mt<boost::log::trivial::severity_le
 //declares a global logger with a custom initialization
 BOOST_LOG_GLOBAL_LOGGER(spiderbite_logger, logger_t)
 
-#endif /* SPIDERBITE_INC_TEXTLEXER_H_ */
+#endif /* SPIDERBITE_INC_LOGGER_H_ */

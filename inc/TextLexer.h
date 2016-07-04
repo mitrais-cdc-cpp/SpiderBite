@@ -1,10 +1,3 @@
-/*
- * TextLexer.h
- *
- *  Created on: Jun 24, 2016
- *      Author: developer
- */
-
 #ifndef SPIDERBITE_INC_TEXTLEXER_H_
 #define SPIDERBITE_INC_TEXTLEXER_H_
 
@@ -19,10 +12,8 @@
 
 using namespace std;
 
-namespace Mitrais
-{
-namespace util
-{
+namespace Mitrais {
+namespace util {
 
 class TextLexer
 {
@@ -44,9 +35,7 @@ private:
 	std::string getUrl(std::string hyperlink);
 };
 
-}
-} //namespace Mitrais::util
-
+}} //namespace Mitrais::util
 
 #endif /* SPIDERBITE_INC_TEXTLEXER_H_ */
 

@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <string>
+#include <list>
 
 #include "UrlTargetStatus.h"
 
@@ -17,6 +18,9 @@ struct UrlTarget
 	std::string Url;				// valid URL address as string
 	std::string LatestUrlPosition;	// TBD
 	UrlTargerStatus Status;			// current status of crawling process for URL address
+	std::vector<UrlTarget> SubUrlList;
+	int Deepness = 0;
+
 
 	/**
 	 * Get current URL

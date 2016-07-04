@@ -14,6 +14,7 @@
 #include "../TextBuffer.h"
 #include "../SocketConnection.h"
 #include "../TextWriter.h"
+#include "../TextLexer.h"
 #include "../WebCrawler.h"
 #include "../Logger.h"
 

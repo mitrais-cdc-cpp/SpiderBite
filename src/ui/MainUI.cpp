@@ -111,6 +111,77 @@ namespace Mitrais
 			gtk_text_buffer_set_text (_buffer, text, -1);
 		}
 
+		static string SaveSourceCode(string strURL_, util::TextBuffer buff_)
+		{
+			string strResponse;
+			// save into file writer
+			util::TextWriter writer(strURL_, buff_.getFullContent());
+			util::BaseResponse responseWrite;
+
+			// save into file
+			writer.writeToFile(responseWrite, true);
+
+			// check the response status
+			if (responseWrite.getStatus())
+			{
+				strResponse = "The "+ strURL_ + " done!\n"+
+					  "The "+ strURL_+ " saved: "+ strURL_ +".html on current application folder\n";
+
+				LOG_INFO << strURL_ + " Saved!";
+			}
+			else
+			{
+				strResponse = "Can't connect to: "+ strURL_ + "n"+
+					   "Skip " + strURL_ +" target\n"+
+						"----------------------------------------------------------------------------\n";
+				LOG_ERROR << "Can't connect to: "+ strURL_;
+			}
+
+			return strResponse;
+		}
+
+		void CrawlSubUrls(WebCrawler &crawler_, util::TextBuffer &buff_, vector<UrlTarget> &vecURL_, int iDeep = 2)
+		{
+	        Mitrais::util::TextLexer lexer;
+	        vector<UrlTarget> vecTemp = vecURL_;
+
+	        if(iDeep == 2)
+	        	return;
+
+			for(auto &target: vecURL_)
+			{
+				std::vector<std::string> vec;
+
+				// clear data
+				buff_.clearBuffer();
+				string data = "";
+
+				// crawl the web and save into buffer
+				crawler_.getContent(target.Url, data);
+				//insert into buffer
+				buff_.insertContentToBuffer(data);
+
+				SaveSourceCode(target.Url, buff_);
+				vec = lexer.findUrls(data);
+				vector<UrlTarget> sublist;
+
+				for(auto const& str: vec)
+				{
+					UrlTarget t;
+					t.Url = str;
+					sublist.push_back(t);
+				}
+
+				target.SubUrlList = sublist;
+				target.Deepness = iDeep;
+
+				CrawlSubUrls(crawler_, buff_, sublist, iDeep++);
+			}
+
+
+		}
+
+
 		/**
 		 * Callback method for start button
 		 * @params button a GtkWidget pointer
@@ -123,6 +194,8 @@ namespace Mitrais
 			gchar* text;
 			GtkTextIter ei;
 			std::string msg = "";
+
+			int deepness = 2;
 
 			//set textview readonly
 			gtk_text_view_set_editable (GTK_TEXT_VIEW (text_view), FALSE);
@@ -139,7 +212,7 @@ namespace Mitrais
 				util::TextBuffer buff;
 				WebCrawler crawler;
 
-				for(auto const& target: _targets)
+				for(auto& target: _targets)
 				{
 					msg = target.Url + " started crawling...!";
 					LOG_INFO << msg;
@@ -152,33 +225,21 @@ namespace Mitrais
 					crawler.getContent(target.Url, data);
 					//insert into buffer
 					buff.insertContentToBuffer(data);
+					SaveSourceCode(target.Url, buff);
+			        TextLexer lexer;
+			        std::vector<std::string> vec = lexer.findUrls(data);
 
-					// save into file writer
-					util::TextWriter writer(target.Url, buff.getFullContent());
-
-					util::BaseResponse responseWrite;
-
-					// save into file
-					writer.writeToFile(responseWrite, true);
-
-					// check the response status
-					if (responseWrite.getStatus())
+					vector<UrlTarget> sublist;
+					for(auto const& str: vec)
 					{
-						url = "The "+ target.Url + " done!\n"+
-							  "The "+ target.Url + " saved: "+ target.Url +".html on current application folder\n";
-
-						msg = target.Url + " Saved!";
-						LOG_INFO << msg;
+						UrlTarget t;
+						t.Url = str;
+						sublist.push_back(t);
 					}
-					else
-					{
-						url = "Can't connect to: "+ target.Url + "n"+
-							   "Skip " + target.Url +" target\n"+
-								"----------------------------------------------------------------------------\n";
 
-						msg = "Can't connect to: "+ target.Url;
-						LOG_ERROR << msg;
-					}
+			        target.SubUrlList = sublist;
+				    CrawlSubUrls(crawler, buff, sublist, 0);
+
 
 					text = convertStringToPChar(url);
 					gtk_text_buffer_get_end_iter(buffer, &ei);

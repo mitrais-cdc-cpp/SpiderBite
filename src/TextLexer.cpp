@@ -1,14 +1,11 @@
 #include "../inc/TextLexer.h"
 
-namespace Mitrais
-{
-namespace util
-{
+
 
 /*
  * TextLexer default constructor
  */
-TextLexer::TextLexer()
+Mitrais::util::TextLexer::TextLexer()
 {
 
 }
@@ -17,8 +14,8 @@ TextLexer::TextLexer()
  * TextLexer constructor with parameter
  * @params content
  */
-TextLexer::TextLexer(std::string content) :
-		_content(content)
+Mitrais::util::TextLexer::TextLexer(std::string content)
+: _content(content)
 {
 
 }
@@ -26,7 +23,7 @@ TextLexer::TextLexer(std::string content) :
 /*
  * TextLexer desctructor
  */
-TextLexer::~TextLexer()
+Mitrais::util::TextLexer::~TextLexer()
 {
 
 }
@@ -34,7 +31,7 @@ TextLexer::~TextLexer()
 /*
  * setContent function to set the content
  */
-void TextLexer::setContent(std::string content)
+void Mitrais::util::TextLexer::setContent(std::string content)
 {
 	// set the file path
 	_content = content;
@@ -45,7 +42,7 @@ void TextLexer::setContent(std::string content)
  * read from file that has been set the file path
  * @returns  urls
  */
-std::vector<std::string> TextLexer::findUrls()
+std::vector<std::string> Mitrais::util::TextLexer::findUrls()
 {
 	std::vector<std::string> urls;
 
@@ -64,7 +61,7 @@ std::vector<std::string> TextLexer::findUrls()
  * findUrls function with parameter to get vector of url target also get response message
  * @returns urls
  */
-std::vector<std::string> TextLexer::findUrls(BaseResponse& response)
+std::vector<std::string> Mitrais::util::TextLexer::findUrls(BaseResponse& response)
 {
 	std::vector<std::string> urls;
 
@@ -121,7 +118,7 @@ std::vector<std::string> TextLexer::findUrls(BaseResponse& response)
  * @params content
  * @return urls
  */
-std::vector<std::string> TextLexer::findUrls(std::string content)
+std::vector<std::string> Mitrais::util::TextLexer::findUrls(std::string content)
 {
 	setContent(content);
 
@@ -134,7 +131,7 @@ std::vector<std::string> TextLexer::findUrls(std::string content)
  * @params response
  * @return vector<std::string> urls
  */
-std::vector<std::string> TextLexer::findUrls(std::string content, BaseResponse& response)
+std::vector<std::string> Mitrais::util::TextLexer::findUrls(std::string content, BaseResponse& response)
 {
 	setContent(content);
 
@@ -145,7 +142,7 @@ std::vector<std::string> TextLexer::findUrls(std::string content, BaseResponse& 
  * readContent function to read the file and save into vector
  * @return urls
  */
-std::vector<std::string> TextLexer::readContent()
+std::vector<std::string> Mitrais::util::TextLexer::readContent()
 {
 	std::vector<std::string> urls;
 
@@ -189,7 +186,7 @@ std::vector<std::string> TextLexer::readContent()
  * get url fucntion
  * @params hyperlink
  */
-std::string TextLexer::getUrl(std::string hyperlink)
+std::string Mitrais::util::TextLexer::getUrl(std::string hyperlink)
 {
 	// define the regex pattern for the link
 	boost::regex urlRegex{"\"(http|ftp|https|www|gopher|telnet|file)(.*?)\""};
@@ -215,5 +212,3 @@ std::string TextLexer::getUrl(std::string hyperlink)
 
 	return line;
 }
-
-}}/* namespace Mitrais::util */
