@@ -111,10 +111,16 @@ namespace Mitrais
 			gtk_text_buffer_set_text (_buffer, text, -1);
 		}
 
-		static string SaveSourceCode(string strURL_, util::TextBuffer buff_)
+		/**
+		 * saveSourceCode function to save the buffer into file
+		 * @param strURL_ the target url
+		 * @param buff_ the TextBuffer
+		 * @return save status in string
+		 */
+		static string saveSourceCode(string strURL_, util::TextBuffer buff_)
 		{
 			string strResponse;
-			// save into file writer
+
 			util::TextWriter writer(strURL_, buff_.getFullContent());
 			util::BaseResponse responseWrite;
 
@@ -140,13 +146,46 @@ namespace Mitrais
 			return strResponse;
 		}
 
-		void CrawlSubUrls(WebCrawler &crawler_, util::TextBuffer &buff_, vector<UrlTarget> &vecURL_, int iDeep = 2)
+		/**
+		 * getSubUrlList function to get list of UrlTarget
+		 * @param content: the string content
+		 * @return the vector of UrlTarget
+		 */
+		static vector<UrlTarget> getSubUrlList(string content)
+		{
+			TextLexer lexer;
+
+			// find the urls
+			std::vector<std::string> vec = lexer.findUrls(content);
+
+			//
+			vector<UrlTarget> sublist;
+			for(auto const& str: vec)
+			{
+				UrlTarget target;
+				target.Url = str;
+				sublist.push_back(target);
+			}
+
+			return sublist;
+		}
+
+		/**
+		 * crawlSubUrls function to crawl the web from given urls target
+		 * @param crawler_ : the web crawler reference
+		 * @param buff_ : the text buffer reference
+		 * @param vecURL_ : the url target reference
+		 * @param iDeep_ : the deep of crawled content
+		 */
+		void crawlSubUrls(WebCrawler &crawler_, util::TextBuffer &buff_, vector<UrlTarget> &vecURL_, int iDeep_ = 2)
 		{
 	        Mitrais::util::TextLexer lexer;
 	        vector<UrlTarget> vecTemp = vecURL_;
 
-	        if(iDeep == 2)
+	        if(iDeep_ == 2)
 	        	return;
+	        else
+	        	++iDeep_;
 
 			for(auto &target: vecURL_)
 			{
@@ -158,27 +197,19 @@ namespace Mitrais
 
 				// crawl the web and save into buffer
 				crawler_.getContent(target.Url, data);
+
 				//insert into buffer
 				buff_.insertContentToBuffer(data);
 
-				SaveSourceCode(target.Url, buff_);
-				vec = lexer.findUrls(data);
-				vector<UrlTarget> sublist;
+				// save into file
+				saveSourceCode(target.Url, buff_);
 
-				for(auto const& str: vec)
-				{
-					UrlTarget t;
-					t.Url = str;
-					sublist.push_back(t);
-				}
+				target.SubUrlList = getSubUrlList(data);
+				target.Deepness = iDeep_;
 
-				target.SubUrlList = sublist;
-				target.Deepness = iDeep;
-
-				CrawlSubUrls(crawler_, buff_, sublist, iDeep++);
+				// Crawl the sub urls
+				crawlSubUrls(crawler_, buff_, target.SubUrlList, iDeep_);
 			}
-
-
 		}
 
 
@@ -190,7 +221,7 @@ namespace Mitrais
 		static void onStartClicked (GtkWidget *button, GtkTextBuffer *buffer)
 		{
 			LOG_INFO << "Crawling web started";
-			string url;
+			string saveStatus;
 			gchar* text;
 			GtkTextIter ei;
 			std::string msg = "";
@@ -225,23 +256,16 @@ namespace Mitrais
 					crawler.getContent(target.Url, data);
 					//insert into buffer
 					buff.insertContentToBuffer(data);
-					SaveSourceCode(target.Url, buff);
-			        TextLexer lexer;
-			        std::vector<std::string> vec = lexer.findUrls(data);
 
-					vector<UrlTarget> sublist;
-					for(auto const& str: vec)
-					{
-						UrlTarget t;
-						t.Url = str;
-						sublist.push_back(t);
-					}
+					// save into file
+					saveStatus = saveSourceCode(target.Url, buff);
 
-			        target.SubUrlList = sublist;
-				    CrawlSubUrls(crawler, buff, sublist, 0);
+			        target.SubUrlList = getSubUrlList(data);;
 
+			        // crawl the sub urls
+				    crawlSubUrls(crawler, buff, target.SubUrlList, 0);
 
-					text = convertStringToPChar(url);
+					text = convertStringToPChar(saveStatus);
 					gtk_text_buffer_get_end_iter(buffer, &ei);
 					gtk_text_buffer_insert(buffer, &ei, text, -1);
 				}
