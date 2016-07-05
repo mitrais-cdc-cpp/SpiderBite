@@ -160,7 +160,7 @@ namespace Mitrais
 						string data = "";
 
 						// crawl the web and save into buffer
-						crawler.getContent(target.Url, data);
+						crawler.getContent(target.Url, data, true);
 						//insert into buffer
 						buff.insertContentToBuffer(data);
 

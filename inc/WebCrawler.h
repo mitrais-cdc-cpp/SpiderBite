@@ -30,6 +30,7 @@ public:
 	~WebCrawler();
 
 	void getContent(const std::string& strURL_, std::string& result);
+	void getContent(const std::string& strURL_, std::string& result_, bool isHTTPS_);
 
 private:
 };
