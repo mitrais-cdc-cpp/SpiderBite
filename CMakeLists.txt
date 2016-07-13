@@ -78,6 +78,18 @@ find_package(Threads REQUIRED)
 find_package(CURL REQUIRED)
 message(STATUS "CURL Version: ${CURL_VERSION_STRING}")
 
+# MONGODAO
+set(MONGODAO_LIBRARY_DIRS ${CMAKE_CURRENT_LIST_DIR}/env/mongodao/lib)
+set(MONGODAO_INCLUDE_DIRS ${CMAKE_CURRENT_LIST_DIR}/env/mongodao/inc)
+
+find_library(
+    URDL_LIBRARIES
+    NAMES mongodao
+    PATHS ${CMAKE_CURRENT_LIST_DIR}/env/mongodao
+    PATH_SUFFIXES "lib"
+    NO_DEFAULT_PATH
+)
+
 include_directories(${GTK3_INCLUDE_DIRS} ${Boost_INCLUDE_DIRS} ${CURL_INCLUDE_DIRS})
 link_directories(${GTK3_LIBRARY_DIRS} ${Boost_LIBRARIES} ${CURL_LIBRARIES})
 target_link_libraries(SpiderBite ${GTK3_LIBRARIES} ${Boost_LIBRARIES} Threads::Threads ${CURL_LIBRARIES} )
