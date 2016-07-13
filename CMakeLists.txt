@@ -67,16 +67,22 @@ find_package(Boost 1.61 EXACT COMPONENTS system regex date_time log log_setup RE
 
 ADD_DEFINITIONS(-DBOOST_LOG_DYN_LINK)
 
-# THREADS
-set(THREADS_PREFER_PTHREAD_FLAG ON)
-find_package(Threads REQUIRED)
+# POCO
+# set the POCO paths and libs
+set(POCO_PREFIX "/usr/local") # the directory containing "include" and "lib"
+set(POCO_INCLUDE_DIR"${POCO_PREFIX}/include")
+set(POCO_LIB_DIR "${POCO_PREFIX}/lib")
+set(POCO_LIBS
+        "${POCO_LIB_DIR}/libPocoNet.so"
+        "${POCO_LIB_DIR}/libPocoUtil.so"
+        "${POCO_LIB_DIR}/libPocoFoundation.so"
+        "${POCO_LIB_DIR}/libPocoJSON.so"
+        "${POCO_LIB_DIR}/libPocoMongoDB.so")
 
-#CURL_INCLUDE_DIRS   		- where to find curl/curl.h, etc.
-#CURL_LIBRARIES      		- List of libraries when using curl.
-#CURL_FOUND          		- True if curl found.
-#CURL_VERSION_STRING 		- the version of curl found (since CMake 2.8.8)
-find_package(CURL REQUIRED)
-message(STATUS "CURL Version: ${CURL_VERSION_STRING}")
+#set(Poco_USE_STATIC_LIBS OFF) 
+#set(Poco_USE_MULTITHREADED ON)  
+#set(Poco_USE_STATIC_RUNTIME OFF) 
+#find_package(Poco 1.7.3 EXACT COMPONENTS PocoNet PocoUtil PocoFoundation PocoJSON PocoMongoDB regex date_time log log_setup REQUIRED)
 
 # MONGODAO
 set(MONGODAO_LIBRARY_DIRS ${CMAKE_CURRENT_LIST_DIR}/env/mongodao/lib)
@@ -90,6 +96,17 @@ find_library(
     NO_DEFAULT_PATH
 )
 
-include_directories(${GTK3_INCLUDE_DIRS} ${Boost_INCLUDE_DIRS} ${CURL_INCLUDE_DIRS})
-link_directories(${GTK3_LIBRARY_DIRS} ${Boost_LIBRARIES} ${CURL_LIBRARIES})
-target_link_libraries(SpiderBite ${GTK3_LIBRARIES} ${Boost_LIBRARIES} Threads::Threads ${CURL_LIBRARIES} )
+# THREADS
+set(THREADS_PREFER_PTHREAD_FLAG ON)
+find_package(Threads REQUIRED)
+
+#CURL_INCLUDE_DIRS   		- where to find curl/curl.h, etc.
+#CURL_LIBRARIES      		- List of libraries when using curl.
+#CURL_FOUND          		- True if curl found.
+#CURL_VERSION_STRING 		- the version of curl found (since CMake 2.8.8)
+find_package(CURL REQUIRED)
+message(STATUS "CURL Version: ${CURL_VERSION_STRING}")
+
+include_directories(${GTK3_INCLUDE_DIRS} ${Boost_INCLUDE_DIRS} ${CURL_INCLUDE_DIRS} ${POCO_INCLUDE})
+link_directories(${GTK3_LIBRARY_DIRS} ${Boost_LIBRARIES} ${CURL_LIBRARIES} ${POCO_LIB_DIR})
+target_link_libraries(SpiderBite ${GTK3_LIBRARIES} ${Boost_LIBRARIES} Threads::Threads ${CURL_LIBRARIES} ${POCO_LIBS})
