@@ -33,6 +33,7 @@ TextWriter::~TextWriter()
 TextWriter::TextWriter(std::string filepath) :
 		_file(filepath)
 {
+	getProtocolType();
 	// log info
 	LOG_INFO << "Set the file path to be save the web crawler result into "+ _file;
 }
@@ -47,6 +48,7 @@ TextWriter::TextWriter(std::string filepath, std::string content) :
 		_file(filepath),
 			_content(content)
 {
+	getProtocolType();
 	// log info
 	LOG_INFO << "Set the file path to be save the web crawler result into "+ _file;
 }
@@ -181,4 +183,55 @@ std::string TextWriter::replaceFirst(std::string subject_, const std::string& ol
 		subject_.replace( subject_.find(old_), old_.length(), new_);
 	}
 	return subject_;
+}
+
+void TextWriter::writeToDatabase(BaseResponse &response)
+{
+	try
+	{
+		DB::Connector connector;
+		DB::Website website;
+
+		website.content = _content;
+		website.protocolType = _protocolType;
+
+		// TODO: Fix the issue on saving the content on database
+		//connector.Insert(website);
+
+		std::string message = _file + " is success saved to database";
+		response.updateStatus(true);
+		response.addMessage(_file);
+
+		LOG_INFO << message;
+	}
+	catch (std::exception& ex)
+	{
+		// catch the exception
+		std::string message = std::string(ex.what());
+
+		response.addMessage(message);
+		response.updateStatus(false);
+
+		// log error
+		LOG_ERROR << message;
+
+	}
+}
+
+void TextWriter::getProtocolType()
+{
+	_protocolType = "";
+
+	if(_file.find("http://") != std::string::npos)
+	{
+		_protocolType = "http";
+	}
+	else if(_file.find("https://") != std::string::npos)
+	{
+		_protocolType = "https";
+	}
+	else if(_file.find("www.") != std::string::npos)
+	{
+		_protocolType = "www";
+	}
 }
