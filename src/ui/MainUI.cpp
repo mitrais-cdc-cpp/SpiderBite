@@ -127,6 +127,9 @@ namespace Mitrais
 			// save into file
 			writer.writeToFile(responseWrite, true);
 
+			// save to database
+			writer.writeToDatabase(responseWrite);
+
 			// check the response status
 			if (responseWrite.getStatus())
 			{
