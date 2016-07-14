@@ -48,7 +48,9 @@ TextWriter::TextWriter(std::string filepath, std::string content) :
 		_file(filepath),
 			_content(content)
 {
+	// get the protocol type
 	getProtocolType();
+
 	// log info
 	LOG_INFO << "Set the file path to be save the web crawler result into "+ _file;
 }
@@ -185,6 +187,10 @@ std::string TextWriter::replaceFirst(std::string subject_, const std::string& ol
 	return subject_;
 }
 
+/**
+ * Write to database method
+ * @param response: BaseResponse reference
+ */
 void TextWriter::writeToDatabase(BaseResponse &response)
 {
 	try
@@ -218,6 +224,9 @@ void TextWriter::writeToDatabase(BaseResponse &response)
 	}
 }
 
+/**
+ * Method to get the protocol type from the given url
+ */
 void TextWriter::getProtocolType()
 {
 	_protocolType = "";
