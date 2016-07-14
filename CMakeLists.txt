@@ -67,6 +67,35 @@ find_package(Boost 1.61 EXACT COMPONENTS system regex date_time log log_setup RE
 
 ADD_DEFINITIONS(-DBOOST_LOG_DYN_LINK)
 
+# POCO
+# set the POCO paths and libs
+set(POCO_PREFIX "/usr/local") # the directory containing "include" and "lib"
+set(POCO_INCLUDE_DIR"${POCO_PREFIX}/include")
+set(POCO_LIB_DIR "${POCO_PREFIX}/lib")
+set(POCO_LIBS
+        "${POCO_LIB_DIR}/libPocoNet.so"
+        "${POCO_LIB_DIR}/libPocoUtil.so"
+        "${POCO_LIB_DIR}/libPocoFoundation.so"
+        "${POCO_LIB_DIR}/libPocoJSON.so"
+        "${POCO_LIB_DIR}/libPocoMongoDB.so")
+
+#set(Poco_USE_STATIC_LIBS OFF) 
+#set(Poco_USE_MULTITHREADED ON)  
+#set(Poco_USE_STATIC_RUNTIME OFF) 
+#find_package(Poco 1.7.3 EXACT COMPONENTS PocoNet PocoUtil PocoFoundation PocoJSON PocoMongoDB regex date_time log log_setup REQUIRED)
+
+# MONGODAO
+set(MONGODAO_LIBRARY_DIRS ${CMAKE_CURRENT_LIST_DIR}/env/mongodao/lib)
+set(MONGODAO_INCLUDE_DIRS ${CMAKE_CURRENT_LIST_DIR}/env/mongodao/inc)
+
+find_library(
+    MONGODAO_LIBRARIES
+    NAMES MongoDao
+    PATHS ${CMAKE_CURRENT_LIST_DIR}/env/mongodao
+    PATH_SUFFIXES "lib"
+    NO_DEFAULT_PATH
+)
+
 # THREADS
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads REQUIRED)
@@ -78,6 +107,6 @@ find_package(Threads REQUIRED)
 find_package(CURL REQUIRED)
 message(STATUS "CURL Version: ${CURL_VERSION_STRING}")
 
-include_directories(${GTK3_INCLUDE_DIRS} ${Boost_INCLUDE_DIRS} ${CURL_INCLUDE_DIRS})
-link_directories(${GTK3_LIBRARY_DIRS} ${Boost_LIBRARIES} ${CURL_LIBRARIES})
-target_link_libraries(SpiderBite ${GTK3_LIBRARIES} ${Boost_LIBRARIES} Threads::Threads ${CURL_LIBRARIES} )
+include_directories(${GTK3_INCLUDE_DIRS} ${Boost_INCLUDE_DIRS} ${POCO_INCLUDE} ${MONGODAO_INCLUDE_DIRS} ${CURL_INCLUDE_DIRS})
+link_directories(${GTK3_LIBRARY_DIRS} ${Boost_LIBRARIES} ${POCO_LIB_DIR} ${MONGODAO_LIBRARY_DIRS} ${CURL_LIBRARIES})
+target_link_libraries(SpiderBite ${GTK3_LIBRARIES} ${Boost_LIBRARIES} ${POCO_LIBS} ${MONGODAO_LIBRARIES} Threads::Threads ${CURL_LIBRARIES})
