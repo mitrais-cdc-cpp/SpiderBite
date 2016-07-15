@@ -14,7 +14,7 @@
 
 #include "BaseResponse.h"
 #include "Logger.h"
-#include <mongodao/DoaImpl/SpiderBite/Connector.h>
+#include "../env/mongodao/inc/DoaImpl/SpiderBite/Connector.h"
 
 namespace Mitrais{
 namespace test{

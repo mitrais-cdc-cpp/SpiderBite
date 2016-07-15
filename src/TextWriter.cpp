@@ -201,8 +201,7 @@ void TextWriter::writeToDatabase(BaseResponse &response)
 		website.content = _content;
 		website.protocolType = _protocolType;
 
-		// TODO: Fix the issue on saving the content on database
-		//connector.Insert(website);
+		connector.Insert(website);
 
 		std::string message = _file + " is success saved to database";
 		response.updateStatus(true);
