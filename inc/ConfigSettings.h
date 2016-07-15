@@ -29,8 +29,9 @@ namespace Mitrais
 	{
 		class ConfigSettings
 		{
+		private:
 			friend class boost::serialization::access;
-			friend std::ostream & operator<<(std::ostream &os, const ConfigSettings &cs);
+			friend ostream& operator<<(ostream &os, const ConfigSettings &cs);
 
 			string connectionString;	// valid connection string as string
 			string logFileName;			// preferred log file name as string
@@ -48,6 +49,7 @@ namespace Mitrais
 					& BOOST_SERIALIZATION_NVP(pathToLocalDir);
 			}
 		public:
+			ConfigSettings(){}
 			ConfigSettings(const string &_cstring,
 					const string &_lname,
 					const int _crdeep,
@@ -59,12 +61,9 @@ namespace Mitrais
 			saveTarget(_svtarg),
 			pathToLocalDir(_pathloc)
 			{}
-
 		};
 
-		BOOST_SERIALIZATION_ASSUME_ABSTRACT(ConfigSettings)
-
-		ostream & operator<<(std::ostream &os, const ConfigSettings &cs)
+		inline ostream& operator<<(ostream &os, const ConfigSettings &cs)
 		{
 			return os << '\n' << cs.connectionString << '\n' << cs.logFileName << '\n'
 					<< cs.crawlingDeepness << '\n' << cs.saveTarget << '\n' << cs.pathToLocalDir << '\n';
