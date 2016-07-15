@@ -228,18 +228,10 @@ void TextWriter::writeToDatabase(BaseResponse &response)
  */
 void TextWriter::getProtocolType()
 {
-	_protocolType = "";
+	_protocolType = "http";
 
-	if(_file.find("http://") != std::string::npos)
-	{
-		_protocolType = "http";
-	}
-	else if(_file.find("https://") != std::string::npos)
+	if(_file.find("https://") != std::string::npos)
 	{
 		_protocolType = "https";
-	}
-	else if(_file.find("www.") != std::string::npos)
-	{
-		_protocolType = "www";
 	}
 }
