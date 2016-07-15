@@ -8,6 +8,7 @@
 #include "Poco/MongoDB/DeleteRequest.h"
 #include "Poco/MongoDB/QueryRequest.h"
 #include "Poco/MongoDB/MongoDB.h"
+#include "Poco/DateTime.h"
 
 #include "Poco/SharedPtr.h"
 #include "Poco/Net/NetException.h"
