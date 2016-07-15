@@ -14,6 +14,7 @@
 
 #include "BaseResponse.h"
 #include "Logger.h"
+#include "../env/mongodao/inc/DoaImpl/SpiderBite/Connector.h"
 
 namespace Mitrais{
 namespace test{
@@ -73,18 +74,20 @@ public:
 	 * @params bool isSaveAsHtml is save as HTML
 	 */
 	void writeToFile(BaseResponse& response, bool isSaveAsHtml);
+	void writeToDatabase(BaseResponse& response);
 
 	friend class Mitrais::test::TestTextWriter;
 
 private:
 	std::string _content;
 	std::string _file;
+	std::string _protocolType;
 
 	std::ofstream _fileStream;
 
 	std::string replaceAll(std::string subject_, const std::string& old_, const std::string& new_);
 	std::string replaceFirst(std::string subject_, const std::string& old_, const std::string& new_);
-
+	void getProtocolType();
 
 };
 

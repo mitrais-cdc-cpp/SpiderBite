@@ -8,3 +8,5 @@
 /SpiderBite
 *.log
 *.html
+/build
+/test/build
