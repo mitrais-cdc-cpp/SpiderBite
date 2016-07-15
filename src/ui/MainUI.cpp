@@ -6,6 +6,7 @@
  */
 
 #include "../../inc/ui/MainUI.h"
+#include "../../inc/ui/PropertyUI.h"
 
 namespace Mitrais
 {
@@ -426,6 +427,19 @@ namespace Mitrais
 		}
 
 		/**
+		 * Callback method for setting menu
+		 * @param argc an integer
+		 * @param argv an array of chars pointer
+		 */
+		static void onSettingClicked(int argc, char *argv[])
+		{
+			LOG_INFO << "Setting Clicked";
+
+			PropertyUI prop;
+			prop.activateUI(argc, argv);
+		}
+
+		/**
 		 * check the parameter
 		 * @param int argc (number of parameter that to be passed)
 		 * @param char* argv (the parameter value that be passed)
@@ -460,6 +474,7 @@ namespace Mitrais
 			GtkWidget *filemenu;
 			GtkWidget *file;
 			GtkWidget *open;
+			GtkWidget *setting;
 			GtkWidget *quit;
 			GtkWidget *scrolled_window;
 
@@ -486,10 +501,12 @@ namespace Mitrais
 			file = gtk_menu_item_new_with_label("File");
 			open = gtk_menu_item_new_with_label("Open");
 			save = gtk_menu_item_new_with_label("Save");
+			setting = gtk_menu_item_new_with_label("Setting");
 			quit = gtk_menu_item_new_with_label("Quit");
 
 			gtk_menu_shell_append(GTK_MENU_SHELL(filemenu), open);
 			gtk_menu_shell_append(GTK_MENU_SHELL(filemenu), save);
+			gtk_menu_shell_append(GTK_MENU_SHELL(filemenu), setting);
 			gtk_menu_shell_append(GTK_MENU_SHELL(filemenu), quit);
 			gtk_menu_item_set_submenu(GTK_MENU_ITEM(file), filemenu);
 			gtk_menu_shell_append(GTK_MENU_SHELL(menubar), file);
@@ -500,6 +517,8 @@ namespace Mitrais
 			g_signal_connect(G_OBJECT(open), "activate", G_CALLBACK(onOpenClicked), window);
 			//Connects GCallback function quit_activated to "activate" signal for "save" menu item
 			g_signal_connect(G_OBJECT(save), "activate", G_CALLBACK(onSaveClicked), window);
+			//Connects GCallback function quit_activated to "activate" signal for "setting" menu item
+			g_signal_connect(G_OBJECT(setting), "activate", G_CALLBACK(onSettingClicked), window);
 			//Connects GCallback function quit_activated to "activate" signal for "quit" menu item
 			g_signal_connect(G_OBJECT(quit), "activate", G_CALLBACK(onQuitClicked), NULL);
 
