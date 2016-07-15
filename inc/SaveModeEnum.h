@@ -10,7 +10,6 @@
 
 namespace Mitrais {
 	namespace util {
-
 		/**
 		 * Enumeration to select which saving method
 		 * user preferred to store the content

@@ -11,12 +11,21 @@ namespace Mitrais
 {
 	namespace util
 	{
+		/**
+		 * Default constructor
+		 */
 		XMLHelper::XMLHelper()
 		{}
 
+		/**
+		 * Default destructor
+		 */
 		XMLHelper::~XMLHelper()
 		{}
 
+		/**
+		 * Save the configuration to some filename
+		 */
 		void XMLHelper::save_schedule(const ConfigSettings &s, const char * filename)
 		{
 			// make an archive
@@ -26,6 +35,9 @@ namespace Mitrais
 			oa << BOOST_SERIALIZATION_NVP(s);
 		}
 
+		/**
+		 * Load the file and assign the props value
+		 */
 		void XMLHelper::restore_schedule(ConfigSettings &s, const char * filename)
 		{
 			// open the archive

@@ -33,11 +33,30 @@ namespace Mitrais
 			friend class boost::serialization::access;
 			friend ostream& operator<<(ostream &os, const ConfigSettings &cs);
 
-			string connectionString;	// valid connection string as string
-			string logFileName;			// preferred log file name as string
-			int crawlingDeepness;		// deepness of the crawling as int
-			SaveModeEnum saveTarget;	// saving mode of the app as enum
-			string pathToLocalDir;		// path of local save dir as string
+			/**
+			 * valid connection string as string
+			 */
+			string connectionString;
+
+			/**
+			 * preferred log file name as string
+			 */
+			string logFileName;
+
+			/**
+			 * deepness of the crawling as int
+			 */
+			int crawlingDeepness;
+
+			/**
+			 * saving mode of the app as enum
+			 */
+			SaveModeEnum saveTarget;
+
+			/**
+			 * path of local save dir as string
+			 */
+			string pathToLocalDir;
 
 			template<class Archive>
 			void serialize(Archive &ar, const unsigned int )
@@ -49,7 +68,14 @@ namespace Mitrais
 					& BOOST_SERIALIZATION_NVP(pathToLocalDir);
 			}
 		public:
+			/**
+			 * Default constructor
+			 */
 			ConfigSettings(){}
+
+			/**
+			 * Constructor for initializing value of props
+			 */
 			ConfigSettings(const string &_cstring,
 					const string &_lname,
 					const int _crdeep,
@@ -63,6 +89,9 @@ namespace Mitrais
 			{}
 		};
 
+		/**
+		 * inline definition of operator friend function
+		 */
 		inline ostream& operator<<(ostream &os, const ConfigSettings &cs)
 		{
 			return os << '\n' << cs.connectionString << '\n' << cs.logFileName << '\n'
