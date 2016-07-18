@@ -33,12 +33,12 @@ namespace Mitrais
 				/**
 				 * Save the configuration to some filename
 				 */
-				void save_schedule(const ConfigSettings &s, const char * filename);
+				void saveXML(const ConfigSettings &s, const char * filename);
 
 				/**
 				 * Load the file and assign the props value
 				 */
-				void restore_schedule(ConfigSettings &s, const char * filename);
+				void loadXML(ConfigSettings &s, const char * filename);
 		};
 	}
 }

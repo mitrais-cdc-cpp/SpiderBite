@@ -26,7 +26,7 @@ namespace Mitrais
 		/**
 		 * Save the configuration to some filename
 		 */
-		void XMLHelper::save_schedule(const ConfigSettings &s, const char * filename)
+		void XMLHelper::saveXML(const ConfigSettings &s, const char * filename)
 		{
 			// make an archive
 			std::ofstream ofs(filename);
@@ -38,7 +38,7 @@ namespace Mitrais
 		/**
 		 * Load the file and assign the props value
 		 */
-		void XMLHelper::restore_schedule(ConfigSettings &s, const char * filename)
+		void XMLHelper::loadXML(ConfigSettings &s, const char * filename)
 		{
 			// open the archive
 			std::ifstream ifs(filename);
