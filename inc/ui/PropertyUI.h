@@ -9,10 +9,15 @@
 #define INC_UI_PROPERTYUI_H_
 
 #include <gtk/gtk.h>
+#include <sys/stat.h>
 
 #include "../Logger.h"
+#include "../XMLHelper.h"
+#include "../ConfigSettings.h"
+#include "../SaveModeEnum.h"
 
 using namespace std;
+using namespace Mitrais::util;
 
 namespace Mitrais
 {

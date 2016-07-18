@@ -11,7 +11,12 @@ namespace Mitrais
 	namespace UI
 	{
 		string _filePathX;
-		GtkWidget *_entryLocalSavedWebPath;
+		GtkWidget* _entry_local_saved_webpath;
+		const char *config_name = "Config.xml";
+		GtkWidget* _entry_db_conn_string;
+		GtkWidget* _entry_log_filename;
+		GtkWidget* _spin_depth_of_crawling;
+		GtkWidget* _switch_save_in_folder;
 
 		/**
 		 * Default constructor of MainUI
@@ -86,9 +91,117 @@ namespace Mitrais
 		   }
 
 		   // show the file path in entry local saved web path
-		   gtk_entry_set_text(GTK_ENTRY(_entryLocalSavedWebPath), convertStringToPCharX(_filePathX));
+		   gtk_entry_set_text(GTK_ENTRY(_entry_local_saved_webpath), convertStringToPCharX(_filePathX));
 
 		   gtk_widget_destroy (dialog);
+		}
+
+		/*
+		 * isExist function to check if file is exist or not
+		 * @param string filename
+		 * @return bool status
+		 */
+		bool isExisting(string filename)
+		{
+			 struct stat buffer;
+			 return (stat (filename.c_str(), &buffer) == 0);
+		}
+
+		/**
+		 * LoadConfigToForm to collect all values from config file,
+		 * set it to setting form when its loaded.
+		 *
+		 * @param config
+		 */
+		void loadConfigToForm(ConfigSettings &config)
+		{
+			// get all the properties value
+			string conn_string = config.connectionString;
+			string log_file_name = config.logFileName;
+			int crawling_deepness = config.crawlingDeepness;
+			SaveModeEnum save_target = config.saveTarget;
+			string path_to_local_dir = config.pathToLocalDir;
+
+			bool isActive;
+			if (save_target == SAVE_TO_FILE)
+			{
+				isActive = true;
+			} else
+			{
+				isActive = false;
+			}
+
+			// set to form
+			gtk_entry_set_text(GTK_ENTRY(_entry_db_conn_string), convertStringToPCharX(conn_string));
+			gtk_entry_set_text(GTK_ENTRY(_entry_log_filename), convertStringToPCharX(log_file_name));
+			gtk_spin_button_set_value(GTK_SPIN_BUTTON(_spin_depth_of_crawling), crawling_deepness);
+			gtk_switch_set_active(GTK_SWITCH(_switch_save_in_folder), isActive);
+			gtk_entry_set_text(GTK_ENTRY(_entry_local_saved_webpath), convertStringToPCharX(path_to_local_dir));
+		}
+
+		/**
+		 * loadXML to load configuration file for setting's form
+		 *
+		 * @param filename
+		 */
+		void loadXML(char *filename)
+		{
+			XMLHelper helper;
+			ConfigSettings conf;
+
+			bool isExist = isExisting(string(filename));
+			if (isExist)
+			{
+				LOG_INFO << "Config loaded";
+				helper.loadXML(conf, filename);
+				loadConfigToForm(conf);
+			} else {
+				LOG_INFO << "Config not found";
+			}
+		}
+
+		/**
+		 * saveXML to save configuration file
+		 *
+		 */
+		void saveXML()
+		{
+			LOG_INFO << "Save config function called!";
+
+			// get all values from setting form
+			string conn_string = gtk_entry_get_text(GTK_ENTRY(_entry_db_conn_string));
+			string log_file_name = gtk_entry_get_text(GTK_ENTRY(_entry_log_filename));
+			int crawling_deepness = gtk_spin_button_get_value(GTK_SPIN_BUTTON(_spin_depth_of_crawling));
+			bool isActive = gtk_switch_get_active(GTK_SWITCH(_switch_save_in_folder));
+			string path_to_local_dir = gtk_entry_get_text(GTK_ENTRY(_entry_local_saved_webpath));
+
+			SaveModeEnum save_target;
+			if (isActive)
+			{
+				save_target = SAVE_TO_FILE;
+			} else
+			{
+				save_target = SAVE_TO_DB;
+			}
+
+			ConfigSettings settings(conn_string, log_file_name, crawling_deepness, save_target, path_to_local_dir);
+			string filename = string(config_name);
+
+			XMLHelper helper;
+			helper.saveXML(settings, filename.c_str());
+
+			LOG_INFO << "Config file saved!";
+		}
+
+		/**
+		 * Callback method for save menu
+		 * @params GtkWidget *widget a widget
+		 * @params GtkWidget *window a window
+		 */
+		static void onSaveClicked(GtkWidget *widget, GtkWidget *window)
+		{
+			LOG_INFO << "Save Clicked";
+			saveXML();
 		}
 
 		/**
@@ -107,18 +220,14 @@ namespace Mitrais
 			GtkWidget *open;
 			GtkWidget *quit;
 			GtkWidget *grid;
-			GtkWidget *labelDBConnString;
-			GtkWidget *labelLogFileName ;
-			GtkWidget *labelDepthOfCrawling;
-			GtkWidget *labelSaveInFolder;
-			GtkWidget *labelLocalSavedWebPath;
-			GtkWidget *entryDBConnString;
-			GtkWidget *entryLogFileName;
-			GtkWidget *spinDepthOfCrawling;
-			GtkWidget *switchSaveInFolder;
-			GtkWidget *buttonSelectPath;
-			GtkWidget *buttonSave;
-			GtkWidget *buttonCancel;
+			GtkWidget *label_db_conn_string;
+			GtkWidget *label_log_file_name ;
+			GtkWidget *label_depth_of_crawling;
+			GtkWidget *label_save_in_folder;
+			GtkWidget *label_local_saved_webpath;
+			GtkWidget *button_select_path;
+			GtkWidget *button_save;
+			GtkWidget *button_cancel;
 
 			//gint context_id;
 			gtk_init (&argc, &argv);
@@ -145,65 +254,71 @@ namespace Mitrais
 						gtk_menu_shell_append(GTK_MENU_SHELL(filemenu), quit);
 
 			//Create label
-			labelDBConnString = gtk_label_new("DB conn string : ");
-			labelLogFileName = gtk_label_new("Log file name : ");
+			label_db_conn_string = gtk_label_new("DB conn string : ");
+			label_log_file_name = gtk_label_new("Log file name : ");
 
 			// depth of recursion of crawling
-			labelDepthOfCrawling = gtk_label_new("Depth crawling recursion : ");
+			label_depth_of_crawling = gtk_label_new("Depth crawling recursion : ");
 
 			// switch for saving in files/folder structure or database
-			labelSaveInFolder = gtk_label_new("Save in folder?" );
+			label_save_in_folder = gtk_label_new("Save in folder?" );
 
 			// path for local saved websites
-			labelLocalSavedWebPath = gtk_label_new("Local saved web path : ");
+			label_local_saved_webpath = gtk_label_new("Local saved web path : ");
 
 			//Create entryBox
-			entryDBConnString = gtk_entry_new ();
-			entryLogFileName = gtk_entry_new ();
-			spinDepthOfCrawling = gtk_spin_button_new_with_range(1, 3, 1);
-			switchSaveInFolder = gtk_switch_new ();
-			_entryLocalSavedWebPath = gtk_entry_new ();
+			_entry_db_conn_string = gtk_entry_new ();
+			_entry_log_filename = gtk_entry_new ();
+			_spin_depth_of_crawling = gtk_spin_button_new_with_range(1, 3, 1);
+			_switch_save_in_folder = gtk_switch_new ();
+			_entry_local_saved_webpath = gtk_entry_new ();
 
 			//Create button to select the local saved website path
-			buttonSelectPath = gtk_button_new_with_label("...");
+			button_select_path = gtk_button_new_with_label("...");
 
 			/* Create a start button. */
-			buttonSave = gtk_button_new_with_label ("Save");
+			button_save = gtk_button_new_with_label ("Save");
 
 			/* Create a stop button. */
-			buttonCancel = gtk_button_new_with_label ("Cancel");
+			button_cancel = gtk_button_new_with_label ("Cancel");
 
 			// attach the grids
 			gtk_grid_attach(GTK_GRID(grid), menubar, 0, 0, 10, 10);
-			gtk_grid_attach(GTK_GRID(grid), labelDBConnString, 0, 15, 20, 10);
-			gtk_grid_attach(GTK_GRID(grid), entryDBConnString, 20, 15, 20, 10);
-			gtk_grid_attach(GTK_GRID(grid), labelLogFileName, 0, 30, 20, 10);
-			gtk_grid_attach(GTK_GRID(grid), entryLogFileName, 20, 30, 20, 10);
-			gtk_grid_attach(GTK_GRID(grid), labelDepthOfCrawling, 0, 45, 20, 10);
-			gtk_grid_attach(GTK_GRID(grid), spinDepthOfCrawling, 20, 45, 10, 10);
-			gtk_grid_attach(GTK_GRID(grid), labelSaveInFolder, 0, 60, 20, 10);
-			gtk_grid_attach(GTK_GRID(grid), switchSaveInFolder, 20, 60, 10, 10);
-			gtk_grid_attach(GTK_GRID(grid), labelLocalSavedWebPath, 0, 75, 20, 10);
-			gtk_grid_attach(GTK_GRID(grid), _entryLocalSavedWebPath, 20, 75, 15, 10);
-			gtk_grid_attach(GTK_GRID(grid), buttonSelectPath, 37, 75, 10, 10);
-			gtk_grid_attach(GTK_GRID(grid), buttonSave, 20, 90, 10, 10);
-			gtk_grid_attach(GTK_GRID(grid), buttonCancel, 30, 90, 10, 10);
+			gtk_grid_attach(GTK_GRID(grid), label_db_conn_string, 0, 15, 20, 10);
+			gtk_grid_attach(GTK_GRID(grid), _entry_db_conn_string, 20, 15, 20, 10);
+			gtk_grid_attach(GTK_GRID(grid), label_log_file_name, 0, 30, 20, 10);
+			gtk_grid_attach(GTK_GRID(grid), _entry_log_filename, 20, 30, 20, 10);
+			gtk_grid_attach(GTK_GRID(grid), label_depth_of_crawling, 0, 45, 20, 10);
+			gtk_grid_attach(GTK_GRID(grid), _spin_depth_of_crawling, 20, 45, 10, 10);
+			gtk_grid_attach(GTK_GRID(grid), label_save_in_folder, 0, 60, 20, 10);
+			gtk_grid_attach(GTK_GRID(grid), _switch_save_in_folder, 20, 60, 10, 10);
+			gtk_grid_attach(GTK_GRID(grid), label_local_saved_webpath, 0, 75, 20, 10);
+			gtk_grid_attach(GTK_GRID(grid), _entry_local_saved_webpath, 20, 75, 15, 10);
+			gtk_grid_attach(GTK_GRID(grid), button_select_path, 37, 75, 10, 10);
+			gtk_grid_attach(GTK_GRID(grid), button_save, 20, 90, 10, 10);
+			gtk_grid_attach(GTK_GRID(grid), button_cancel, 30, 90, 10, 10);
 
 			// callbacks
 
 			//Connects GCallback function quit_activated to "activate" signal for "quit" menu item
 			g_signal_connect (G_OBJECT(quit), "activate", G_CALLBACK(onQuitClicked), window);
-			g_signal_connect (GTK_ENTRY(entryDBConnString), "activate", G_CALLBACK(entry_activate), labelDBConnString);
-			g_signal_connect (GTK_ENTRY(entryLogFileName), "activate", G_CALLBACK(entry_activate), labelLogFileName);
-			g_signal_connect (G_OBJECT(spinDepthOfCrawling), "activate", G_CALLBACK(entry_activate), labelDepthOfCrawling);
-			g_signal_connect (GTK_ENTRY(switchSaveInFolder), "activate", G_CALLBACK(entry_activate), labelSaveInFolder);
-			g_signal_connect (GTK_ENTRY(_entryLocalSavedWebPath), "activate", G_CALLBACK(entry_activate), labelLocalSavedWebPath);
-			g_signal_connect (G_OBJECT(buttonSelectPath), "clicked", G_CALLBACK(onOpenClicked), window);
-//			g_signal_connect (G_OBJECT (buttonSave), "clicked",G_CALLBACK (onStartClicked), window);
-			g_signal_connect (G_OBJECT (buttonCancel), "clicked",G_CALLBACK (onQuitClicked), window);
+
+			//Connects GCallback function quit_activated to "activate" signal for "save" menu item
+			g_signal_connect (G_OBJECT(save), "activate", G_CALLBACK(onSaveClicked), window);
+			g_signal_connect (GTK_ENTRY(_entry_db_conn_string), "activate", G_CALLBACK(entry_activate), label_db_conn_string);
+			g_signal_connect (GTK_ENTRY(_entry_log_filename), "activate", G_CALLBACK(entry_activate), label_log_file_name);
+			g_signal_connect (GTK_SPIN_BUTTON(_spin_depth_of_crawling), "activate", G_CALLBACK(entry_activate), label_depth_of_crawling);
+			g_signal_connect (GTK_SWITCH(_switch_save_in_folder), "activate", G_CALLBACK(entry_activate), label_save_in_folder);
+			g_signal_connect (GTK_ENTRY(_entry_local_saved_webpath), "activate", G_CALLBACK(entry_activate), label_local_saved_webpath);
+			g_signal_connect (G_OBJECT(button_select_path), "clicked", G_CALLBACK(onOpenClicked), window);
+			g_signal_connect (G_OBJECT (button_save), "clicked",G_CALLBACK (onSaveClicked), window);
+			g_signal_connect (G_OBJECT (button_cancel), "clicked",G_CALLBACK (onQuitClicked), window);
 
 			// add grid to window container
 			gtk_container_add(GTK_CONTAINER(window), grid);
+
+			// load configuration file
+			loadXML((char*)config_name);
 
 			gtk_widget_show_all (window);
 			gtk_main ();
