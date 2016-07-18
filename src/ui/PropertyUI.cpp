@@ -106,7 +106,6 @@ namespace Mitrais
 			GtkWidget *save;
 			GtkWidget *open;
 			GtkWidget *quit;
-			GtkWidget *scrolled_window;
 			GtkWidget *grid;
 			GtkWidget *labelDBConnString;
 			GtkWidget *labelLogFileName ;
@@ -118,6 +117,8 @@ namespace Mitrais
 			GtkWidget *spinDepthOfCrawling;
 			GtkWidget *switchSaveInFolder;
 			GtkWidget *buttonSelectPath;
+			GtkWidget *buttonSave;
+			GtkWidget *buttonCancel;
 
 			//gint context_id;
 			gtk_init (&argc, &argv);
@@ -128,6 +129,7 @@ namespace Mitrais
 			gtk_container_set_border_width (GTK_CONTAINER (window), 10);
 			gtk_window_set_default_size (GTK_WINDOW (window), 300, 200);
 
+			// create new grid layout
 			grid = gtk_grid_new();
 
 			/* Create menubar and the menu list itself.*/
@@ -141,9 +143,6 @@ namespace Mitrais
 			gtk_menu_shell_append(GTK_MENU_SHELL(menubar), menu);
 			gtk_menu_shell_append(GTK_MENU_SHELL(filemenu), save);
 						gtk_menu_shell_append(GTK_MENU_SHELL(filemenu), quit);
-
-			//Connects GCallback function quit_activated to "activate" signal for "quit" menu item
-			g_signal_connect(G_OBJECT(quit), "activate", G_CALLBACK(onQuitClicked), window);
 
 			//Create label
 			labelDBConnString = gtk_label_new("DB conn string : ");
@@ -168,6 +167,12 @@ namespace Mitrais
 			//Create button to select the local saved website path
 			buttonSelectPath = gtk_button_new_with_label("...");
 
+			/* Create a start button. */
+			buttonSave = gtk_button_new_with_label ("Save");
+
+			/* Create a stop button. */
+			buttonCancel = gtk_button_new_with_label ("Cancel");
+
 			// attach the grids
 			gtk_grid_attach(GTK_GRID(grid), menubar, 0, 0, 10, 10);
 			gtk_grid_attach(GTK_GRID(grid), labelDBConnString, 0, 15, 20, 10);
@@ -181,14 +186,21 @@ namespace Mitrais
 			gtk_grid_attach(GTK_GRID(grid), labelLocalSavedWebPath, 0, 75, 20, 10);
 			gtk_grid_attach(GTK_GRID(grid), _entryLocalSavedWebPath, 20, 75, 15, 10);
 			gtk_grid_attach(GTK_GRID(grid), buttonSelectPath, 37, 75, 10, 10);
+			gtk_grid_attach(GTK_GRID(grid), buttonSave, 20, 90, 10, 10);
+			gtk_grid_attach(GTK_GRID(grid), buttonCancel, 30, 90, 10, 10);
 
 			// callbacks
+
+			//Connects GCallback function quit_activated to "activate" signal for "quit" menu item
+			g_signal_connect (G_OBJECT(quit), "activate", G_CALLBACK(onQuitClicked), window);
 			g_signal_connect (GTK_ENTRY(entryDBConnString), "activate", G_CALLBACK(entry_activate), labelDBConnString);
 			g_signal_connect (GTK_ENTRY(entryLogFileName), "activate", G_CALLBACK(entry_activate), labelLogFileName);
 			g_signal_connect (G_OBJECT(spinDepthOfCrawling), "activate", G_CALLBACK(entry_activate), labelDepthOfCrawling);
 			g_signal_connect (GTK_ENTRY(switchSaveInFolder), "activate", G_CALLBACK(entry_activate), labelSaveInFolder);
 			g_signal_connect (GTK_ENTRY(_entryLocalSavedWebPath), "activate", G_CALLBACK(entry_activate), labelLocalSavedWebPath);
 			g_signal_connect (G_OBJECT(buttonSelectPath), "clicked", G_CALLBACK(onOpenClicked), window);
+//			g_signal_connect (G_OBJECT (buttonSave), "clicked",G_CALLBACK (onStartClicked), window);
+			g_signal_connect (G_OBJECT (buttonCancel), "clicked",G_CALLBACK (onQuitClicked), window);
 
 			// add grid to window container
 			gtk_container_add(GTK_CONTAINER(window), grid);
