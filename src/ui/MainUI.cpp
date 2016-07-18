@@ -350,7 +350,7 @@ namespace Mitrais
 		static void onQuitClicked (GtkWidget *widget, gpointer data)
 		{
 			LOG_INFO << "Program terminated";
-			gtk_main_quit ();
+			gtk_widget_destroy(GTK_WIDGET(data));
 		}
 
 		/**
@@ -520,7 +520,7 @@ namespace Mitrais
 			//Connects GCallback function quit_activated to "activate" signal for "setting" menu item
 			g_signal_connect(G_OBJECT(setting), "activate", G_CALLBACK(onSettingClicked), window);
 			//Connects GCallback function quit_activated to "activate" signal for "quit" menu item
-			g_signal_connect(G_OBJECT(quit), "activate", G_CALLBACK(onQuitClicked), NULL);
+			g_signal_connect(G_OBJECT(quit), "activate", G_CALLBACK(onQuitClicked), window);
 
 			/* Create a multiline text widget. */
 			text_view = gtk_text_view_new ();

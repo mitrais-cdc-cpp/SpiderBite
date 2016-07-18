@@ -27,10 +27,10 @@ namespace Mitrais
 		 * Callback method for quit menu
 		 * params widget a GtkWidget pointer
 		 */
-		static void onQuitClicked (GtkWidget *widget, gpointer data)
+		static void onQuitClicked (GtkWidget *widget, gpointer window)
 		{
 			LOG_INFO << "Property terminated";
-			gtk_main_quit ();
+			gtk_widget_destroy(GTK_WIDGET(window));
 		}
 
 		/**
@@ -143,7 +143,7 @@ namespace Mitrais
 						gtk_menu_shell_append(GTK_MENU_SHELL(filemenu), quit);
 
 			//Connects GCallback function quit_activated to "activate" signal for "quit" menu item
-			g_signal_connect(G_OBJECT(quit), "activate", G_CALLBACK(onQuitClicked), NULL);
+			g_signal_connect(G_OBJECT(quit), "activate", G_CALLBACK(onQuitClicked), window);
 
 			//Create label
 			labelDBConnString = gtk_label_new("DB conn string : ");
