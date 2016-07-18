@@ -33,30 +33,6 @@ namespace Mitrais
 			friend class boost::serialization::access;
 			friend ostream& operator<<(ostream &os, const ConfigSettings &cs);
 
-			/**
-			 * valid connection string as string
-			 */
-			string connectionString;
-
-			/**
-			 * preferred log file name as string
-			 */
-			string logFileName;
-
-			/**
-			 * deepness of the crawling as int
-			 */
-			int crawlingDeepness;
-
-			/**
-			 * saving mode of the app as enum
-			 */
-			SaveModeEnum saveTarget;
-
-			/**
-			 * path of local save dir as string
-			 */
-			string pathToLocalDir;
 
 			template<class Archive>
 			void serialize(Archive &ar, const unsigned int )
@@ -87,6 +63,31 @@ namespace Mitrais
 			saveTarget(_svtarg),
 			pathToLocalDir(_pathloc)
 			{}
+
+			/**
+			 * valid connection string as string
+			 */
+			string connectionString;
+
+			/**
+			 * preferred log file name as string
+			 */
+			string logFileName;
+
+			/**
+			 * deepness of the crawling as int
+			 */
+			int crawlingDeepness;
+
+			/**
+			 * saving mode of the app as enum
+			 */
+			SaveModeEnum saveTarget;
+
+			/**
+			 * path of local save dir as string
+			 */
+			string pathToLocalDir;
 		};
 
 		/**
@@ -94,8 +95,11 @@ namespace Mitrais
 		 */
 		inline ostream& operator<<(ostream &os, const ConfigSettings &cs)
 		{
-			return os << '\n' << cs.connectionString << '\n' << cs.logFileName << '\n'
-					<< cs.crawlingDeepness << '\n' << cs.saveTarget << '\n' << cs.pathToLocalDir << '\n';
+			return os << "Connection String: " << cs.connectionString <<
+					"\n Log File Name: " << cs.logFileName <<
+					"\n Crawling Deepness: " << cs.crawlingDeepness <<
+					"\n Save To File? " << cs.saveTarget <<
+					"\n Path to Local dir: " << cs.pathToLocalDir;
 		}
 	} /* namespace util */
 } /* namespace Mitrais */
