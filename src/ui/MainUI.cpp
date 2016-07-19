@@ -122,20 +122,33 @@ namespace Mitrais
 		{
 			string strResponse;
 
+			util::Configuration config;
 			util::TextWriter writer(strURL_, buff_.getFullContent());
 			util::BaseResponse responseWrite;
 
-			// save into file
-			writer.writeToFile(responseWrite, true);
-
-			// save to database
-			writer.writeToDatabase(responseWrite);
+			if(config.getSetting().saveTarget == SAVE_TO_FILE)
+			{
+				// save into file
+				writer.writeToFile(responseWrite, true);
+			}
+			else
+			{
+				// save to database
+				writer.writeToDatabase(responseWrite);
+			}
 
 			// check the response status
 			if (responseWrite.getStatus())
 			{
-				strResponse = "The "+ strURL_ + " done!\n"+
-					  "The "+ strURL_+ " saved: "+ strURL_ +".html on current application folder\n";
+				strResponse = "The "+ strURL_ + " done!\n"+ "The "+ strURL_+ " saved";
+				if(config.getSetting().saveTarget == SAVE_TO_FILE)
+				{
+					strResponse += ": "+ strURL_ +".html on current application folder\n";
+				}
+				else
+				{
+					strResponse += " on database\n";
+				}
 
 				LOG_INFO << strURL_ + " Saved!";
 			}
@@ -186,7 +199,8 @@ namespace Mitrais
 	        Mitrais::util::TextLexer lexer;
 	        vector<UrlTarget> vecTemp = vecURL_;
 
-	        if(iDeep_ == 2)
+			util::Configuration config;
+	        if(iDeep_ == config.getSetting().crawlingDeepness)
 	        	return;
 	        else
 	        	++iDeep_;
