@@ -165,8 +165,6 @@ bool TextReader::isExist(std::string filePath)
  */
 std::vector<UrlTarget> TextReader::readFile()
 {
-	std::vector<UrlTarget> urls;
-
 	// read the file
 	std::ifstream file(_filePath);
 	std::string url;
@@ -185,25 +183,147 @@ std::vector<UrlTarget> TextReader::readFile()
 			{
 				UrlTarget target;
 
-				if (!url.empty() && url[url.size() - 1] == '\r')
-					url.erase(url.size() - 1);
+				bool isExist = checkDuplicateUrl(url, target);
 
-				if (!url.empty() && url[url.size() - 1] == '\n')
-					url.erase(url.size() - 1);
-
-				target.Url = url;
-				target.LatestUrlPosition = url;
-				target.Status = NONE;
-
-				// store into vector
-				urls.push_back(target);
+				if (!isExist)
+				{
+					_targets.push_back(target);
+				}
 			}
 		}
 
 		file.close();
 	}
 
-	return urls;
+	return _targets;
+}
+
+/*
+ * checkDuplicateUrl function to check the duplication of an url on venctor of url
+ * @param url (string)
+ * @param target (UrlTarget)
+ * @return status (duplicate or not)
+ */
+bool TextReader::checkDuplicateUrl(std::string url, UrlTarget& target)
+{
+	// convert the url to lower case
+	boost::algorithm::to_lower(url);
+
+	// remove \r character
+	if (!url.empty() && url[url.size() - 1] == '\r')
+	{
+		url.erase(url.size() - 1);
+	}
+
+	// remove enter/newline character
+	if (!url.empty() && url[url.size() - 1] == '\n')
+	{
+		url.erase(url.size() - 1);
+	}
+
+	// remove url prefix (www.)
+	url = removeUrlPrefix(url);
+
+	target = getUrl(url);
+
+	return isUrlExist(target);
+}
+
+/*
+ * getUrl to construct an url string into UrlTarget using POCO URI library
+ * @param url (string)
+ * @return UrlTarget
+ */
+UrlTarget TextReader::getUrl(string url)
+{
+	UrlTarget target;
+
+	Poco::URI uri(url);
+
+	// get the protocol/schema (http, https, ftp)
+	std::string protocol = uri.getScheme();
+
+	// check if there is a protocol or not
+	if (!protocol.empty())
+	{
+		target.Protocol = protocol;
+	}
+	else
+	{
+		// set "http" as default protocol
+		target.Protocol = _defaultProtocol;
+	}
+
+	// get the host name and also the authority or port (if exist, example : www.mitrais.com:8080)
+	target.Url = uri.getAuthority();
+
+	// remove url prefix (www.)
+	target.Url = removeUrlPrefix(target.Url);
+
+	// get the pathEtc (mitaris.com/contact-us, pathEtc = /contact-us
+	std::string pathOrSubpage = uri.getPathEtc();
+
+	// check if the pathEtc is exist
+	if (!pathOrSubpage.empty())
+	{
+		// add into host name and auth address
+		target.Url += pathOrSubpage;
+	}
+
+	// set the latest url position as the url
+	target.LatestUrlPosition = target.Url;
+
+	// set the target as NONE
+	target.Status = NONE;
+
+	return target;
+}
+
+/*
+ * Check whether the url target is exist or not on vector
+ * @param UrlTarget
+ * @return status (exist or not)
+ */
+bool TextReader::isUrlExist(UrlTarget target)
+{
+//	vector<UrlTarget>::iterator it;
+//
+//	it = std::find(_targets.begin(), _targets.end(), target);
+//
+//	if (it !=_targets.end())
+//	{
+//		// if found (there is duplication)
+//		return true;
+//	}
+//
+//	// not found
+//	return false;
+
+	// looping manual to search the equal value since could not use std::find
+	if (_targets.size() > 0)
+	{
+		for(auto const& existingUrl:_targets)
+		{
+			if ((existingUrl.Protocol.compare(target.Protocol) == 0) &&
+				(existingUrl.Url.compare(target.Url) == 0))
+			{
+				return true;
+			}
+		}
+	}
+
+	return false;
+}
+
+std::string TextReader::removeUrlPrefix(std::string url)
+{
+	if (url.compare(0, _prefixLength, _prefix) == 0)
+	{
+		// remove the "www." character
+		url.erase(0, _prefixLength);
+	}
+
+	return url;
 }
 
 }}/* namespace Mitrais::util */

@@ -9,6 +9,7 @@
 #define INC_WEBCRAWLER_H_
 
 #include <iostream>
+#include <string>
 #include <curl/curl.h>
 
 #include "TextBuffer.h"
@@ -33,6 +34,7 @@ public:
 	void getContent(const std::string& strURL_, std::string& result_, bool isHTTPS_);
 
 private:
+	std::string addPrefixAndSufixUrl(const std::string& url);
 };
 
 }} // namespace Mitrais::util
