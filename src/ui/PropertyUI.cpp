@@ -236,14 +236,14 @@ namespace Mitrais
 			grid = gtk_grid_new();
 
 			//Create label
-			label_db_conn_string = gtk_label_new("DB conn string : ");
+			label_db_conn_string = gtk_label_new("Database location : ");
 			label_log_file_name = gtk_label_new("Log file name : ");
 
 			// depth of recursion of crawling
-			label_depth_of_crawling = gtk_label_new("Depth crawling recursion : ");
+			label_depth_of_crawling = gtk_label_new("Crawling deepness : ");
 
 			// switch for saving in files/folder structure or database
-			label_save_in_folder = gtk_label_new("Save in folder?" );
+			label_save_in_folder = gtk_label_new("Save in folder? :" );
 
 			// path for local saved websites
 			label_local_saved_webpath = gtk_label_new("Local saved web path : ");
@@ -278,6 +278,13 @@ namespace Mitrais
 			gtk_grid_attach(GTK_GRID(grid), button_select_path, 37, 75, 10, 10);
 			gtk_grid_attach(GTK_GRID(grid), button_save, 20, 90, 10, 10);
 			gtk_grid_attach(GTK_GRID(grid), button_cancel, 30, 90, 10, 10);
+
+			// set label to justify left
+			gtk_label_set_xalign(GTK_LABEL(label_db_conn_string), 0);
+			gtk_label_set_xalign(GTK_LABEL(label_log_file_name), 0);
+			gtk_label_set_xalign(GTK_LABEL(label_depth_of_crawling), 0);
+			gtk_label_set_xalign(GTK_LABEL(label_save_in_folder), 0);
+			gtk_label_set_xalign(GTK_LABEL(label_local_saved_webpath), 0);
 
 			// callbacks
 			g_signal_connect (GTK_ENTRY(_entry_db_conn_string), "activate", G_CALLBACK(entry_activate), label_db_conn_string);
