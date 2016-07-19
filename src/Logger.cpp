@@ -11,11 +11,19 @@ BOOST_LOG_GLOBAL_LOGGER_INIT(spiderbite_logger, logger_t)
 {
     logger_t lg;
 
+	Mitrais::util::Configuration config;
+	std::string logFileName = "spiderbite_%N.log";
+
+	if(config.getSetting().logFileName != "")
+	{
+		logFileName = config.getSetting().logFileName + "_%N.log";
+	}
+
     logging::add_common_attributes();
 
     logging::add_file_log
 	(
-		keywords::file_name = SYS_LOGFILE,
+		keywords::file_name = logFileName,
 		keywords::open_mode = std::ios_base::app,
 		keywords::auto_flush = true,
 		keywords::rotation_size = 10*1024*1204,   // rotate files every 10 MiB...
