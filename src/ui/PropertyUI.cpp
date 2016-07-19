@@ -213,12 +213,6 @@ namespace Mitrais
 		{
 			LOG_INFO << "Property UI activated";
 			GtkWidget *window;
-			GtkWidget *menubar;
-			GtkWidget *filemenu;
-			GtkWidget *menu;
-			GtkWidget *save;
-			GtkWidget *open;
-			GtkWidget *quit;
 			GtkWidget *grid;
 			GtkWidget *label_db_conn_string;
 			GtkWidget *label_log_file_name ;
@@ -236,22 +230,10 @@ namespace Mitrais
 			window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 			gtk_window_set_title (GTK_WINDOW (window), "Settings");
 			gtk_container_set_border_width (GTK_CONTAINER (window), 10);
-			gtk_window_set_default_size (GTK_WINDOW (window), 300, 200);
+			gtk_window_set_default_size (GTK_WINDOW (window), 300, 170);
 
 			// create new grid layout
 			grid = gtk_grid_new();
-
-			/* Create menubar and the menu list itself.*/
-			menubar = gtk_menu_bar_new();
-			filemenu = gtk_menu_new();
-			menu = gtk_menu_item_new_with_label("Menu");
-			save = gtk_menu_item_new_with_label("Save");
-			quit = gtk_menu_item_new_with_label("Quit");
-
-			gtk_menu_item_set_submenu(GTK_MENU_ITEM(menu), filemenu);
-			gtk_menu_shell_append(GTK_MENU_SHELL(menubar), menu);
-			gtk_menu_shell_append(GTK_MENU_SHELL(filemenu), save);
-						gtk_menu_shell_append(GTK_MENU_SHELL(filemenu), quit);
 
 			//Create label
 			label_db_conn_string = gtk_label_new("DB conn string : ");
@@ -283,7 +265,6 @@ namespace Mitrais
 			button_cancel = gtk_button_new_with_label ("Cancel");
 
 			// attach the grids
-			gtk_grid_attach(GTK_GRID(grid), menubar, 0, 0, 10, 10);
 			gtk_grid_attach(GTK_GRID(grid), label_db_conn_string, 0, 15, 20, 10);
 			gtk_grid_attach(GTK_GRID(grid), _entry_db_conn_string, 20, 15, 20, 10);
 			gtk_grid_attach(GTK_GRID(grid), label_log_file_name, 0, 30, 20, 10);
@@ -299,12 +280,6 @@ namespace Mitrais
 			gtk_grid_attach(GTK_GRID(grid), button_cancel, 30, 90, 10, 10);
 
 			// callbacks
-
-			//Connects GCallback function quit_activated to "activate" signal for "quit" menu item
-			g_signal_connect (G_OBJECT(quit), "activate", G_CALLBACK(onQuitClicked), window);
-
-			//Connects GCallback function quit_activated to "activate" signal for "save" menu item
-			g_signal_connect (G_OBJECT(save), "activate", G_CALLBACK(onSaveClicked), window);
 			g_signal_connect (GTK_ENTRY(_entry_db_conn_string), "activate", G_CALLBACK(entry_activate), label_db_conn_string);
 			g_signal_connect (GTK_ENTRY(_entry_log_filename), "activate", G_CALLBACK(entry_activate), label_log_file_name);
 			g_signal_connect (GTK_SPIN_BUTTON(_spin_depth_of_crawling), "activate", G_CALLBACK(entry_activate), label_depth_of_crawling);
