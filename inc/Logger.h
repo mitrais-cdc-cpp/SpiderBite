@@ -11,6 +11,7 @@
 #include <boost/date_time/posix_time/posix_time_types.hpp>
 #include <boost/log/support/date_time.hpp>
 #include <boost/log/attributes/mutable_constant.hpp>
+#include "Configuration.h"
 
 #define LOG_INFO  BOOST_LOG_SEV(spiderbite_logger::get(), boost::log::trivial::info)     << "[" <<std::string(__FILE__).substr(std::string( __FILE__).find_last_of("/\\")+1) << " : " << BOOST_CURRENT_FUNCTION << " : "<<__LINE__<< "] "
 #define LOG_DEBUG BOOST_LOG_SEV(spiderbite_logger::get(), boost::log::trivial::debug)    << "[" <<std::string(__FILE__).substr(std::string( __FILE__).find_last_of("/\\")+1) << " : " << BOOST_CURRENT_FUNCTION << " : "<<__LINE__<< "] "
@@ -18,8 +19,6 @@
 #define LOG_ERROR BOOST_LOG_SEV(spiderbite_logger::get(), boost::log::trivial::error)    << "[" <<std::string(__FILE__).substr(std::string( __FILE__).find_last_of("/\\")+1) << " : " << BOOST_CURRENT_FUNCTION << " : "<<__LINE__<< "] "
 #define LOG_FATAL BOOST_LOG_SEV(spiderbite_logger::get(), boost::log::trivial::fatal)    << "[" <<std::string(__FILE__).substr(std::string( __FILE__).find_last_of("/\\")+1) << " : " << BOOST_CURRENT_FUNCTION << " : "<<__LINE__<< "] "
 
-
-#define SYS_LOGFILE             "spiderbite_%N.log"
 
 //Narrow-char thread-safe logger.
 typedef boost::log::sources::severity_logger_mt<boost::log::trivial::severity_level> logger_t;

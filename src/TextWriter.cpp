@@ -85,6 +85,9 @@ void TextWriter::writeToFile(BaseResponse& response, bool isSaveAsHtml)
 {
 	try
 	{
+		Configuration config;
+		std::string directoryPath = config.getSetting().pathToLocalDir;
+
 		std::string fileName = _file;
 
 		// fill blanks if we find http:// or https://
@@ -104,6 +107,8 @@ void TextWriter::writeToFile(BaseResponse& response, bool isSaveAsHtml)
 
 		if (isSaveAsHtml)
 			fileName += ".html";
+
+		fileName = directoryPath + fileName;
 
 		_fileStream.open(fileName.c_str(), std::ios::trunc);
 
