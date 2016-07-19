@@ -37,13 +37,15 @@ static size_t writeCallback(void *contents, size_t size, size_t nmemb, void* str
 void Mitrais::util::WebCrawler::getContent(const std::string& strURL_,
 		std::string& result_, bool isHTTPS_)
 {
+	std::string url = addPrefixAndSufixUrl(strURL_);
+
 	CURL* curl;
 	CURLcode res;
 
 	curl_global_init(CURL_GLOBAL_ALL); //pretty obvious
 	curl = curl_easy_init();
 
-	curl_easy_setopt(curl, CURLOPT_URL, strURL_.c_str());//strURL_);
+	curl_easy_setopt(curl, CURLOPT_URL, url.c_str());//url);
 	curl_easy_setopt(curl, CURLOPT_WRITEDATA, &result_);
 	curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, &writeCallback);
     curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 1);
@@ -68,7 +70,6 @@ void Mitrais::util::WebCrawler::getContent(const std::string& strURL_,
 	curl_global_cleanup();
 
 }
-
 	/**
 	 * Gives content of given URL
 	 * @param strURL_ valid URL address
@@ -76,13 +77,15 @@ void Mitrais::util::WebCrawler::getContent(const std::string& strURL_,
 	 */
 void Mitrais::util::WebCrawler::getContent(const std::string& strURL_, std::string& result_)
 {
+	std::string url = addPrefixAndSufixUrl(strURL_);
+
 	CURL* curl;
 	CURLcode res;
 
 	curl_global_init(CURL_GLOBAL_ALL); //pretty obvious
 	curl = curl_easy_init();
 
-	curl_easy_setopt(curl, CURLOPT_URL, strURL_.c_str());//strURL_);
+	curl_easy_setopt(curl, CURLOPT_URL, url.c_str());//url);
 	curl_easy_setopt(curl, CURLOPT_WRITEDATA, result_);
 	curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, &writeCallback);
 	curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);//tell curl to output its progress
@@ -102,5 +105,18 @@ void Mitrais::util::WebCrawler::getContent(const std::string& strURL_, std::stri
 
 	curl_easy_cleanup(curl);
 	curl_global_cleanup();
+}
 
+/*
+ * add prefix (http://www.) and also sufix ("//")
+ * @param url (string)
+ * @return result with prefix and sufix
+ */
+string Mitrais::util::WebCrawler::addPrefixAndSufixUrl(const std::string& url)
+{
+	std::string result;
+
+	result = "http://www." + url + "/";
+
+	return result;
 }

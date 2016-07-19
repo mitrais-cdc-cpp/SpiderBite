@@ -247,7 +247,6 @@ namespace Mitrais
 				util::TextBuffer buff;
 				WebCrawler crawler;
 
-
 				for(auto& target: _targets)
 				{
 					msg = target.Url + " started crawling...!";
