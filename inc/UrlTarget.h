@@ -15,6 +15,7 @@ namespace util {
  */
 struct UrlTarget
 {
+	std::string Protocol;           // protocol type (http, https, ftp)
 	std::string Url;				// valid URL address as string
 	std::string LatestUrlPosition;	// TBD
 	UrlTargerStatus Status;			// current status of crawling process for URL address
