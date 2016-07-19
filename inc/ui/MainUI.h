@@ -17,7 +17,7 @@
 #include "../TextLexer.h"
 #include "../WebCrawler.h"
 #include "../Logger.h"
-#include "../XMLHelper.h"
+#include "../Configuration.h"
 
 using namespace Mitrais;
 using namespace Mitrais::util;

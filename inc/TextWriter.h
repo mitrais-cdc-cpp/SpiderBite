@@ -11,10 +11,12 @@
 #include <iostream>
 #include <fstream>
 #include <regex>
+#include <boost/filesystem.hpp>
 
 #include "BaseResponse.h"
 #include "Logger.h"
 #include "../env/mongodao/inc/DoaImpl/SpiderBite/Connector.h"
+#include "Configuration.h"
 
 namespace Mitrais{
 namespace test{
