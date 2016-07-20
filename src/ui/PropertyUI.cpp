@@ -164,7 +164,7 @@ namespace Mitrais
 		 * saveXML to save configuration file
 		 *
 		 */
-		void saveXML()
+		void saveXML(GtkWidget *window)
 		{
 			LOG_INFO << "Save config function called!";
 
@@ -184,13 +184,34 @@ namespace Mitrais
 				save_target = SAVE_TO_DB;
 			}
 
-			ConfigSettings settings(conn_string, log_file_name, crawling_deepness, save_target, path_to_local_dir);
-			string filename = string(config_name);
+			if(conn_string.empty() || log_file_name.empty() || path_to_local_dir.empty())
+			{
+				LOG_INFO << "Config file save failed!";
 
-			XMLHelper helper;
-			helper.saveXML(settings, filename.c_str());
+				GtkWidget *dialog;
+				GtkDialogFlags flags = GTK_DIALOG_DESTROY_WITH_PARENT;
+				dialog = gtk_message_dialog_new (GTK_WINDOW(window),
+				                                 flags,
+				                                 GTK_MESSAGE_ERROR,
+				                                 GTK_BUTTONS_CLOSE,
+				                                 NULL);
+				gtk_message_dialog_set_markup (GTK_MESSAGE_DIALOG (dialog),
+												"All fields should be filled!");
+				gtk_dialog_run (GTK_DIALOG (dialog));
+				gtk_widget_destroy (dialog);
+			}
+			else
+			{
+				ConfigSettings settings(conn_string, log_file_name, crawling_deepness, save_target, path_to_local_dir);
+				string filename = string(config_name);
 
-			LOG_INFO << "Config file saved!";
+				XMLHelper helper;
+				helper.saveXML(settings, filename.c_str());
+
+				gtk_widget_destroy(GTK_WIDGET(window));
+
+				LOG_INFO << "Config file saved!";
+			}
 		}
 
 		/**
@@ -201,8 +222,7 @@ namespace Mitrais
 		static void onSaveClicked(GtkWidget *widget, GtkWidget *window)
 		{
 			LOG_INFO << "Save Clicked";
-			saveXML();
-			gtk_widget_destroy(GTK_WIDGET(window));
+			saveXML(window);
 		}
 
 		/**
