@@ -122,11 +122,10 @@ namespace Mitrais
 		{
 			string strResponse;
 
-			util::Configuration config;
 			util::TextWriter writer(strURL_, buff_.getFullContent());
 			util::BaseResponse responseWrite;
 
-			if(config.getSetting().saveTarget == SAVE_TO_FILE)
+			if(util::Configuration::getSetting().saveTarget == SAVE_TO_FILE)
 			{
 				// save into file
 				writer.writeToFile(responseWrite, true);
@@ -141,7 +140,7 @@ namespace Mitrais
 			if (responseWrite.getStatus())
 			{
 				strResponse = "The "+ strURL_ + " done!\n"+ "The "+ strURL_+ " saved";
-				if(config.getSetting().saveTarget == SAVE_TO_FILE)
+				if(util::Configuration::getSetting().saveTarget == SAVE_TO_FILE)
 				{
 					strResponse += ": "+ strURL_ +".html on current application folder\n";
 				}

@@ -12,9 +12,39 @@ namespace Mitrais
 	{
 		/**
 		 * Default constructor.
-		 * The valid configuration setting will be constructed here
 		 */
 		Configuration::Configuration()
+		{
+		}
+
+		/**
+		 * Default destructor
+		 */
+		Configuration::~Configuration()
+		{
+		}
+
+		/**
+		 * The xml file for configuration
+		 */
+		const string Configuration::_fileName = "Config.xml";
+
+		/**
+		 * The XMLHelper object
+		 */
+		XMLHelper Configuration::_helper;
+
+		/**
+		 * The configuration setting object
+		 */
+		ConfigSettings Configuration::_setting;
+
+		/**
+		 * Get the configuration setting
+		 * The valid configuration setting will be constructed here
+		 * @return ConfigSettings oject
+		 */
+		ConfigSettings Configuration::getSetting()
 		{
 			if(boost::filesystem::exists(_fileName.c_str()))
 			{
@@ -28,21 +58,6 @@ namespace Mitrais
 				_setting.saveTarget = SAVE_TO_FILE;
 				_setting.pathToLocalDir = "";
 			}
-		}
-
-		/**
-		 * Default destructor
-		 */
-		Configuration::~Configuration()
-		{
-		}
-
-		/**
-		 * Get the configuration setting
-		 * @return ConfigSettings oject
-		 */
-		ConfigSettings Configuration::getSetting()
-		{
 			return _setting;
 		}
 	}

@@ -85,8 +85,7 @@ void TextWriter::writeToFile(BaseResponse& response, bool isSaveAsHtml)
 {
 	try
 	{
-		Configuration config;
-		std::string directoryPath = config.getSetting().pathToLocalDir;
+		std::string directoryPath = util::Configuration::getSetting().pathToLocalDir;
 
 		std::string fileName = _file;
 
@@ -108,7 +107,7 @@ void TextWriter::writeToFile(BaseResponse& response, bool isSaveAsHtml)
 		if (isSaveAsHtml)
 			fileName += ".html";
 
-		fileName = directoryPath + fileName;
+		fileName = directoryPath + "/" + fileName;
 
 		_fileStream.open(fileName.c_str(), std::ios::trunc);
 

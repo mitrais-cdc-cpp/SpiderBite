@@ -34,23 +34,23 @@ namespace Mitrais
 				 * Get the configuration setting
 				 * @return ConfigSettings oject
 				 */
-				ConfigSettings getSetting();
+				static ConfigSettings getSetting();
 
 			private:
 				/**
 				 * The xml file for configuration
 				 */
-				const string _fileName = "Config.xml";
+				static const string _fileName;
 
 				/**
 				 * The XMLHelper object
 				 */
-				XMLHelper _helper;
+				static XMLHelper _helper;
 
 				/**
 				 * The configuration setting object
 				 */
-				ConfigSettings _setting;
+				static ConfigSettings _setting;
 		};
 	}
 }
