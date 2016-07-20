@@ -331,7 +331,7 @@ namespace Mitrais
 
 			GtkWidget *dialog;
 
-			dialog = gtk_file_chooser_dialog_new ("Chose file..",
+			dialog = gtk_file_chooser_dialog_new ("Choose file..",
 			     GTK_WINDOW(window),
 			     GTK_FILE_CHOOSER_ACTION_OPEN,
 				 ("_Cancel"), GTK_RESPONSE_CANCEL,

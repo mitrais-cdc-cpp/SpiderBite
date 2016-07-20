@@ -72,11 +72,11 @@ namespace Mitrais
 
 			GtkWidget *dialog;
 
-			dialog = gtk_file_chooser_dialog_new ("Chose file..",
+			dialog = gtk_file_chooser_dialog_new ("Select folder..",
 				 GTK_WINDOW(window),
-				 GTK_FILE_CHOOSER_ACTION_OPEN,
+				 GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
 				 ("_Cancel"), GTK_RESPONSE_CANCEL,
-				 ("_Open"), GTK_RESPONSE_ACCEPT,
+				 ("_Select"), GTK_RESPONSE_ACCEPT,
 				 NULL);
 
 		   if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT)
@@ -202,6 +202,7 @@ namespace Mitrais
 		{
 			LOG_INFO << "Save Clicked";
 			saveXML();
+			gtk_widget_destroy(GTK_WIDGET(window));
 		}
 
 		/**
@@ -285,6 +286,12 @@ namespace Mitrais
 			gtk_label_set_xalign(GTK_LABEL(label_depth_of_crawling), 0);
 			gtk_label_set_xalign(GTK_LABEL(label_save_in_folder), 0);
 			gtk_label_set_xalign(GTK_LABEL(label_local_saved_webpath), 0);
+
+			// set spacing between row in grid
+			gtk_grid_set_row_spacing(GTK_GRID(grid), 2);
+
+			// set spacing between column in grid
+			gtk_grid_set_column_spacing(GTK_GRID(grid), 2);
 
 			// callbacks
 			g_signal_connect (GTK_ENTRY(_entry_db_conn_string), "activate", G_CALLBACK(entry_activate), label_db_conn_string);
