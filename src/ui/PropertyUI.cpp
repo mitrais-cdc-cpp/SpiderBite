@@ -287,6 +287,8 @@ namespace Mitrais
 			gtk_label_set_xalign(GTK_LABEL(label_save_in_folder), 0);
 			gtk_label_set_xalign(GTK_LABEL(label_local_saved_webpath), 0);
 
+			gtk_widget_set_sensitive (_entry_local_saved_webpath, FALSE);
+
 			// set spacing between row in grid
 			gtk_grid_set_row_spacing(GTK_GRID(grid), 2);
 
