@@ -233,6 +233,9 @@ namespace Mitrais
 			gtk_container_set_border_width (GTK_CONTAINER (window), 10);
 			gtk_window_set_default_size (GTK_WINDOW (window), 300, 170);
 
+			// set resizeable false
+			gtk_window_set_resizable(GTK_WINDOW(window), FALSE);
+
 			// create new grid layout
 			grid = gtk_grid_new();
 
@@ -287,6 +290,7 @@ namespace Mitrais
 			gtk_label_set_xalign(GTK_LABEL(label_save_in_folder), 0);
 			gtk_label_set_xalign(GTK_LABEL(label_local_saved_webpath), 0);
 
+			// disable _entry_local_saved_webpath
 			gtk_widget_set_sensitive (_entry_local_saved_webpath, FALSE);
 
 			// set spacing between row in grid
