@@ -21,6 +21,9 @@ int main(int argc, char* argv[])
 	MainUI ab;
 	ab.activateUI(argc, argv);
 
+//	ThreadHelper helper;
+//	helper.executeTaskAsync(3);
+
 //	ConfigSettings settings("a","b",1,SAVE_TO_DB,"e");
 //	std::string filename(boost::archive::tmpdir());
 //	filename += "/sett.xml";
