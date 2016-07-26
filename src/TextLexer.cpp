@@ -94,7 +94,7 @@ std::vector<std::string> Mitrais::util::TextLexer::findUrls(BaseResponse& respon
 		response.addSuccessMessage();
 
 		// log success message
-		//LOG_INFO << "Success find all urls from the content";
+		LOG_INFO << "Success find all urls from the content";
 	}
 	catch (std::exception& ex)
 	{
@@ -107,7 +107,7 @@ std::vector<std::string> Mitrais::util::TextLexer::findUrls(BaseResponse& respon
 		response.updateStatus(false);
 
 		// log error message
-		//LOG_ERROR << message;
+		LOG_ERROR << message;
 	}
 
 	return urls;

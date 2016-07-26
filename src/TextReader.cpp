@@ -221,13 +221,19 @@ bool TextReader::checkDuplicateUrl(std::string url, UrlTarget& target)
 		url.erase(url.size() - 1);
 	}
 
+	// remove enter/newline character
+	if (!url.empty() && url[url.size() - 1] == '\/')
+	{
+		url.erase(url.size() - 1);
+	}
+
 	// remove url prefix (www.)
-	url = removeUrlPrefix(url);
+	url = util::TextReader::removeUrlPrefix(url);
 
 	// google.com or mitrais.com
-	target = getUrl(url);
+	target = util::TextReader::getUrl(url);
 
-	return isUrlExist(target);
+	return util::TextReader::isUrlExist(_targets, target);
 }
 
 /*
@@ -252,14 +258,14 @@ UrlTarget TextReader::getUrl(string url)
 	else
 	{
 		// set "http" as default protocol
-		target.Protocol = _defaultProtocol;
+		target.Protocol = "http";
 	}
 
 	// get the host name and also the authority or port (if exist, example : www.mitrais.com:8080)
 	target.Url = uri.getAuthority();
 
 	// remove url prefix (www. -> mitrais.com:8080)
-	target.Url = removeUrlPrefix(target.Url);
+	target.Url = util::TextReader::removeUrlPrefix(target.Url);
 
 	// get the pathEtc (mitaris.com/contact-us, pathEtc = /contact-us -> mitrais.com:8080/contact-us
 	std::string pathOrSubpage = uri.getPathEtc();
@@ -282,31 +288,19 @@ UrlTarget TextReader::getUrl(string url)
 
 /*
  * Check whether the url target is exist or not on vector
- * @param UrlTarget
+ * @param list of existing Urls
+ * @param current url
  * @return status (exist or not)
  */
-bool TextReader::isUrlExist(UrlTarget target)
+bool TextReader::isUrlExist(const vector<UrlTarget>& existingUrls, const UrlTarget& currentUrl)
 {
-//	vector<UrlTarget>::iterator it;
-//
-//	it = std::find(_targets.begin(), _targets.end(), target);
-//
-//	if (it !=_targets.end())
-//	{
-//		// if found (there is duplication)
-//		return true;
-//	}
-//
-//	// not found
-//	return false;
-
 	// looping manual to search the equal value since could not use std::find
-	if (_targets.size() > 0)
+	if (existingUrls.size() > 0)
 	{
-		for(auto const& existingUrl:_targets)
+		for(auto const& existingUrl:existingUrls)
 		{
-			if ((existingUrl.Protocol.compare(target.Protocol) == 0) &&
-				(existingUrl.Url.compare(target.Url) == 0))
+			if ((existingUrl.Protocol.compare(currentUrl.Protocol) == 0) &&
+				(existingUrl.Url.compare(currentUrl.Url) == 0))
 			{
 				return true;
 			}
@@ -316,15 +310,21 @@ bool TextReader::isUrlExist(UrlTarget target)
 	return false;
 }
 
+/*
+ * Remove URL prefix (www)
+ * @param url (string)
+ * @return url without www
+ */
 std::string TextReader::removeUrlPrefix(std::string url)
 {
-	if (url.compare(0, _prefixLength, _prefix) == 0)
+	if (url.compare(0, 4, "www.") == 0)
 	{
 		// remove the "www." character
-		url.erase(0, _prefixLength);
+		url.erase(0, 4);
 	}
 
 	return url;
 }
+
 
 }}/* namespace Mitrais::util */

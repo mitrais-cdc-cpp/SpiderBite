@@ -9,8 +9,7 @@
 #include <iterator>
 
 #include "BaseResponse.h"
-
-using namespace std;
+#include "Logger.h"
 
 namespace Mitrais {
 namespace util {

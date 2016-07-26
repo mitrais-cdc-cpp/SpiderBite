@@ -16,9 +16,6 @@
 #include "UrlTarget.h"
 #include "Logger.h"
 
-using namespace std;
-using namespace Poco;
-
 namespace Mitrais
 {
 namespace util
@@ -37,19 +34,18 @@ public:
 	std::vector<UrlTarget> getUrls(BaseResponse& response);
 	std::vector<UrlTarget> getUrls(std::string filePath);
 	std::vector<UrlTarget> getUrls(std::string filePath, BaseResponse& response);
+	static UrlTarget getUrl(std::string url);
+	static bool isUrlExist(const vector<UrlTarget>& existingUrls, const UrlTarget& currentUrl);
 
 private:
-	const std::string _prefix = "www.";
-	const int _prefixLength = 4;
-	const std::string _defaultProtocol = "http";
 	std::string _filePath;
 	std::vector<UrlTarget> _targets;
 	bool isExist(std::string filePath);
 	std::vector<UrlTarget> readFile();
 	bool checkDuplicateUrl(std::string url, UrlTarget& target);
-	UrlTarget getUrl(std::string url);
-	bool isUrlExist(UrlTarget target);
-	std::string removeUrlPrefix(std::string url);
+	//UrlTarget getUrl(std::string url);
+	//bool isUrlExist(UrlTarget target);
+	static std::string removeUrlPrefix(std::string url);
 };
 
 }

@@ -185,10 +185,13 @@ namespace Mitrais
 			vector<UrlTarget> sublist;
 			for(auto const& str: vec)
 			{
-				UrlTarget target;
-				target.Url = str;
-				target.Status = NONE;
-				sublist.push_back(target);
+				UrlTarget target = util::TextReader::getUrl(str);
+				bool isExist = util::TextReader::isUrlExist(_targets, target);
+
+				if (!isExist)
+				{
+					sublist.push_back(target);
+				}
 			}
 
 			return sublist;
