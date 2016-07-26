@@ -224,6 +224,7 @@ bool TextReader::checkDuplicateUrl(std::string url, UrlTarget& target)
 	// remove url prefix (www.)
 	url = removeUrlPrefix(url);
 
+	// google.com or mitrais.com
 	target = getUrl(url);
 
 	return isUrlExist(target);
@@ -257,10 +258,10 @@ UrlTarget TextReader::getUrl(string url)
 	// get the host name and also the authority or port (if exist, example : www.mitrais.com:8080)
 	target.Url = uri.getAuthority();
 
-	// remove url prefix (www.)
+	// remove url prefix (www. -> mitrais.com:8080)
 	target.Url = removeUrlPrefix(target.Url);
 
-	// get the pathEtc (mitaris.com/contact-us, pathEtc = /contact-us
+	// get the pathEtc (mitaris.com/contact-us, pathEtc = /contact-us -> mitrais.com:8080/contact-us
 	std::string pathOrSubpage = uri.getPathEtc();
 
 	// check if the pathEtc is exist

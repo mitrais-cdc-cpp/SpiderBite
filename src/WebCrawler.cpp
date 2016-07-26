@@ -34,7 +34,7 @@ static size_t writeCallback(void *contents, size_t size, size_t nmemb, void* str
 	return size * nmemb;
 }
 
-void Mitrais::util::WebCrawler::getContent(const std::string& strURL_,
+void Mitrais::util::WebCrawler::getContent(const util::UrlTarget& strURL_,
 		std::string& result_, bool isHTTPS_)
 {
 	std::string url = addPrefixAndSufixUrl(strURL_);
@@ -75,7 +75,7 @@ void Mitrais::util::WebCrawler::getContent(const std::string& strURL_,
 	 * @param strURL_ valid URL address
 	 * @param result_ founded result, commonly HTML source code
 	 */
-void Mitrais::util::WebCrawler::getContent(const std::string& strURL_, std::string& result_)
+void Mitrais::util::WebCrawler::getContent(const util::UrlTarget& strURL_, std::string& result_)
 {
 	std::string url = addPrefixAndSufixUrl(strURL_);
 
@@ -112,11 +112,24 @@ void Mitrais::util::WebCrawler::getContent(const std::string& strURL_, std::stri
  * @param url (string)
  * @return result with prefix and sufix
  */
-string Mitrais::util::WebCrawler::addPrefixAndSufixUrl(const std::string& url)
+string Mitrais::util::WebCrawler::addPrefixAndSufixUrl(const util::UrlTarget& url)
 {
 	std::string result;
 
-	result = "http://www." + url + "/";
+	if (url.Protocol.compare("http") == 0)
+	{
+		result = "http://www.";
+	}
+	else if (url.Protocol.compare("https") == 0)
+	{
+		result = "https://www.";
+	}
+	else if (url.Protocol.compare("ftp") == 0)
+	{
+		result = "ftp://";
+	}
+
+	result += url.Url+ "/";
 
 	return result;
 }

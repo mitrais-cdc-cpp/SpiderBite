@@ -142,7 +142,15 @@ namespace Mitrais
 				strResponse = "The "+ strURL_ + " done!\n"+ "The "+ strURL_+ " saved";
 				if(util::Configuration::getSetting().saveTarget == SAVE_TO_FILE)
 				{
-					strResponse += ": "+ strURL_ +".html on current application folder\n";
+					string savePath = util::Configuration::getSetting().pathToLocalDir;
+					if (!savePath.empty())
+					{
+						strResponse += ": "+ savePath +"\/" + strURL_ +".html\n";
+					}
+					else
+					{
+						strResponse += ": "+ strURL_ +".html on current application folder\n";
+					}
 				}
 				else
 				{
@@ -174,12 +182,12 @@ namespace Mitrais
 			// find the urls
 			std::vector<std::string> vec = lexer.findUrls(content);
 
-			//
 			vector<UrlTarget> sublist;
 			for(auto const& str: vec)
 			{
 				UrlTarget target;
 				target.Url = str;
+				target.Status = NONE;
 				sublist.push_back(target);
 			}
 
@@ -195,6 +203,8 @@ namespace Mitrais
 		 */
 		void crawlSubUrls(WebCrawler &crawler_, util::TextBuffer &buff_, vector<UrlTarget> &vecURL_, int iDeep_ = 2)
 		{
+			GtkTextIter ei;
+
 	        Mitrais::util::TextLexer lexer;
 	        vector<UrlTarget> vecTemp = vecURL_;
 
@@ -206,20 +216,43 @@ namespace Mitrais
 
 			for(auto &target: vecURL_)
 			{
+				// check if the url target status is DONE
+				if (target.Status == DONE)
+				{
+					string message = target.Url + " has been crawled previously\n";
+					gchar* text;
+					text = convertStringToPChar(message);
+					text = convertStringToPChar(message);
+					gtk_text_buffer_get_end_iter(_buffer, &ei);
+					gtk_text_buffer_insert(_buffer, &ei, text, -1);
+
+					// continue to the next URL target
+					continue;
+				}
+
 				std::vector<std::string> vec;
 
 				// clear data
 				buff_.clearBuffer();
 				string data = "";
 
+				// set the status into START
+				target.Status = START;
+
 				// crawl the web and save into buffer
-				crawler_.getContent(target.Url, data);
+				crawler_.getContent(target, data);
+
+				// update the status into CRAWLING
+				target.Status = CRAWLING;
 
 				//insert into buffer
 				buff_.insertContentToBuffer(data);
 
 				// save into file
 				saveSourceCode(target.Url, buff_);
+
+				// update the status into DONE
+				target.Status = DONE;
 
 				target.SubUrlList = getSubUrlList(data);
 				target.Deepness = iDeep_;
@@ -254,6 +287,8 @@ namespace Mitrais
 
 			// disable start button
 			gtk_widget_set_sensitive (button, FALSE);
+			// enable stop button
+			gtk_widget_set_sensitive (_stop_btn, TRUE);
 
 			if (_targets.size() > 0)
 			{
@@ -262,6 +297,20 @@ namespace Mitrais
 
 				for(auto& target: _targets)
 				{
+					// check if the url target status is DONE
+					if (target.Status == DONE)
+					{
+						// show message
+						string message = target.Url + " has been crawled previously.\n";
+						gchar* text;
+						text = convertStringToPChar(message);
+						gtk_text_buffer_get_end_iter(buffer, &ei);
+						gtk_text_buffer_insert(buffer, &ei, text, -1);
+
+						// continue to the next URL target
+						continue;
+					}
+
 					msg = target.Url + " started crawling...!";
 					LOG_INFO << msg;
 
@@ -269,10 +318,20 @@ namespace Mitrais
 					buff.clearBuffer();
 					string data = "";
 
+					// update the status into START
+					target.Status = START;
+
 					// crawl the web and save into buffer
-					crawler.getContent(target.Url, data);
+					crawler.getContent(target, data);
+
+					// update the status into CRAWLING
+					target.Status = CRAWLING;
+
 					//insert into buffer
 					buff.insertContentToBuffer(data);
+
+					// update the status into DONE
+					target.Status = DONE;
 
 					// save into file
 					saveStatus = saveSourceCode(target.Url, buff);
@@ -295,9 +354,10 @@ namespace Mitrais
 				LOG_WARN << msg;
 			}
 
-			// enable stop button
-			gtk_widget_set_sensitive (_stop_btn, TRUE);
 			pushMessage("Crawling stopped.");
+			// enable start button
+			gtk_widget_set_sensitive (button, TRUE);
+			gtk_widget_set_sensitive (_stop_btn, FALSE);
 		}
 
 		/**
