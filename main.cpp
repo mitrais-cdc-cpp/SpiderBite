@@ -18,6 +18,9 @@ int main(int argc, char* argv[])
 {
 	// logger example
 	LOG_INFO << "Program started";
+
+	gtk_init(&argc, &argv);
+
 	MainUI ab;
 	ab.activateUI(argc, argv);
 

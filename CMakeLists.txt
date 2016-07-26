@@ -10,7 +10,9 @@ set(_ECLIPSE_VERSION "4.5")
 file(GLOB SOURCES
  main.cpp
  inc/util/*.h
+ inc/util/*.hpp
  inc/view/*.h
+ inc/view/*.hpp
  src//util/*.cpp
  src/view/*.cpp)
 
