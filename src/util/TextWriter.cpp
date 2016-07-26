@@ -5,7 +5,7 @@
  *      Author: Andi_y
  */
 
-#include "../inc/TextWriter.h"
+#include "../../inc/util/TextWriter.h"
 
 using namespace Mitrais::util;
 

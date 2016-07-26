@@ -5,7 +5,7 @@
  *      Author: developer
  */
 
-#include "../inc/Configuration.h"
+#include "../../inc/util/Configuration.h"
 namespace Mitrais
 {
 	namespace util

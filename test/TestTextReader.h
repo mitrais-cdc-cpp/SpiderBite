@@ -4,8 +4,8 @@
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 
-#include "../inc/TextReader.h"
-#include "../inc/UrlTarget.h"
+#include "../inc/util/TextReader.h"
+#include "../inc/util/UrlTarget.h"
 
 class TestTextReader: public CppUnit::TestFixture
 {

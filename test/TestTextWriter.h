@@ -10,7 +10,7 @@
 
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
-#include "../inc/TextWriter.h"
+#include "../inc/util/TextWriter.h"
 #include <sys/stat.h>
 
 namespace Mitrais{

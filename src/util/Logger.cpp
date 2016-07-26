@@ -1,4 +1,4 @@
-#include "../inc/Logger.h"
+#include "../../inc/util/Logger.h"
 
 namespace attrs    = boost::log::attributes;
 namespace expr     = boost::log::expressions;

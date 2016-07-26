@@ -11,10 +11,10 @@
 #include <gtk/gtk.h>
 #include <sys/stat.h>
 
-#include "../Logger.h"
-#include "../XMLHelper.h"
-#include "../ConfigSettings.h"
-#include "../SaveModeEnum.h"
+#include "../util/Logger.h"
+#include "../util/XMLHelper.h"
+#include "../util/ConfigSettings.h"
+#include "../util/SaveModeEnum.h"
 
 using namespace std;
 using namespace Mitrais::util;

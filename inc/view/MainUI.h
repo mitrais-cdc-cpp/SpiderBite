@@ -10,14 +10,14 @@
 
 #include <gtk/gtk.h>
 
-#include "../TextReader.h"
-#include "../TextBuffer.h"
-#include "../SocketConnection.h"
-#include "../TextWriter.h"
-#include "../TextLexer.h"
-#include "../WebCrawler.h"
-#include "../Logger.h"
-#include "../Configuration.h"
+#include "../util/TextReader.h"
+#include "../util/TextBuffer.h"
+#include "../util/SocketConnection.h"
+#include "../util/TextWriter.h"
+#include "../util/TextLexer.h"
+#include "../util/WebCrawler.h"
+#include "../util/Logger.h"
+#include "../util/Configuration.h"
 
 using namespace Mitrais;
 using namespace Mitrais::util;

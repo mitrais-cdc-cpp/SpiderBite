@@ -5,8 +5,8 @@
  *      Author: adityo_w
  */
 
-#include "../../inc/ui/MainUI.h"
-#include "../../inc/ui/PropertyUI.h"
+#include "../../inc/view/MainUI.h"
+#include "../../inc/view/PropertyUI.h"
 
 namespace Mitrais
 {

@@ -8,7 +8,7 @@
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 
-#include "../inc/TextLexer.h"
+#include "../inc/util/TextLexer.h"
 
 class TestTextLexer: public CppUnit::TestFixture
 {

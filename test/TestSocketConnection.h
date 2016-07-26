@@ -11,7 +11,7 @@
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 
-#include "../inc/SocketConnection.h"
+#include "../inc/util/SocketConnection.h"
 
 
 class TestSocketConnection: public CppUnit::TestFixture

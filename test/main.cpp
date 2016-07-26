@@ -3,11 +3,11 @@
 #include <cppunit/ui/text/TestRunner.h>
 
 #include "TestSocketConnection.h"
-#include "../inc/SocketConnection.h"
+#include "../inc/util/SocketConnection.h"
 #include "TestTextReader.h"
-#include "../inc/TextReader.h"
+#include "../inc/util/TextReader.h"
 #include "TestTextBuffer.h"
-#include "../inc/TextBuffer.h"
+#include "../inc/util/TextBuffer.h"
 
 using namespace Mitrais::util;
 

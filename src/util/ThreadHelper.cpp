@@ -5,7 +5,7 @@
  *      Author: developer
  */
 
-#include "../inc/ThreadHelper.h"
+#include "../../inc/util/ThreadHelper.h"
 
 namespace Mitrais
 {

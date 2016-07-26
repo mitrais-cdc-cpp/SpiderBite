@@ -1,4 +1,4 @@
-#include "../inc/TextReader.h"
+#include "../../inc/util/TextReader.h"
 
 namespace Mitrais
 {

@@ -8,7 +8,7 @@
 #include <iostream>
 #include <boost/archive/tmpdir.hpp>
 
-#include "inc/ui/MainUI.h"
+#include "inc/view/MainUI.h"
 
 using namespace Mitrais::UI;
 using namespace Mitrais::util;

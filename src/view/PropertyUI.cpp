@@ -4,7 +4,7 @@
  *  Created on: Jul 11, 2016
  *      Author: Ari Suarkadipa
  */
-#include "../../inc/ui/PropertyUI.h"
+#include "../../inc/view/PropertyUI.h"
 
 namespace Mitrais
 {

@@ -1,5 +1,5 @@
-#include "../inc/WebCrawler.h"
-#include "../inc/TextLexer.h"
+#include "../../inc/util/WebCrawler.h"
+#include "../../inc/util/TextLexer.h"
 
 /**
  * Ctor
