@@ -304,6 +304,11 @@ bool TextReader::isUrlExist(const vector<UrlTarget>& existingUrls, const UrlTarg
 			{
 				return true;
 			}
+
+			if (existingUrl.SubUrlList.size() > 0)
+			{
+				return util::TextReader::isUrlExist(existingUrl.SubUrlList, currentUrl);
+			}
 		}
 	}
 
