@@ -44,13 +44,21 @@ namespace Mitrais
 			void build();
 			void start();
 			void setButtonAndMenuDisability();
+			void clearTextBox();
+			void setStringToTextBox(std::string str);
+			void appendStringToTextBox(std::string str);
+			std::string getStringFromTextBuffer();
 		private:
 			MainView();
+			GtkTextBuffer* getPTextBuffer(GtkWidget* widget);
+			void setTextBuffer(std::string str);
 
 			GtkTextBuffer* _textBuffer;
+			GtkWidget* _txtBox;
 			GtkWidget* _startBtn;
 			GtkWidget* _stopBtn;
 			GtkWidget* _save;
+
 			std::string _filePath;
 
 			static MainView* m_instance;

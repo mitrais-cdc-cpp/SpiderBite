@@ -109,6 +109,45 @@ void MainView::setButtonAndMenuDisability()
 	}
 }
 
+GtkTextBuffer* MainView::getPTextBuffer(GtkWidget* widget)
+{
+	return gtk_text_view_get_buffer(GTK_TEXT_VIEW(widget));
+}
+
+void MainView::setTextBuffer(std::string str)
+{
+	gtk_text_buffer_set_text (_textBuffer, str.c_str(), -1);
+}
+
+void MainView::clearTextBox()
+{
+	_textBuffer = getPTextBuffer(_txtBox);
+	setTextBuffer("");
+}
+
+void MainView::setStringToTextBox(std::string str)
+{
+	_textBuffer = getPTextBuffer(_txtBox);
+	setTextBuffer(str);
+}
+
+void MainView::appendStringToTextBox(std::string str)
+{
+	GtkTextIter end;
+
+	gtk_text_buffer_get_end_iter(_textBuffer, &end);
+	gtk_text_buffer_insert(_textBuffer, &end, str.c_str(), -1);
+}
+
+std::string MainView::getStringFromTextBuffer()
+{
+	GtkTextIter start,end;
+
+	gtk_text_buffer_get_start_iter(_textBuffer, &start);
+	gtk_text_buffer_get_end_iter(_textBuffer, &end);
+	return gtk_text_buffer_get_text(_textBuffer, &start, &end, FALSE);
+}
+
 void MainView::build()
 {
 	/* Create a Window. */
@@ -159,15 +198,12 @@ void MainView::build()
 			G_CALLBACK(quitClicked), window);
 
 	/* Create a multiline text widget. */
-	GtkWidget *text_view = gtk_text_view_new ();
-	gtk_text_view_set_editable (GTK_TEXT_VIEW (text_view), FALSE);
-	gtk_text_view_set_cursor_visible (GTK_TEXT_VIEW (text_view), FALSE);
-	gtk_box_pack_start (GTK_BOX (vbox), text_view, TRUE, TRUE, 0);
+	_txtBox = gtk_text_view_new ();
+	gtk_text_view_set_editable (GTK_TEXT_VIEW (_txtBox), FALSE);
+	gtk_text_view_set_cursor_visible (GTK_TEXT_VIEW (_txtBox), FALSE);
+	gtk_box_pack_start (GTK_BOX (vbox), _txtBox, TRUE, TRUE, 0);
 
-	/* Obtaining the buffer associated with the widget. */
-	_textBuffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (text_view));
-	/* Set the default buffer text. */
-	gtk_text_buffer_set_text (_textBuffer, "", -1);
+	clearTextBox();
 
 	/* Create a horizontal button box */
 	GtkWidget *hbtn_box = gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
