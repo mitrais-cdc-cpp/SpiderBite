@@ -199,7 +199,10 @@ void TextWriter::writeToDatabase(BaseResponse &response)
 {
 	try
 	{
-		DB::Connector connector;
+		const std::string dbHost = Configuration::getSetting().dbHost;
+		const int dbPort = Configuration::getSetting().dbPort;
+		const std::string dbName = Configuration::getSetting().dbName;
+		DB::Connector connector(dbHost, dbPort, dbName);
 		DB::Website website;
 
 		website.content = _content;

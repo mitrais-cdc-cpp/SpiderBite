@@ -24,8 +24,19 @@ class Connector
 {
 public:
 
-	Connector() {};
-	virtual ~Connector() {};
+	/**
+	 * Default constructor
+	 * @param host: host address
+	 * @param port: host port
+	 * @param dbName: database name
+	 */
+	Connector(const string &host, const int &port, const string &dbName);
+
+	/**
+	 * Default destructor
+	 */
+	virtual ~Connector();
+
 	/**
 	 * Insert Website to MongoDB
 	 *
@@ -94,9 +105,9 @@ public:
 	Filter createFilter(int selectedColumn, int selectedOpr, string value);
 
 private:
-	const string _host = "localhost";
-	const int _port = 27017;
-	const string _dbName = "SpiderBite";
+	const string _host;
+	const int _port;
+	const string _dbName;
 	const string _collectionName = "Website";
 };
 
