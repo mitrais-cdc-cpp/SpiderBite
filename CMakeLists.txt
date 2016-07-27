@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.1.0 FATAL_ERROR)
-project(SpiderBite VERSION 0.1 LANGUAGES CXX)
+project(SpiderBiteMVP VERSION 0.1 LANGUAGES CXX)
 
 set(_ECLIPSE_VERSION "4.5")
 
@@ -9,10 +9,12 @@ set(_ECLIPSE_VERSION "4.5")
 
 file(GLOB SOURCES
  main.cpp
- inc/*.h
- inc/ui/*.h
- src/*.cpp
- src/ui/*.cpp)
+ inc/util/*.h
+ inc/util/*.hpp
+ inc/view/*.h
+ inc/view/*.hpp
+ src//util/*.cpp
+ src/view/*.cpp)
 
 #to take control which files are used, dont go recursive through
 #file(GLOB_RECURSE SOURCES src/*.cpp inc/*.h)
@@ -27,28 +29,37 @@ endforeach()
 ###############################################################################
 
 #Generate the shared library from the sources
-add_executable(SpiderBite ${SOURCES})
+add_executable(SpiderBiteMVP ${SOURCES})
 
 #Set Debug or Release
 set(CMAKE_BUILD_TYPE Debug)
 
 # just for example add some compiler flags
-#target_compile_options(SpiderBite PUBLIC -Wextra)
+#target_compile_options(SpiderBiteMVP PUBLIC -Wextra)
 
 ###############################################################################
 ## compiler definitions########################################################
 ###############################################################################
 
 #enable c++11 and set it required
-set_property(TARGET SpiderBite PROPERTY CXX_STANDARD 11)
-set_property(TARGET SpiderBite PROPERTY CXX_STANDARD_REQUIRED ON)
+set_property(TARGET SpiderBiteMVP PROPERTY CXX_STANDARD 11)
+set_property(TARGET SpiderBiteMVP PROPERTY CXX_STANDARD_REQUIRED ON)
 
-#project(SpiderBite CXX)
+#project(SpiderBiteMVP CXX)
 #message("Your C++ compiler supports these C++ features:")
 #foreach(i ${CMAKE_CXX_COMPILE_FEATURES})
 #  message("${i}")
 #endforeach()
 
+###############################################################################
+## generate documentation #####################################################
+###############################################################################
+
+find_package(Doxygen)
+add_custom_target (doc ALL
+	${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/doxy/*.doxyfile
+	WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/doxy
+)
 
 ###############################################################################
 ## dependencies ###############################################################
@@ -109,4 +120,4 @@ message(STATUS "CURL Version: ${CURL_VERSION_STRING}")
 
 include_directories(${GTK3_INCLUDE_DIRS} ${Boost_INCLUDE_DIRS} ${POCO_INCLUDE} ${MONGODAO_INCLUDE_DIRS} ${CURL_INCLUDE_DIRS})
 link_directories(${GTK3_LIBRARY_DIRS} ${Boost_LIBRARIES} ${POCO_LIB_DIR} ${MONGODAO_LIBRARY_DIRS} ${CURL_LIBRARIES})
-target_link_libraries(SpiderBite ${GTK3_LIBRARIES} ${Boost_LIBRARIES} ${POCO_LIBS} Threads::Threads ${MONGODAO_LIBRARIES} ${CURL_LIBRARIES})
+target_link_libraries(SpiderBiteMVP ${GTK3_LIBRARIES} ${Boost_LIBRARIES} ${POCO_LIBS} Threads::Threads ${MONGODAO_LIBRARIES} ${CURL_LIBRARIES})
