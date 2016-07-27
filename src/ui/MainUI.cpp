@@ -102,9 +102,23 @@ namespace Mitrais
 			gchar* text;
 			string url;
 
-			for(auto const& target: _targets)
+			if (_filePath.empty())
 			{
-				url += target.Protocol +"://"+target.Url + "\n";
+				url = "No selected file, please select a file that contains URL records.";
+			}
+			else
+			{
+				if (_targets.size() > 0)
+				{
+					for(auto const& target: _targets)
+					{
+						url += target.Protocol +"://"+target.Url + "\n";
+					}
+				}
+				else
+				{
+					url = "There are no valid URL records on " + _filePath;
+				}
 			}
 
 			text = convertStringToPChar(url);

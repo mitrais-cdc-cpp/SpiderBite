@@ -118,7 +118,18 @@ string Mitrais::util::WebCrawler::addPrefixAndSufixUrl(const util::UrlTarget& ur
 
 	if (url.Protocol.compare("http") == 0)
 	{
-		result = "http://";
+		// special case for mitrais.com url
+		if (url.Url.length() >= 11)
+		{
+			if (url.Url.substr(0, 11).compare("mitrais.com") == 0)
+			{
+				result = "http://www.";
+			}
+		}
+		else
+		{
+			result = "http://";
+		}
 	}
 	else if (url.Protocol.compare("https") == 0)
 	{

@@ -8,9 +8,9 @@
 #include <vector>
 #include <sys/stat.h>
 #include <algorithm>
-//#include <boost/algorithm/string.hpp>
 
 #include "Poco/URI.h"
+#include "Poco/Exception.h"
 
 #include "BaseResponse.h"
 #include "UrlTarget.h"
@@ -43,8 +43,6 @@ private:
 	bool isExist(std::string filePath);
 	std::vector<UrlTarget> readFile();
 	bool checkDuplicateUrl(std::string url, UrlTarget& target);
-	//UrlTarget getUrl(std::string url);
-	//bool isUrlExist(UrlTarget target);
 	static std::string removeUrlPrefix(std::string url);
 };
 

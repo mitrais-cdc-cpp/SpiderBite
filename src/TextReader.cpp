@@ -169,18 +169,14 @@ std::vector<UrlTarget> TextReader::readFile()
 	std::ifstream file(_filePath);
 	std::string url;
 
-	// define the regex pattern
-	boost::regex urlRegex{".*\\..*"};
-
-	boost::smatch urlMatchResult;
-
 	if (file.is_open())
 	{
 		while (std::getline(file, url))
 		{
-			// check if the url is match with regex pattern
-			if (boost::regex_match(url, urlMatchResult, urlRegex))
+			try
 			{
+				Poco::URI uri(url);
+
 				UrlTarget target;
 
 				bool isExist = checkDuplicateUrl(url, target);
@@ -189,6 +185,10 @@ std::vector<UrlTarget> TextReader::readFile()
 				{
 					_targets.push_back(target);
 				}
+			}
+			catch (Poco::SyntaxException *ex)
+			{
+				LOG_ERROR << ex->message();
 			}
 		}
 
