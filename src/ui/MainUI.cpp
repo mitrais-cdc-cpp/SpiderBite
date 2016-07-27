@@ -104,7 +104,7 @@ namespace Mitrais
 
 			for(auto const& target: _targets)
 			{
-				url += (target.Url + "\n");
+				url += target.Protocol +"://"+target.Url + "\n";
 			}
 
 			text = convertStringToPChar(url);
@@ -114,15 +114,17 @@ namespace Mitrais
 
 		/**
 		 * saveSourceCode function to save the buffer into file
-		 * @param strURL_ the target url
+		 * @param target the target url
 		 * @param buff_ the TextBuffer
 		 * @return save status in string
 		 */
-		static string saveSourceCode(string strURL_, util::TextBuffer buff_)
+		static string saveSourceCode(util::UrlTarget target, util::TextBuffer buff_)
 		{
+			string fileName = target.Protocol + "." + target.Url;
+
 			string strResponse;
 
-			util::TextWriter writer(strURL_, buff_.getFullContent());
+			util::TextWriter writer(fileName, buff_.getFullContent());
 			util::BaseResponse responseWrite;
 
 			if(util::Configuration::getSetting().saveTarget == SAVE_TO_FILE)
@@ -139,17 +141,17 @@ namespace Mitrais
 			// check the response status
 			if (responseWrite.getStatus())
 			{
-				strResponse = "The "+ strURL_ + " done!\n"+ "The "+ strURL_+ " saved";
+				strResponse = "The "+ fileName + " done!\n"+ "The "+ fileName + " saved";
 				if(util::Configuration::getSetting().saveTarget == SAVE_TO_FILE)
 				{
 					string savePath = util::Configuration::getSetting().pathToLocalDir;
 					if (!savePath.empty())
 					{
-						strResponse += ": "+ savePath +"\/" + strURL_ +".html\n";
+						strResponse += ": "+ savePath +"\/" + fileName +".html\n";
 					}
 					else
 					{
-						strResponse += ": "+ strURL_ +".html on current application folder\n";
+						strResponse += ": "+ fileName +".html on current application folder\n";
 					}
 				}
 				else
@@ -157,14 +159,14 @@ namespace Mitrais
 					strResponse += " on database\n";
 				}
 
-				LOG_INFO << strURL_ + " Saved!";
+				LOG_INFO << fileName + " Saved!";
 			}
 			else
 			{
-				strResponse = "Can't connect to: "+ strURL_ + "n"+
-					   "Skip " + strURL_ +" target\n"+
+				strResponse = "Can't connect to: "+ fileName + "n"+
+					   "Skip " + fileName +" target\n"+
 						"----------------------------------------------------------------------------\n";
-				LOG_ERROR << "Can't connect to: "+ strURL_;
+				LOG_ERROR << "Can't connect to: "+ fileName;
 			}
 
 			return strResponse;
@@ -252,7 +254,7 @@ namespace Mitrais
 				buff_.insertContentToBuffer(data);
 
 				// save into file
-				saveSourceCode(target.Url, buff_);
+				saveSourceCode(target, buff_);
 
 				// update the status into DONE
 				target.Status = DONE;
@@ -337,7 +339,7 @@ namespace Mitrais
 					target.Status = DONE;
 
 					// save into file
-					saveStatus = saveSourceCode(target.Url, buff);
+					saveStatus = saveSourceCode(target, buff);
 
 			        target.SubUrlList = getSubUrlList(data);;
 

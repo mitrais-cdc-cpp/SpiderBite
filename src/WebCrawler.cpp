@@ -118,18 +118,39 @@ string Mitrais::util::WebCrawler::addPrefixAndSufixUrl(const util::UrlTarget& ur
 
 	if (url.Protocol.compare("http") == 0)
 	{
-		result = "http://www.";
+		result = "http://";
 	}
 	else if (url.Protocol.compare("https") == 0)
 	{
-		result = "https://www.";
+		result = "https://";
 	}
 	else if (url.Protocol.compare("ftp") == 0)
 	{
 		result = "ftp://";
 	}
 
-	result += url.Url+ "/";
+	result += url.Url;
+
+	std::size_t foundSubPage = url.Url.find("\/");
+
+	if (foundSubPage == std::string::npos)
+	{
+		result += "/";
+	}
+	else
+	{
+		std::string subPageUrl = url.Url.substr(foundSubPage, url.Url.length());
+
+		if (!subPageUrl.empty())
+		{
+			std::size_t foundSubPageExtension = subPageUrl.find(".");
+
+			if (foundSubPageExtension == std::string::npos)
+			{
+				result += "/";
+			}
+		}
+	}
 
 	return result;
 }
