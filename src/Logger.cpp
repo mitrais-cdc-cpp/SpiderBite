@@ -11,7 +11,7 @@ BOOST_LOG_GLOBAL_LOGGER_INIT(spiderbite_logger, logger_t)
 {
     logger_t lg;
 
-	std::string logFileName = "spiderbite_%N.log";
+	std::string logFileName = "SpiderBite_%N.log";
 
 	if(Mitrais::util::Configuration::getSetting().logFileName != "")
 	{

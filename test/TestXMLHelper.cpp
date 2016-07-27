@@ -38,6 +38,6 @@ void TestXMLHelper::testXMLHelperTwo()
 
 	helper.loadXML(newCf, fileName.c_str());
 	const string testData = "constring_test";
-	bool isTrue = newCf.connectionString.compare(testData);
+	bool isTrue = newCf.dbHost.compare(testData);
 	CPPUNIT_ASSERT(isTrue == 0);
 }

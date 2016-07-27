@@ -37,7 +37,9 @@ namespace Mitrais
 			template<class Archive>
 			void serialize(Archive &ar, const unsigned int )
 			{
-				ar  & BOOST_SERIALIZATION_NVP(connectionString)
+				ar  & BOOST_SERIALIZATION_NVP(dbHost)
+					& BOOST_SERIALIZATION_NVP(dbPort)
+					& BOOST_SERIALIZATION_NVP(dbName)
 					& BOOST_SERIALIZATION_NVP(logFileName)
 					& BOOST_SERIALIZATION_NVP(crawlingDeepness)
 					& BOOST_SERIALIZATION_NVP(saveTarget)
@@ -52,12 +54,18 @@ namespace Mitrais
 			/**
 			 * Constructor for initializing value of props
 			 */
-			ConfigSettings(const string &_cstring,
+			 // TODO:
+			ConfigSettings(
+					const string &_dbhost,
+					const int &_dbport,
+					const string &_dbname,
 					const string &_lname,
 					const int _crdeep,
 					const SaveModeEnum &_svtarg,
 					const string &_pathloc) :
-			connectionString(_cstring),
+			dbHost(_dbhost),
+			dbPort(_dbport),
+			dbName(_dbname),
 			logFileName(_lname),
 			crawlingDeepness(_crdeep),
 			saveTarget(_svtarg),
@@ -65,9 +73,20 @@ namespace Mitrais
 			{}
 
 			/**
-			 * valid connection string as string
+			 * valid database host as string
 			 */
-			string connectionString;
+			string dbHost;
+
+			/**
+			 * TODO : should be integer
+			 * valid database host as string
+			 */
+			int dbPort;
+
+			/**
+			 * valid database name as string
+			 */
+			string dbName;
 
 			/**
 			 * preferred log file name as string
@@ -95,7 +114,9 @@ namespace Mitrais
 		 */
 		inline ostream& operator<<(ostream &os, const ConfigSettings &cs)
 		{
-			return os << "Connection String: " << cs.connectionString <<
+			return os << "Database Host: " << cs.dbHost <<
+					"\n Database Port: " << cs.dbPort <<
+					"\n Database Name: " << cs.dbName <<
 					"\n Log File Name: " << cs.logFileName <<
 					"\n Crawling Deepness: " << cs.crawlingDeepness <<
 					"\n Save To File? " << cs.saveTarget <<

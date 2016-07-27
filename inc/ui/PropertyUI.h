@@ -10,6 +10,7 @@
 
 #include <gtk/gtk.h>
 #include <sys/stat.h>
+#include <string>
 
 #include "../Logger.h"
 #include "../XMLHelper.h"

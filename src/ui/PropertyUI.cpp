@@ -13,7 +13,9 @@ namespace Mitrais
 		string _filePathX;
 		GtkWidget* _entry_local_saved_webpath;
 		const char *config_name = "Config.xml";
-		GtkWidget* _entry_db_conn_string;
+		GtkWidget* _entry_db_host;
+		GtkWidget* _entry_db_port;
+		GtkWidget* _entry_db_name;
 		GtkWidget* _entry_log_filename;
 		GtkWidget* _spin_depth_of_crawling;
 		GtkWidget* _switch_save_in_folder;
@@ -61,6 +63,17 @@ namespace Mitrais
 			return cstr;
 		}
 
+		/**
+		 * Convert integer to char
+		 * @param number: The integer number
+		 * @return the char pointer
+		 */
+		char* convertIntegerToPCharX(int number)
+		{
+			std::string str = std::to_string(number);
+			char *cstr = convertStringToPCharX(str);
+			return cstr;
+		}
 		/**
 		 * Callback method for open menu
 		 * params button a GtkWidget pointer
@@ -116,7 +129,9 @@ namespace Mitrais
 		void loadConfigToForm(ConfigSettings &config)
 		{
 			// get all the properties value
-			string conn_string = config.connectionString;
+			string db_host = config.dbHost;
+			int db_port = config.dbPort;
+			string db_name = config.dbName;
 			string log_file_name = config.logFileName;
 			int crawling_deepness = config.crawlingDeepness;
 			SaveModeEnum save_target = config.saveTarget;
@@ -132,7 +147,9 @@ namespace Mitrais
 			}
 
 			// set to form
-			gtk_entry_set_text(GTK_ENTRY(_entry_db_conn_string), convertStringToPCharX(conn_string));
+			gtk_entry_set_text(GTK_ENTRY(_entry_db_host), convertStringToPCharX(db_host));
+			gtk_entry_set_text(GTK_ENTRY(_entry_db_port), convertIntegerToPCharX(db_port));
+			gtk_entry_set_text(GTK_ENTRY(_entry_db_name), convertStringToPCharX(db_name));
 			gtk_entry_set_text(GTK_ENTRY(_entry_log_filename), convertStringToPCharX(log_file_name));
 			gtk_spin_button_set_value(GTK_SPIN_BUTTON(_spin_depth_of_crawling), crawling_deepness);
 			gtk_switch_set_active(GTK_SWITCH(_switch_save_in_folder), isActive);
@@ -169,7 +186,9 @@ namespace Mitrais
 			LOG_INFO << "Save config function called!";
 
 			// get all values from setting form
-			string conn_string = gtk_entry_get_text(GTK_ENTRY(_entry_db_conn_string));
+			string db_host = gtk_entry_get_text(GTK_ENTRY(_entry_db_host));
+			int db_port = atoi(gtk_entry_get_text(GTK_ENTRY(_entry_db_port)));
+			string db_name = gtk_entry_get_text(GTK_ENTRY(_entry_db_name));
 			string log_file_name = gtk_entry_get_text(GTK_ENTRY(_entry_log_filename));
 			int crawling_deepness = gtk_spin_button_get_value(GTK_SPIN_BUTTON(_spin_depth_of_crawling));
 			bool isActive = gtk_switch_get_active(GTK_SWITCH(_switch_save_in_folder));
@@ -184,7 +203,8 @@ namespace Mitrais
 				save_target = SAVE_TO_DB;
 			}
 
-			if(conn_string.empty() || log_file_name.empty() || path_to_local_dir.empty())
+// TODO: add validation
+			if(db_host.empty() || log_file_name.empty() || path_to_local_dir.empty())
 			{
 				LOG_INFO << "Config file save failed!";
 
@@ -202,7 +222,13 @@ namespace Mitrais
 			}
 			else
 			{
-				ConfigSettings settings(conn_string, log_file_name, crawling_deepness, save_target, path_to_local_dir);
+				ConfigSettings settings(db_host,
+										db_port,
+										db_name,
+										log_file_name,
+										crawling_deepness,
+										save_target,
+										path_to_local_dir);
 				string filename = string(config_name);
 
 				XMLHelper helper;
@@ -235,7 +261,9 @@ namespace Mitrais
 			LOG_INFO << "Property UI activated";
 			GtkWidget *window;
 			GtkWidget *grid;
-			GtkWidget *label_db_conn_string;
+			GtkWidget *label_db_host;
+			GtkWidget *label_db_port;
+			GtkWidget *label_db_name;
 			GtkWidget *label_log_file_name ;
 			GtkWidget *label_depth_of_crawling;
 			GtkWidget *label_save_in_folder;
@@ -251,7 +279,7 @@ namespace Mitrais
 			window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 			gtk_window_set_title (GTK_WINDOW (window), "Settings");
 			gtk_container_set_border_width (GTK_CONTAINER (window), 10);
-			gtk_window_set_default_size (GTK_WINDOW (window), 300, 170);
+			gtk_window_set_default_size (GTK_WINDOW (window), 300, 300);
 
 			// set resizeable false
 			gtk_window_set_resizable(GTK_WINDOW(window), FALSE);
@@ -260,7 +288,9 @@ namespace Mitrais
 			grid = gtk_grid_new();
 
 			//Create label
-			label_db_conn_string = gtk_label_new("Database location : ");
+			label_db_host = gtk_label_new("Database Host : ");
+			label_db_port = gtk_label_new("Database Port : ");
+			label_db_name = gtk_label_new("Database Name : ");
 			label_log_file_name = gtk_label_new("Log file name : ");
 
 			// depth of recursion of crawling
@@ -273,7 +303,9 @@ namespace Mitrais
 			label_local_saved_webpath = gtk_label_new("Local saved web path : ");
 
 			//Create entryBox
-			_entry_db_conn_string = gtk_entry_new ();
+			_entry_db_host = gtk_entry_new ();
+			_entry_db_port = gtk_entry_new();
+			_entry_db_name = gtk_entry_new();
 			_entry_log_filename = gtk_entry_new ();
 			_spin_depth_of_crawling = gtk_spin_button_new_with_range(1, 3, 1);
 			_switch_save_in_folder = gtk_switch_new ();
@@ -289,22 +321,28 @@ namespace Mitrais
 			button_cancel = gtk_button_new_with_label ("Cancel");
 
 			// attach the grids
-			gtk_grid_attach(GTK_GRID(grid), label_db_conn_string, 0, 15, 20, 10);
-			gtk_grid_attach(GTK_GRID(grid), _entry_db_conn_string, 20, 15, 20, 10);
-			gtk_grid_attach(GTK_GRID(grid), label_log_file_name, 0, 30, 20, 10);
-			gtk_grid_attach(GTK_GRID(grid), _entry_log_filename, 20, 30, 20, 10);
-			gtk_grid_attach(GTK_GRID(grid), label_depth_of_crawling, 0, 45, 20, 10);
-			gtk_grid_attach(GTK_GRID(grid), _spin_depth_of_crawling, 20, 45, 10, 10);
-			gtk_grid_attach(GTK_GRID(grid), label_save_in_folder, 0, 60, 20, 10);
-			gtk_grid_attach(GTK_GRID(grid), _switch_save_in_folder, 20, 60, 10, 10);
-			gtk_grid_attach(GTK_GRID(grid), label_local_saved_webpath, 0, 75, 20, 10);
-			gtk_grid_attach(GTK_GRID(grid), _entry_local_saved_webpath, 20, 75, 15, 10);
-			gtk_grid_attach(GTK_GRID(grid), button_select_path, 37, 75, 10, 10);
-			gtk_grid_attach(GTK_GRID(grid), button_save, 20, 90, 10, 10);
-			gtk_grid_attach(GTK_GRID(grid), button_cancel, 30, 90, 10, 10);
+			gtk_grid_attach(GTK_GRID(grid), label_db_host, 0, 15, 20, 10);
+			gtk_grid_attach(GTK_GRID(grid), _entry_db_host, 20, 15, 20, 10);
+			gtk_grid_attach(GTK_GRID(grid), label_db_port, 0, 30, 20, 10);
+			gtk_grid_attach(GTK_GRID(grid), _entry_db_port, 20, 30, 20, 10);
+			gtk_grid_attach(GTK_GRID(grid), label_db_name, 0, 45, 20, 10);
+			gtk_grid_attach(GTK_GRID(grid), _entry_db_name, 20, 45, 20, 10);
+			gtk_grid_attach(GTK_GRID(grid), label_log_file_name, 0, 60, 20, 10);
+			gtk_grid_attach(GTK_GRID(grid), _entry_log_filename, 20, 60, 20, 10);
+			gtk_grid_attach(GTK_GRID(grid), label_depth_of_crawling, 0, 75, 20, 10);
+			gtk_grid_attach(GTK_GRID(grid), _spin_depth_of_crawling, 20, 75, 10, 10);
+			gtk_grid_attach(GTK_GRID(grid), label_save_in_folder, 0, 90, 20, 10);
+			gtk_grid_attach(GTK_GRID(grid), _switch_save_in_folder, 20, 90, 10, 10);
+			gtk_grid_attach(GTK_GRID(grid), label_local_saved_webpath, 0, 105, 20, 10);
+			gtk_grid_attach(GTK_GRID(grid), _entry_local_saved_webpath, 20, 105, 15, 10);
+			gtk_grid_attach(GTK_GRID(grid), button_select_path, 37, 105, 10, 10);
+			gtk_grid_attach(GTK_GRID(grid), button_save, 20, 120, 10, 10);
+			gtk_grid_attach(GTK_GRID(grid), button_cancel, 30, 120, 10, 10);
 
 			// set label to justify left
-			gtk_label_set_xalign(GTK_LABEL(label_db_conn_string), 0);
+			gtk_label_set_xalign(GTK_LABEL(label_db_host), 0);
+			gtk_label_set_xalign(GTK_LABEL(label_db_port), 0);
+			gtk_label_set_xalign(GTK_LABEL(label_db_name), 0);
 			gtk_label_set_xalign(GTK_LABEL(label_log_file_name), 0);
 			gtk_label_set_xalign(GTK_LABEL(label_depth_of_crawling), 0);
 			gtk_label_set_xalign(GTK_LABEL(label_save_in_folder), 0);
@@ -320,7 +358,9 @@ namespace Mitrais
 			gtk_grid_set_column_spacing(GTK_GRID(grid), 2);
 
 			// callbacks
-			g_signal_connect (GTK_ENTRY(_entry_db_conn_string), "activate", G_CALLBACK(entry_activate), label_db_conn_string);
+			g_signal_connect (GTK_ENTRY(_entry_db_host), "activate", G_CALLBACK(entry_activate), label_db_host);
+			g_signal_connect (GTK_ENTRY(_entry_db_port), "activate", G_CALLBACK(entry_activate), label_db_port);
+			g_signal_connect (GTK_ENTRY(_entry_db_name), "activate", G_CALLBACK(entry_activate), label_db_name);
 			g_signal_connect (GTK_ENTRY(_entry_log_filename), "activate", G_CALLBACK(entry_activate), label_log_file_name);
 			g_signal_connect (GTK_SPIN_BUTTON(_spin_depth_of_crawling), "activate", G_CALLBACK(entry_activate), label_depth_of_crawling);
 			g_signal_connect (GTK_SWITCH(_switch_save_in_folder), "activate", G_CALLBACK(entry_activate), label_save_in_folder);

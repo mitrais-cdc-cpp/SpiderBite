@@ -28,6 +28,8 @@ namespace Mitrais
 		 */
 		MainUI::MainUI()
 		{
+			// Check the configuration file on MainUI constructor
+			checkConfigSetting();
 		}
 
 		/**
@@ -35,6 +37,31 @@ namespace Mitrais
 		 */
 		MainUI::~MainUI()
 		{
+		}
+
+		/**
+		 * Method to check configuration file setting.
+		 * If the configuration file is not exist this method will create \n
+		 * the default configuration file.
+		 */
+		void MainUI::checkConfigSetting()
+		{
+			if(!boost::filesystem::exists(_configFileName.c_str()))
+			{
+
+				util::ConfigSettings settings("localhost",
+												27017,
+												"SpiderBite",
+												"SpiderBite",
+												1,
+												SAVE_TO_DB,
+												"");
+
+				util::XMLHelper helper;
+				helper.saveXML(settings, _configFileName.c_str());
+
+				LOG_INFO << "Default configuration file saved!";
+			}
 		}
 
 		/**

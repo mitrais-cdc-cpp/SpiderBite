@@ -52,7 +52,9 @@ namespace Mitrais
 			}
 			else
 			{
-				_setting.connectionString = "";
+				_setting.dbHost = "localhost";
+				_setting.dbPort = 27017;
+				_setting.dbName = "SpiderBite";
 				_setting.crawlingDeepness = 2;
 				_setting.logFileName = "spiderbite";
 				_setting.saveTarget = SAVE_TO_FILE;
