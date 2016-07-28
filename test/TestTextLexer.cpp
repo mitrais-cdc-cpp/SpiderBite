@@ -5,7 +5,7 @@
  */
 std::vector<std::string> TestTextLexer::findUrls()
 {
-	std::fstream file("Mitrais.html");
+	std::fstream file("Mitrais.htm");
 	std::string content;
 	content.assign((std::istreambuf_iterator<char>(file) ),
             		(std::istreambuf_iterator<char>()));
@@ -20,7 +20,7 @@ std::vector<std::string> TestTextLexer::findUrls()
  */
 std::vector<std::string> TestTextLexer::findUrls(Mitrais::util::BaseResponse& response)
 {
-	std::fstream file("Mitrais.html");
+	std::fstream file("Mitrais.htm");
 	std::string content;
 	content.assign((std::istreambuf_iterator<char>(file) ),
 	            		(std::istreambuf_iterator<char>()));
