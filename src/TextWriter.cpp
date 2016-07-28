@@ -28,7 +28,7 @@ TextWriter::~TextWriter()
 /**
  * TextWriter constructor with param
  *
- * @params std::string filepath a filepath
+ * @param filepath a string filepath
  */
 TextWriter::TextWriter(std::string filepath) :
 		_file(filepath)
@@ -41,8 +41,8 @@ TextWriter::TextWriter(std::string filepath) :
 /**
  * TextWriter constructor with params
  *
- * @params std::string filepath a filepath
- * @params std::string content a content
+ * @param filepath a string filepath
+ * @param content a string content
  */
 TextWriter::TextWriter(std::string filepath, std::string content) :
 		_file(filepath),
@@ -58,7 +58,7 @@ TextWriter::TextWriter(std::string filepath, std::string content) :
 /**
  * Set Content method
  *
- * @params std::string value a value
+ * @param value a string value
  */
 void TextWriter::setContent(std::string value)
 {
@@ -68,7 +68,7 @@ void TextWriter::setContent(std::string value)
 /**
  * Set file path method
  *
- * @params std::string value a value
+ * @param value a string value
  */
 void TextWriter::setFilePath(std::string value)
 {
@@ -78,8 +78,8 @@ void TextWriter::setFilePath(std::string value)
 /**
  * Write to file method
  *
- * @params BaseResponse& response a response
- * @params bool isSaveAsHtml is save as HTML
+ * @param response a response address
+ * @param isSaveAsHtml is save as HTML
  */
 void TextWriter::writeToFile(BaseResponse& response, bool isSaveAsHtml)
 {

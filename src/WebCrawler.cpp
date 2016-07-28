@@ -18,7 +18,7 @@ Mitrais::util::WebCrawler::~WebCrawler()
 
 /**
  * Callback method, used in CURL to return content
- * @param ptr buffered results, size of buffer is size*nmemb
+ * @param contents the content
  * @param size size
  * @param nmemb size
  * @param stream founded content

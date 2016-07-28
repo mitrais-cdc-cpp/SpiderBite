@@ -28,7 +28,7 @@ namespace Mitrais
 		/**
 		 * Constructor of TextBuffer class
 		 *
-		 * @buffer The string buffer
+		 * @param buffer The string buffer
 		 */
 		TextBuffer::TextBuffer(vector<string> buffer) :
 				_stringBuffer(buffer)
@@ -38,7 +38,7 @@ namespace Mitrais
 		/**
 		 * Insert the stored string to a buffer
 		 *
-		 * @str the stored text
+		 * @param str the stored text
 		 */
 		void TextBuffer::insertContentToBuffer(string str)
 		{
@@ -59,6 +59,9 @@ namespace Mitrais
 			return content;
 		}
 
+		/**
+		 * Clear existing buffer
+		 */
 		void TextBuffer::clearBuffer()
 		{
 			_stringBuffer.clear();

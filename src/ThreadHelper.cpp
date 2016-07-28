@@ -19,9 +19,9 @@ namespace Mitrais
 
 		/**
 		 * Initialize threads as many as numOfThreads
-		 * @ioService the io service
-		 * @threads the threadpool
-		 * @numOfThreads number of threads
+		 * @param ioService the io service
+		 * @param threads the threadpool
+		 * @param numOfThreads number of threads
 		 */
 		void ThreadHelper::initializeThreads(
 				boost::asio::io_service &ioService,
@@ -50,8 +50,8 @@ namespace Mitrais
 
 		/**
 		 * Push task to a thread
-		 * @ioService the io service
-		 * @pendingData vector of future int to store result of the execution
+		 * @param ioService the io service
+		 * @param pendingData vector of future int to store result of the execution
 		 */
 		void ThreadHelper::pushTask(
 				boost::asio::io_service& ioService,
@@ -73,7 +73,7 @@ namespace Mitrais
 
 		/**
 		 * Execute tasks in threadpool in async mode
-		 * @numOfThreads the number of thread
+		 * @param numOfThreads the number of thread
 		 */
 		void ThreadHelper::executeTaskAsync(const int numOfThreads)
 		{

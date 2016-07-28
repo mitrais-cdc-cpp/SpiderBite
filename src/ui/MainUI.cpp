@@ -66,7 +66,7 @@ namespace Mitrais
 
 		/**
 		 * convert std string to char pointer
-		 * params str an std string
+		 * @param str an std string
 		 */
 		char* convertStringToPChar(string str)
 		{
@@ -77,7 +77,7 @@ namespace Mitrais
 
 		/**
 		 * Push text message to status bar.
-		 * @Params message a message to display
+		 * @param message a message to display
 		 */
 		void pushMessage(std::string message)
 		{
@@ -311,8 +311,8 @@ namespace Mitrais
 
 		/**
 		 * Callback method for start button
-		 * @params button a GtkWidget pointer
-		 * @params buffer a GtkTextBuffer pointer
+		 * @param button a GtkWidget pointer
+		 * @param buffer a GtkTextBuffer pointer
 		 */
 		static void onStartClicked (GtkWidget *button, GtkTextBuffer *buffer)
 		{
@@ -408,8 +408,8 @@ namespace Mitrais
 
 		/**
 		 * Callback method for stop button
-		 * params button a GtkWidget pointer
-		 * params buffer a GtkTextBuffer pointer
+		 * @param button a GtkWidget pointer
+		 * @param buffer a GtkTextBuffer pointer
 		 */
 		static void onStopClicked (GtkWidget *button, GtkTextBuffer *buffer)
 		{
@@ -427,8 +427,8 @@ namespace Mitrais
 
 		/**
 		 * Callback method for open menu
-		 * params button a GtkWidget pointer
-		 * params window a GtkWidget pointer
+		 * @param button a GtkWidget pointer
+		 * @param window a GtkWidget pointer
 		 */
 		static void onOpenClicked(GtkWidget *widget, GtkWidget *window)
 		{
@@ -463,7 +463,7 @@ namespace Mitrais
 
 		/**
 		 * Callback method for quit menu
-		 * params widget a GtkWidget pointer
+		 * @param widget a GtkWidget pointer
 		 */
 		static void onQuitClicked (GtkWidget *widget, gpointer data)
 		{
@@ -473,7 +473,7 @@ namespace Mitrais
 
 		/**
 		 * To save file
-		 * @params char *filename a char of filename
+		 * @param filename a char of filename
 		 */
 		void saveToFile(char *filename)
 		{
@@ -500,8 +500,8 @@ namespace Mitrais
 
 		/**
 		 * Callback method for save menu
-		 * @params GtkWidget *widget a widget
-		 * @params GtkWidget *window a window
+		 * @param widget a pointer widget
+		 * @param window a pointer window
 		 */
 		static void onSaveClicked(GtkWidget *widget, GtkWidget *window)
 		{
@@ -559,8 +559,8 @@ namespace Mitrais
 
 		/**
 		 * check the parameter
-		 * @param int argc (number of parameter that to be passed)
-		 * @param char* argv (the parameter value that be passed)
+		 * @param argc number of parameter that to be passed
+		 * @param argv the parameter value that be passed
 		 */
 		void checkParameter(int argc, char* argv[])
 		{
@@ -579,8 +579,8 @@ namespace Mitrais
 
 		/**
 		 * Activates the UI
-		 * params argc an integer
-		 * params argv an array of chars pointer
+		 * @param argc an integer
+		 * @param argv an array of chars pointer
 		 */
 		void MainUI::activateUI(int argc, char *argv[])
 		{

@@ -17,7 +17,7 @@ SocketConnection::SocketConnection()
 /**
  * Constructor
  *
- * @serverName: the server name
+ * @param serverName: the server name
  */
 
 SocketConnection::SocketConnection(std::string serverName) :
@@ -88,12 +88,11 @@ bool SocketConnection::isSocketOpen()
 /**
  * check the socket connection
  *
- * @serverName : the server name
+ * @param serverName : the server name
  *
  * Example : servername = www.google.com
  *
  */
-
 bool SocketConnection::isSocketOpen(std::string serverName)
 {
 	setServerName(serverName);
