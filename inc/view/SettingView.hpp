@@ -1,55 +1,105 @@
 /*
- * SettingView.hpp
+ * PropertyUI.h
  *
- *  Created on: Jul 26, 2016
- *      Author: developer
+ *  Created on: Jul 11, 2016
+ *      Author: Ari Suarkadipa
  */
 
-#ifndef INC_VIEW_SETTINGVIEW_HPP_
-#define INC_VIEW_SETTINGVIEW_HPP_
+#ifndef INC_UI_PROPERTYUI_H_
+#define INC_UI_PROPERTYUI_H_
 
 #include <gtk/gtk.h>
+#include <sys/stat.h>
 #include <functional>
-#include <iostream>
+#include <memory>
 
-namespace Mitrais
-{
-	namespace View
+#include "../util/SaveModeEnum.h"
+
+namespace Mitrais {
+namespace UI {
+
+	typedef std::function<void()> CallbackFunction;
+
+	class PropertyUI
 	{
-		typedef std::function<void()> CallbackFunction;
+	public:
+		virtual ~PropertyUI();
+		static PropertyUI* getInstance();
 
-		class SettingView
-		{
-		public:
-			~SettingView();
-			SettingView(SettingView const&) = delete;
-			void operator=(SettingView const&) = delete;
+		//Public interface
+		void quit();
+		void show();
+		void activateUI(int argc, char *argv[]);
 
-			static SettingView* getInstance();
+		//getter/setter
+		void setConfiguration(std::string& connection,std::string& logfilename,std::string& pathtolocaldir, int deepness, Mitrais::util::SaveModeEnum savemode);
+		std::string getConnectionString();
+		std::string getLogFileName();
+		std::string getPathToLocalDir();
+		int getCrawlingDeepness();
+		Mitrais::util::SaveModeEnum getSaveMode();
 
-			void onQuitClicked(CallbackFunction callback);
-			void onOpenClicked(CallbackFunction callback);
-			void onSaveClicked(CallbackFunction callback);
-			void onEntryKeyIn(CallbackFunction callback);
-
-			static void quitClicked (GtkWidget *widget, gpointer window);
-			static void openClicked(GtkWidget *widget, GtkWidget *window);
-			static void saveClicked(GtkWidget *widget, GtkWidget *window);
-			static void entryKeyIn(GtkEntry *entry, GtkLabel *label);
-
-			void build();
-			void start();
-		private:
-			SettingView();
-			static SettingView* m_instance;
-
-			CallbackFunction whenQuitClicked;
-			CallbackFunction whenOpenClicked;
-			CallbackFunction whenSaveClicked;
-			CallbackFunction whenEntryKeyIn;
-		};
-	}
-}
+		//Events to register
+		void SaveConfiguration(CallbackFunction cb_SaveConfigurationClicked_);
+		void QuitClicked(CallbackFunction cb_OpenClicked_);
+		void OpenClicked(CallbackFunction cb_QuitClicked_);
 
 
-#endif /* INC_VIEW_SETTINGVIEW_HPP_ */
+	private:
+
+		//Arguments nested class
+		class PropertyUIArgs;
+		std::shared_ptr<PropertyUIArgs> _args;
+
+		//private ctor
+		PropertyUI(std::shared_ptr<PropertyUI::PropertyUIArgs> args_);
+		PropertyUI();
+
+		//Singleton self
+		static PropertyUI* _self;
+
+		//Signals from gtk+
+		static void onSaveConfigurationClicked();
+		static void onQuitClicked();
+		static void onOpenClicked();
+
+		//UI Helper
+		void CreateGuiElements();
+		void CreateMainForm();
+		void CreateGrid();
+		void ConnectSignals();
+		void SetPropertyUIArgsToPropertyUI(bool isSaveInFolderActive);
+		void OpenDialog();
+
+		GtkWidget* form_MainForm;			//MainForm
+		GtkWidget* grid;					//GridView
+
+		//Textboxes
+		GtkWidget* tb_LocalSavePath;
+		GtkWidget* tb_DbConnectionString;
+		GtkWidget* tb_LogFileName;
+
+		GtkWidget* stb_CrawlingDepth;
+		GtkWidget* switch_SaveInFolder;
+
+		//labels
+		GtkWidget* label_DbConnectionString;
+		GtkWidget* label_LogFileName;
+		GtkWidget* label_CrawlingDepth;
+		GtkWidget* label_SaveInFolder;
+		GtkWidget* label_LocalSavePath;
+
+		//buttons
+		GtkWidget* btn_SelectPath;
+		GtkWidget* btn_Save;
+		GtkWidget* btn_Cancel;
+
+		//Callback function pointers
+		CallbackFunction cb_SaveConfigurationClicked;
+		CallbackFunction cb_OpenClicked;
+		CallbackFunction cb_QuitClicked;
+	};
+}} //namespace Mitrais::UI
+
+
+#endif /* INC_UI_PROPERTYUI_H_ */
