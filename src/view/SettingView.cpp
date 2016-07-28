@@ -4,15 +4,12 @@
  *  Created on: Jul 11, 2016
  *      Author: Ari Suarkadipa
  */
-#include "../../inc/view/PropertyUI.hpp"
+#include "../../inc/view/SettingView.hpp"
 
 #include "../../inc/util/Logger.h"
 #include "../../inc/util/SaveModeEnum.h"
 
-using namespace Mitrais::UI;
-
-
-
+using namespace Mitrais::View;
 
 class PropertyUI::PropertyUIArgs
 {
@@ -161,12 +158,12 @@ void PropertyUI::onOpenClicked()
  * params argc an integer
  * params argv an array of chars pointer
  */
-void PropertyUI::activateUI(int argc, char *argv[])
+void PropertyUI::activateUI()
 {
 	LOG_INFO << "Property UI activated";
 
 	//gint context_id;
-	gtk_init (&argc, &argv);
+//	gtk_init (&argc, &argv);
 
 	//call my helpers
 	CreateMainForm();

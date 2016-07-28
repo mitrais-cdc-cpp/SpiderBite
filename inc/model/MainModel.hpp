@@ -10,6 +10,9 @@
 
 #include <functional>
 #include <iostream>
+#include "../util/UrlTarget.h"
+#include "../util/TextReader.h"
+#include "../util/TextWriter.h"
 
 namespace Mitrais
 {
@@ -27,8 +30,12 @@ namespace Mitrais
 			static MainModel* getInstance();
 
 			void run();
+			std::vector<Mitrais::util::UrlTarget> readUrlFromFile(std::string filename);
+			void writeUrlToFile(std::string fileName, std::vector<Mitrais::util::UrlTarget> urls);
 
 			void whenApplicationStarts(CallbackFunction callback);
+			void whenReadUrlsFromFile(CallbackFunction callback);
+			void whenWriteUrlsToFile(CallbackFunction callback);
 
 		private:
 			MainModel();

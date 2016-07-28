@@ -25,7 +25,7 @@ void MainPresenter::registerEventsView()
 	_view->onOpenClicked( [this]{ this->setOpenClicked_Callback(); });
 	_view->onStopClicked( [this]{ this->setStopClicked_Callback(); });
 	_view->onStartClicked( [this]{this->setStartClicked_Callback(); });
-//	_view->onSettingClicked( [this]{ this->setSettingClicked_Callback(); });
+	_view->onSettingViewClicked( [this]{ this->setSettingViewClicked_Callback(); });
 }
 
 void MainPresenter::registerEventsModel()
@@ -68,6 +68,18 @@ void MainPresenter::setQuitClicked_Callback()
 void MainPresenter::setOpenClicked_Callback()
 {
 	LOG_INFO << "setOpenClicked_Callback()";
+	_view->showOpenDialog();
+
+	auto targets = _model->readUrlFromFile(_view->getFilename());
+
+	string url;
+
+	for(auto const& target: targets)
+	{
+		urls.push_back(target.Url);
+	}
+
+	_view->displayFileContent(urls);
 }
 
 void MainPresenter::setStopClicked_Callback()
@@ -80,10 +92,9 @@ void MainPresenter::setStartClicked_Callback()
 	LOG_INFO << "setStartClicked_Callback()";
 }
 
-void setSettingClicked_Callback()
+void MainPresenter::setSettingViewClicked_Callback()
 {
-	LOG_INFO << "setSettingClicked_Callback()";
-//	PropertyUI prop;
-//	prop.activateUI(argc, argv);
+	LOG_INFO << "setSettingViewClicked_Callback()";
+	_view->openSettingView();
 }
 

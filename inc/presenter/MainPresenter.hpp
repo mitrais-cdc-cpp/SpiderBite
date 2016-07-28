@@ -25,16 +25,13 @@ public:
 	void setOpenClicked_Callback();
 	void setStopClicked_Callback();
 	void setStartClicked_Callback();
-	void setSettingClicked_Callback();
+	void setSettingViewClicked_Callback();
 
 	void applicationStartCallback();
 
 	//Model
-
-
-
 private:
-
+	std::vector<std::string> urls;
 	View::MainView* _view;
 	Model::MainModel* _model;
 };

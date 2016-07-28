@@ -87,9 +87,55 @@ void MainView::settingClicked()
 	MainView::getInstance()->whenSettingClicked();
 }
 
+void MainView::openSettingView()
+{
+	_settingView->activateUI();
+}
+
+void MainView::displayFileContent(std::vector<std::string> urls)
+{
+	//set textview editable
+	gtk_text_view_set_editable (GTK_TEXT_VIEW (_txtBox), TRUE);
+	gtk_text_view_set_cursor_visible (GTK_TEXT_VIEW (_txtBox), TRUE);
+
+	std::string text;
+
+	for(const auto& url : urls)
+	{
+		text += url;
+	}
+
+	setStringToTextBox(text);
+}
+
+void MainView::showOpenDialog()
+{
+	LOG_INFO << "Open menu clicked";
+
+	GtkWidget *dialog;
+
+	dialog = gtk_file_chooser_dialog_new ("Choose file..",
+		 GTK_WINDOW(_window),
+		 GTK_FILE_CHOOSER_ACTION_OPEN,
+		 ("_Cancel"), GTK_RESPONSE_CANCEL,
+		 ("_Open"), GTK_RESPONSE_ACCEPT,
+		 NULL);
+
+	if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT)
+	{
+		_fileName = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
+		LOG_INFO << "URL file loaded:" +_fileName;
+//		pushMessage("File loaded:" + _fileName);
+	}
+
+	setButtonAndMenuDisability();
+
+	gtk_widget_destroy (dialog);
+}
+
 void MainView::setButtonAndMenuDisability()
 {
-	if (_filePath.empty())
+	if (_fileName.empty())
 	{
 		// disable start and stop button
 		gtk_widget_set_sensitive (_startBtn, FALSE);
@@ -151,17 +197,17 @@ std::string MainView::getStringFromTextBuffer()
 void MainView::build()
 {
 	/* Create a Window. */
-	GtkWidget *window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-	gtk_window_set_title (GTK_WINDOW (window), "Spiderbite");
+	_window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+	gtk_window_set_title (GTK_WINDOW (_window), "Spiderbite");
 
 	/* Set a decent default size for the window. */
-	gtk_window_set_default_size (GTK_WINDOW (window), 600, 400);
-	g_signal_connect (G_OBJECT (window), "destroy",
+	gtk_window_set_default_size (GTK_WINDOW (_window), 600, 400);
+	g_signal_connect (G_OBJECT (_window), "destroy",
 					G_CALLBACK (quitClicked),
 					NULL);
 
 	GtkWidget *vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 2);
-	gtk_container_add (GTK_CONTAINER (window), vbox);
+	gtk_container_add (GTK_CONTAINER (_window), vbox);
 
 	/* Create menubar and the menu list itself.*/
 	GtkWidget *menubar = gtk_menu_bar_new();
@@ -183,19 +229,19 @@ void MainView::build()
 
 	//Connects GCallback function open_activated to "activate" signal for "open" menu item
 	g_signal_connect(G_OBJECT(open), "activate",
-			G_CALLBACK(openClicked), window);
+			G_CALLBACK(openClicked), _window);
 
 	//Connects GCallback function quit_activated to "activate" signal for "save" menu item
 	g_signal_connect(G_OBJECT(_save), "activate",
-			G_CALLBACK(saveClicked), window);
+			G_CALLBACK(saveClicked), _window);
 
 	//Connects GCallback function quit_activated to "activate" signal for "setting" menu item
 	g_signal_connect(G_OBJECT(setting), "activate",
-			G_CALLBACK(settingClicked), window);
+			G_CALLBACK(settingClicked), _window);
 
 	//Connects GCallback function quit_activated to "activate" signal for "quit" menu item
 	g_signal_connect(G_OBJECT(quit), "activate",
-			G_CALLBACK(quitClicked), window);
+			G_CALLBACK(quitClicked), _window);
 
 	/* Create a multiline text widget. */
 	_txtBox = gtk_text_view_new ();
@@ -232,7 +278,9 @@ void MainView::build()
 
 	gint context_id = gtk_statusbar_get_context_id(GTK_STATUSBAR (status_bar), "Status bar");
 
-	gtk_widget_show_all(window);
+	gtk_widget_show_all(_window);
+
+	_settingView = PropertyUI::getInstance();
 }
 
 void MainView::start()

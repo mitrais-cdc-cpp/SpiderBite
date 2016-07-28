@@ -16,7 +16,7 @@
 #include "../util/SaveModeEnum.h"
 
 namespace Mitrais {
-namespace UI {
+namespace View {
 
 	typedef std::function<void()> CallbackFunction;
 
@@ -29,7 +29,7 @@ namespace UI {
 		//Public interface
 		void quit();
 		void show();
-		void activateUI(int argc, char *argv[]);
+		void activateUI();
 
 		//getter/setter
 		void setConfiguration(std::string& connection,std::string& logfilename,std::string& pathtolocaldir, int deepness, Mitrais::util::SaveModeEnum savemode);
