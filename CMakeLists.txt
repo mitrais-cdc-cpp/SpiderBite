@@ -13,8 +13,12 @@ file(GLOB SOURCES
  inc/util/*.hpp
  inc/view/*.h
  inc/view/*.hpp
+ inc/presenter/*.hpp
+ inc/model/*.hpp
  src/util/*.cpp
- src/view/*.cpp)
+ src/view/*.cpp
+ src/presenter/*.cpp
+ src/model/*.cpp)
 
 message("Following sources found:")
 foreach(a ${SOURCES})

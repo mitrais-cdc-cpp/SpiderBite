@@ -52,7 +52,7 @@ void MainView::onStartClicked(CallbackFunction callback)
 	whenStartClicked = callback;
 }
 
-void MainView::onSettingClicked(CallbackFunction callback)
+void MainView::onSettingViewClicked(CallbackFunction callback)
 {
 	whenSettingClicked = callback;
 }
@@ -231,6 +231,8 @@ void MainView::build()
 	gtk_widget_show (status_bar);
 
 	gint context_id = gtk_statusbar_get_context_id(GTK_STATUSBAR (status_bar), "Status bar");
+
+	gtk_widget_show_all(window);
 }
 
 void MainView::start()

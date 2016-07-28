@@ -1,13 +1,19 @@
 #include "../../inc/presenter/MainPresenter.hpp"
-#include "../util/Logger.h"
+#include "../../inc/util/Logger.h"
 
 using namespace Mitrais::Presenter;
 
-MainPresenter::MainPresenter(std::shared_ptr<View::MainView> view_, std::shared_ptr<Model::MainModel> model_)
+MainPresenter::MainPresenter(View::MainView* view_, Model::MainModel* model_)
 : _view(view_)
 , _model(model_)
 {
 	registerEvents();
+}
+
+MainPresenter::~MainPresenter()
+{
+	delete _view;
+	delete _model;
 }
 
 void MainPresenter::registerEventsView()
@@ -19,12 +25,19 @@ void MainPresenter::registerEventsView()
 	_view->onOpenClicked( [this]{ this->setOpenClicked_Callback(); });
 	_view->onStopClicked( [this]{ this->setStopClicked_Callback(); });
 	_view->onStartClicked( [this]{this->setStartClicked_Callback(); });
-	_view->onSettingClicked( [this]{ this->setSettingClicked_Callback(); });
+//	_view->onSettingClicked( [this]{ this->setSettingClicked_Callback(); });
 }
 
 void MainPresenter::registerEventsModel()
 {
 	LOG_INFO << "registerEventsModel()";
+	_model->whenApplicationStarts( [this]{ this->applicationStartCallback(); });
+}
+
+void MainPresenter::applicationStartCallback()
+{
+	_view->build();
+	_view->start();
 }
 
 void MainPresenter::registerEvents()
@@ -70,7 +83,7 @@ void MainPresenter::setStartClicked_Callback()
 void setSettingClicked_Callback()
 {
 	LOG_INFO << "setSettingClicked_Callback()";
-	PropertyUI prop;
-	prop.activateUI(argc, argv);
+//	PropertyUI prop;
+//	prop.activateUI(argc, argv);
 }
 

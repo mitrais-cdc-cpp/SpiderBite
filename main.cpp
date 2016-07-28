@@ -10,9 +10,13 @@
 
 #include "inc/view/MainUI.h"
 
-using namespace Mitrais::UI;
-using namespace Mitrais::util;
-using namespace std;
+#include "inc/model/MainModel.hpp"
+#include "inc/presenter/MainPresenter.hpp"
+#include "inc/view/MainView.hpp"
+
+using namespace Mitrais::View;
+using namespace Mitrais::Model;
+using namespace Mitrais::Presenter;
 
 int main(int argc, char* argv[])
 {
@@ -20,9 +24,9 @@ int main(int argc, char* argv[])
 	LOG_INFO << "Program started";
 
 	gtk_init(&argc, &argv);
-
-	MainUI ab;
-	ab.activateUI(argc, argv);
+	MainPresenter presenter(MainView::getInstance(), MainModel::getInstance());
+	presenter.registerEvents();
+	MainModel::getInstance()->run();
 
 //	ThreadHelper helper;
 //	helper.executeTaskAsync(3);

@@ -3,20 +3,16 @@
 
 #include <memory>
 #include "../view/MainView.hpp"
+#include "../model/MainModel.hpp"
 
 
 namespace Mitrais {
 namespace Presenter {
 
-namespace Model {
-class MainModel;
-}
-
-
 class MainPresenter
 {
 public:
-	MainPresenter(std::shared_ptr<View::MainView> view_, std::shared_ptr<Model::MainModel> model_);
+	MainPresenter(View::MainView* view_, Model::MainModel* model_);
 	~MainPresenter();
 
 	void registerEvents();
@@ -31,14 +27,16 @@ public:
 	void setStartClicked_Callback();
 	void setSettingClicked_Callback();
 
+	void applicationStartCallback();
+
 	//Model
 
 
 
 private:
 
-	std::shared_ptr<View::MainView> _view;
-	std::shared_ptr<Model::MainModel> _model;
+	View::MainView* _view;
+	Model::MainModel* _model;
 };
 
 }} //namespace Mitrais::presenter

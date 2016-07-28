@@ -16,7 +16,7 @@ namespace Mitrais
 {
 	namespace View
 	{
-		typedef std::function<void(std::string)> CallbackFunctionWithArgString;
+		typedef std::function<void()> CallbackFunction;
 
 		class MainView
 		{
@@ -32,7 +32,7 @@ namespace Mitrais
 			void onOpenClicked(CallbackFunction callback);
 			void onStopClicked(CallbackFunction callback);
 			void onStartClicked(CallbackFunction callback);
-			void onSettingClicked(CallbackFunction callback);
+			void onSettingViewClicked(CallbackFunction callback);
 
 			static void saveClicked(GtkWidget *widget, GtkWidget *window);
 			static void quitClicked(GtkWidget *widget, gpointer data);

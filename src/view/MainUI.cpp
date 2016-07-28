@@ -320,12 +320,6 @@ namespace Mitrais
 			LOG_INFO << "Web crawling stopped";
 		}
 
-		void OpenDialog()
-		{
-
-			_view.OpenDialog();
-		}
-
 		/**
 		 * Callback method for open menu
 		 * params button a GtkWidget pointer
