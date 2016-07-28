@@ -6,7 +6,8 @@
  */
 
 #include "../../inc/view/MainUI.h"
-#include "../../inc/view/PropertyUI.h"
+
+#include "../../inc/view/PropertyUI.hpp"
 
 namespace Mitrais
 {
@@ -447,8 +448,9 @@ namespace Mitrais
 		{
 			LOG_INFO << "Setting Clicked";
 
-			PropertyUI prop;
-			prop.activateUI(argc, argv);
+			//TODO: refactor MVP
+			//PropertyUI prop;
+			//prop.activateUI(argc, argv);
 		}
 
 		/**

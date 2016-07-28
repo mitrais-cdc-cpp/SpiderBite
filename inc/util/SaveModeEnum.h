@@ -15,6 +15,7 @@ namespace Mitrais {
 		 * user preferred to store the content
 		 */
 		enum SaveModeEnum {
+			NOT_SET,
 			SAVE_TO_FILE,	//!< Save the content to a file
 			SAVE_TO_DB		//!< Save the content to the database
 		};
