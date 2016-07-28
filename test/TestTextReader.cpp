@@ -101,3 +101,18 @@ void TestTextReader::testTextReaderResultTwo()
 
 	CPPUNIT_ASSERT(isEqual == 0);
 }
+
+/*
+ * test the duplication url
+ */
+void TestTextReader::testTextReaderDuplicateUrl()
+{
+	Mitrais::util::BaseResponse response;
+	std::vector<Mitrais::util::UrlTarget> results = getUrls(response);
+
+	int actualResultNumber(2);
+
+	int resultNumber = results.size();
+
+	CPPUNIT_ASSERT(resultNumber == actualResultNumber);
+}

@@ -17,6 +17,7 @@ public:
 	CPPUNIT_TEST(testTextReaderResultNumber);
 	CPPUNIT_TEST(testTextReaderResultOne);
 	CPPUNIT_TEST(testTextReaderResultTwo);
+	CPPUNIT_TEST(testTextReaderDuplicateUrl);
 	CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -27,6 +28,7 @@ private:
 	void testTextReaderResultNumber();
 	void testTextReaderResultOne();
 	void testTextReaderResultTwo();
+	void testTextReaderDuplicateUrl();
 };
 
 CPPUNIT_TEST_SUITE_REGISTRATION( TestTextReader );
