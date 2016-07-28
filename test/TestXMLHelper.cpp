@@ -16,11 +16,13 @@ void TestXMLHelper::testXMLHelperOne()
 {
 	XMLHelper helper;
 	ConfigSettings cf(
-			"constring_test",
-			"log_name",
+			"localhost",
+			5000,
+			"SpiderBiteTest",
+			"SpiderBiteTest",
 			3,
 			SAVE_TO_DB,
-			"path_loc");
+			"/home/test_result/");
 	string fileName = "testConfig.xml";
 
 	helper.saveXML(cf, fileName.c_str());
