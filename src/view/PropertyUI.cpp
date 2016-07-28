@@ -147,13 +147,13 @@ void PropertyUI::onSaveConfigurationClicked()
 void PropertyUI::onQuitClicked ()
 {
 	LOG_INFO << "onQuitClicked()";
-	PropertyUI::getInstance()->cb_OpenClicked();
+	PropertyUI::getInstance()->cb_QuitClicked();
 }
 
 void PropertyUI::onOpenClicked()
 {
 	LOG_INFO << "onOpenClicked()";
-	PropertyUI::getInstance()->cb_QuitClicked();
+	PropertyUI::getInstance()->cb_OpenClicked();
 }
 
 /**

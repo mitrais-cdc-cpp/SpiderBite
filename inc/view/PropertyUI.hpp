@@ -23,8 +23,6 @@ namespace UI {
 	class PropertyUI
 	{
 	public:
-
-
 		virtual ~PropertyUI();
 		static PropertyUI* getInstance();
 

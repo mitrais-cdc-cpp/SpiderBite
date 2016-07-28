@@ -16,7 +16,7 @@ namespace Mitrais
 {
 	namespace View
 	{
-		typedef std::function<void()> CallbackFunction;
+		typedef std::function<void(std::string)> CallbackFunctionWithArgString;
 
 		class MainView
 		{
