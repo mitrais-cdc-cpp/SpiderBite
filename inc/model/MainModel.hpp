@@ -34,8 +34,6 @@ namespace Mitrais
 			void writeUrlToFile(std::string fileName, std::vector<Mitrais::util::UrlTarget> urls);
 
 			void whenApplicationStarts(CallbackFunction callback);
-			void whenReadUrlsFromFile(CallbackFunction callback);
-			void whenWriteUrlsToFile(CallbackFunction callback);
 
 		private:
 			MainModel();

@@ -68,9 +68,12 @@ void MainPresenter::setQuitClicked_Callback()
 void MainPresenter::setOpenClicked_Callback()
 {
 	LOG_INFO << "setOpenClicked_Callback()";
+
 	_view->showOpenDialog();
 
-	auto targets = _model->readUrlFromFile(_view->getFilename());
+	auto targets = _model->readUrlFromFile(
+			_view->getFilename()
+			);
 
 	string url;
 

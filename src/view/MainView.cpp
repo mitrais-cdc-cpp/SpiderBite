@@ -102,7 +102,7 @@ void MainView::displayFileContent(std::vector<std::string> urls)
 
 	for(const auto& url : urls)
 	{
-		text += url;
+		text += url + "\n";
 	}
 
 	setStringToTextBox(text);

@@ -31,11 +31,6 @@ void MainModel::whenApplicationStarts(CallbackFunction callback)
 	cb = callback;
 }
 
-void MainModel::whenReadUrlsFromFile(CallbackFunction callback)
-{
-
-}
-
 void MainModel::run()
 {
 	cb();
@@ -46,5 +41,4 @@ std::vector<Mitrais::util::UrlTarget> MainModel::readUrlFromFile(std::string fil
 	util::TextReader reader(filename);
 	util::BaseResponse response;
 	return reader.getUrls(response);
-
 }
