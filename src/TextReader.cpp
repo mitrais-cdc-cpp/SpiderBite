@@ -294,26 +294,24 @@ UrlTarget TextReader::getUrl(string url)
  */
 bool TextReader::isUrlExist(const vector<UrlTarget>& existingUrls, const UrlTarget& currentUrl)
 {
-	// looping manual to search the equal value since could not use std::find
 	if (existingUrls.size() > 0)
 	{
-		for(auto const& existingUrl:existingUrls)
-		{
-			if ((existingUrl.Protocol.compare(currentUrl.Protocol) == 0) &&
-				(existingUrl.Url.compare(currentUrl.Url) == 0))
-			{
-				return true;
-			}
+		auto it = std::find_if(existingUrls.begin(), existingUrls.end(), [&currentUrl](const UrlTarget& url){return url.Protocol.compare(currentUrl.Protocol) == 0 && url.Url.compare(currentUrl.Url) == 0;});
 
-			if (existingUrl.SubUrlList.size() > 0)
-			{
-				return util::TextReader::isUrlExist(existingUrl.SubUrlList, currentUrl);
-			}
+		if (it != existingUrls.end())
+		{
+			return true;
+		}
+
+		if ((*it).SubUrlList.size() > 0)
+		{
+			return util::TextReader::isUrlExist((*it).SubUrlList, currentUrl);
 		}
 	}
 
 	return false;
 }
+
 
 /*
  * Remove URL prefix (www)
