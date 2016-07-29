@@ -15,6 +15,7 @@
 #include "../util/TextWriter.h"
 #include "../util/TextBuffer.h"
 #include "../util/TextLexer.h"
+#include "../util/WebCrawler.h"
 
 namespace Mitrais
 {
@@ -38,12 +39,21 @@ namespace Mitrais
 			std::vector<std::string> findUrls(std::string content);
 			void clearBuffer(vector<std::string> stringBuffer);
 			void insertContentToBuffer(vector<std::string> stringBuffer ,string content);
+			void crawlContent(const std::string& url, std::string& result);
 
 			void whenApplicationStarts(CallbackFunction callback);
+			void whenApplicationStop(CallbackFunction callback);
+			void whenCrawlingStart(CallbackFunction callback);
+			void whenCrawlingStop(CallbackFunction callback);
+			void whenCrawlingRunning(CallbackFunction callback);
 
 		private:
 			MainModel();
-			CallbackFunction cb;
+			CallbackFunction onApplicationStarts;
+			CallbackFunction onApplicationStop;
+			CallbackFunction onCrawlingStart;
+			CallbackFunction onCrawlingStop;
+			CallbackFunction onCrawlingRunning;
 			static MainModel* m_instance;
 		};
 	}

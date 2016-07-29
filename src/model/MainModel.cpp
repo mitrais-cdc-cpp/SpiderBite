@@ -28,12 +28,32 @@ MainModel* MainModel::getInstance()
 
 void MainModel::whenApplicationStarts(CallbackFunction callback)
 {
-	cb = callback;
+	onApplicationStarts = callback;
+}
+
+void MainModel::whenApplicationStop(CallbackFunction callback)
+{
+	onApplicationStop = callback;
+}
+
+void MainModel::whenCrawlingStart(CallbackFunction callback)
+{
+	onCrawlingStart = callback;
+}
+
+void MainModel::whenCrawlingStop(CallbackFunction callback)
+{
+	onCrawlingStop = callback;
+}
+
+void MainModel::whenCrawlingRunning(CallbackFunction callback)
+{
+	onCrawlingRunning = callback;
 }
 
 void MainModel::run()
 {
-	cb();
+	onApplicationStarts();
 }
 
 std::vector<Mitrais::util::UrlTarget> MainModel::readUrlFromFile(std::string filename)
@@ -74,4 +94,10 @@ void MainModel::insertContentToBuffer(vector<std::string> stringBuffer ,string c
 {
 	util::TextBuffer buffer(stringBuffer);
 	buffer.insertContentToBuffer(content);
+}
+
+void MainModel::crawlContent(const std::string& url, std::string& result)
+{
+	util::WebCrawler crawler;
+	crawler.getContent(url, result);
 }
