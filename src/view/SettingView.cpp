@@ -4,7 +4,7 @@
  *  Created on: Jul 11, 2016
  *      Author: Ari Suarkadipa
  */
-#include "../../inc/view/PropertyUI.hpp"
+#include "../../inc/view/SettingView.hpp"
 
 #include "../../inc/util/Logger.h"
 #include "../../inc/util/SaveModeEnum.h"
@@ -14,11 +14,11 @@ using namespace Mitrais::UI;
 
 
 
-class PropertyUI::PropertyUIArgs
+class SettingView::SettingViewArgs
 {
 public:
 
-	PropertyUIArgs(	std::string& connection,
+	SettingViewArgs(std::string& connection,
 					std::string& logfilename,
 					std::string& pathtolocaldir,
 					int deepness,
@@ -30,7 +30,7 @@ public:
 	, _enumSaveMode(savemode)
 	{}
 
-	PropertyUIArgs()
+	SettingViewArgs()
 	{}
 
 	std::string 				_strConnection = "";
@@ -41,20 +41,20 @@ public:
 };
 
 
-PropertyUI::PropertyUI()
+SettingView::SettingView()
 {
 }
-PropertyUI::~PropertyUI()
+SettingView::~SettingView()
 {
 }
 
-PropertyUI* PropertyUI::getInstance()
+SettingView* SettingView::getInstance()
 {
-	static PropertyUI* _self =  nullptr;
+	static SettingView* _self =  nullptr;
 
 	if(!_self)
 	{
-		_self = new PropertyUI();
+		_self = new SettingView();
 		//_args = std::make_shared<PropertyUIArgs>( new PropertyUIArgs() );
 	}
 
@@ -62,23 +62,23 @@ PropertyUI* PropertyUI::getInstance()
 }
 
 
-std::string PropertyUI::getConnectionString()
+std::string SettingView::getConnectionString()
 {
 	return _args->_strConnection;
 }
-std::string PropertyUI::getLogFileName()
+std::string SettingView::getLogFileName()
 {
 	return _args->_strLogFileName;
 }
-std::string PropertyUI::getPathToLocalDir()
+std::string SettingView::getPathToLocalDir()
 {
 	return _args->_strPathToLocalDirectory;
 }
-int PropertyUI::getCrawlingDeepness()
+int SettingView::getCrawlingDeepness()
 {
 	return _args->_iCrawlingDeepness;
 }
-Mitrais::util::SaveModeEnum PropertyUI::getSaveMode()
+Mitrais::util::SaveModeEnum SettingView::getSaveMode()
 {
 	return _args->_enumSaveMode;
 }
@@ -105,7 +105,7 @@ static void entry_activate (GtkEntry *entry, GtkLabel *label)
  *
  * @param config
  */
-void PropertyUI::setConfiguration(std::string& connection,
+void SettingView::setConfiguration(std::string& connection,
 					std::string& logfilename,
 					std::string& pathtolocaldir,
 					int deepness,
@@ -123,37 +123,37 @@ void PropertyUI::setConfiguration(std::string& connection,
 }
 
 
-void PropertyUI::SaveConfiguration(CallbackFunction cb_SaveConfigurationClicked_)
+void SettingView::SaveConfiguration(CallbackFunction cb_SaveConfigurationClicked_)
 {
 	cb_SaveConfigurationClicked = cb_SaveConfigurationClicked_;
 }
 
-void PropertyUI::OpenClicked(CallbackFunction cb_OpenClicked_)
+void SettingView::OpenClicked(CallbackFunction cb_OpenClicked_)
 {
 	cb_OpenClicked = cb_OpenClicked_;
 }
 
-void PropertyUI::QuitClicked(CallbackFunction cb_QuitClicked_)
+void SettingView::QuitClicked(CallbackFunction cb_QuitClicked_)
 {
 	cb_QuitClicked = cb_QuitClicked_;
 }
 
-void PropertyUI::onSaveConfigurationClicked()
+void SettingView::onSaveConfigurationClicked()
 {
 	LOG_INFO << "onSaveConfigurationClicked()";
-	PropertyUI::getInstance()->cb_SaveConfigurationClicked();
+	SettingView::getInstance()->cb_SaveConfigurationClicked();
 }
 
-void PropertyUI::onQuitClicked ()
+void SettingView::onQuitClicked ()
 {
 	LOG_INFO << "onQuitClicked()";
-	PropertyUI::getInstance()->cb_QuitClicked();
+	SettingView::getInstance()->cb_QuitClicked();
 }
 
-void PropertyUI::onOpenClicked()
+void SettingView::onOpenClicked()
 {
 	LOG_INFO << "onOpenClicked()";
-	PropertyUI::getInstance()->cb_OpenClicked();
+	SettingView::getInstance()->cb_OpenClicked();
 }
 
 /**
@@ -161,7 +161,7 @@ void PropertyUI::onOpenClicked()
  * params argc an integer
  * params argv an array of chars pointer
  */
-void PropertyUI::activateUI(int argc, char *argv[])
+void SettingView::activateUI(int argc, char *argv[])
 {
 	LOG_INFO << "Property UI activated";
 
@@ -178,18 +178,18 @@ void PropertyUI::activateUI(int argc, char *argv[])
 	show();
 }
 
-void PropertyUI::show()
+void SettingView::show()
 {
 	gtk_widget_show_all(form_MainForm);
 	gtk_main();
 }
 
-void PropertyUI::quit()
+void SettingView::quit()
 {
 	gtk_widget_destroy(GTK_WIDGET(form_MainForm));
 }
 
-void PropertyUI::ConnectSignals()
+void SettingView::ConnectSignals()
 {
 	// callbacks
 	g_signal_connect (GTK_ENTRY(tb_DbConnectionString), "activate", G_CALLBACK(entry_activate), label_DbConnectionString);
@@ -199,14 +199,14 @@ void PropertyUI::ConnectSignals()
 	g_signal_connect (GTK_SPIN_BUTTON(stb_CrawlingDepth), "activate", G_CALLBACK(entry_activate), label_CrawlingDepth);
 	g_signal_connect (GTK_SWITCH(switch_SaveInFolder), "activate", G_CALLBACK(entry_activate), label_SaveInFolder);
 
-	g_signal_connect (G_OBJECT (btn_Save), "clicked",G_CALLBACK(PropertyUI::onSaveConfigurationClicked), form_MainForm);
-	g_signal_connect (G_OBJECT (btn_SelectPath), "clicked", G_CALLBACK(PropertyUI::onOpenClicked), form_MainForm);
-	g_signal_connect (G_OBJECT (btn_Cancel), "clicked",G_CALLBACK (PropertyUI::onQuitClicked), form_MainForm);
+	g_signal_connect (G_OBJECT (btn_Save), "clicked",G_CALLBACK(SettingView::onSaveConfigurationClicked), form_MainForm);
+	g_signal_connect (G_OBJECT (btn_SelectPath), "clicked", G_CALLBACK(SettingView::onOpenClicked), form_MainForm);
+	g_signal_connect (G_OBJECT (btn_Cancel), "clicked",G_CALLBACK (SettingView::onQuitClicked), form_MainForm);
 
 }
 
 
-void PropertyUI::CreateMainForm()
+void SettingView::CreateMainForm()
 {
 	form_MainForm	= gtk_window_new (GTK_WINDOW_TOPLEVEL);
 	gtk_window_set_title (GTK_WINDOW (form_MainForm), "Settings");
@@ -218,7 +218,7 @@ void PropertyUI::CreateMainForm()
 }
 
 
-void PropertyUI::CreateGrid()
+void SettingView::CreateGrid()
 {
 	grid = gtk_grid_new();
 
@@ -248,7 +248,7 @@ void PropertyUI::CreateGrid()
 }
 
 
-void PropertyUI::CreateGuiElements()
+void SettingView::CreateGuiElements()
 {
 	//Create Textboxes
 	tb_DbConnectionString	= gtk_entry_new ();
@@ -283,7 +283,7 @@ void PropertyUI::CreateGuiElements()
 
 }
 
-void PropertyUI::SetPropertyUIArgsToPropertyUI(bool isSaveInFolderActive)
+void SettingView::SetPropertyUIArgsToPropertyUI(bool isSaveInFolderActive)
 {
 	gtk_entry_set_text(GTK_ENTRY(tb_DbConnectionString), _args->_strConnection.c_str());
 	gtk_entry_set_text(GTK_ENTRY(tb_LogFileName), _args->_strLogFileName.c_str());
@@ -292,7 +292,7 @@ void PropertyUI::SetPropertyUIArgsToPropertyUI(bool isSaveInFolderActive)
 	gtk_switch_set_active(GTK_SWITCH(switch_SaveInFolder), isSaveInFolderActive);
 }
 
-void PropertyUI::OpenDialog()
+void SettingView::OpenDialog()
 {
 	GtkWidget *dialog;
 
