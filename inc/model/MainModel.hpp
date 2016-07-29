@@ -16,6 +16,7 @@
 #include "../util/TextBuffer.h"
 #include "../util/TextLexer.h"
 #include "../util/WebCrawler.h"
+#include "../util/SaveModeEnum.h"
 
 namespace Mitrais
 {
@@ -32,24 +33,25 @@ namespace Mitrais
 
 			static MainModel* getInstance();
 
+			//events;
 			void run();
-			bool readUrlFromFile(std::string filename);
-			void writeUrlToFile(std::string filename, bool isSaveAsHtml);
-			void writeUrlToDatabase(std::string filename);
+			void stop();
 
+			//public interface;
+			bool startCrawling(std::vector<Mitrais::util::UrlTarget> urls);
+			bool stopCrawling();
+			bool readUrls(std::string filename);
+			bool writeUrls(Mitrais::util::SaveModeEnum enum_);
 
-
-			void startCrawling(std::vector<Mitrais::util::UrlTarget> urls);
-			void stopCrawling();
-
-			//events
+			//registered events
 			void whenApplicationStarts(CallbackFunction callback);
 			void whenApplicationStop(CallbackFunction callback);
 			void whenCrawlingStart(CallbackFunction callback);
 			void whenCrawlingStop(CallbackFunction callback);
 			void whenCrawlingRunning(CallbackFunction callback);
 
-
+			//Getter
+			inline std::string getUrlFilename() { return _strUrlFilename; }
 			inline bool getInitialReading() { return _bInitialReadingDone; }
 			inline std::vector<Mitrais::util::UrlTarget> getUrls() { return urls; }
 
@@ -62,14 +64,19 @@ namespace Mitrais
 			CallbackFunction onCrawlingRunning;
 			static MainModel* m_instance;
 
-			//getter
+			//setter
 			inline void setInitialReading(bool value) { _bInitialReadingDone = value; }
 			inline void setUrls(std::vector<Mitrais::util::UrlTarget> value) { urls = value; }
 
 			//helper
 			std::vector<Mitrais::util::UrlTarget> findUrls(Mitrais::util::UrlTarget url);
+			bool readUrlFromFile(std::string filename);
+			bool readUrlFromDatabase();
+			void writeUrlToFile(std::string filename, bool isSaveAsHtml);
+			void writeUrlToDatabase(std::string filename);
 
 			//member
+			std::string _strUrlFilename;
 			bool _bInitialReadingDone;
 			std::vector<Mitrais::util::UrlTarget> urls;
 		};

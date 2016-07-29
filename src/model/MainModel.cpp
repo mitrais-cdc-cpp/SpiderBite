@@ -57,13 +57,26 @@ void MainModel::run()
 	onApplicationStarts();
 }
 
-bool MainModel::readUrlFromFile(std::string filename)
+void MainModel::stop()
+{
+	onApplicationStop();
+}
+
+bool MainModel::readUrls(std::string filename)
+{
+	_strUrlFilename = filename;
+	return readUrlFromFile();
+}
+
+
+
+bool MainModel::readUrlFromFile()
 {
 	try
 	{
 		if(!_bInitialReadingDone)
 		{
-			util::TextReader 	reader(filename);
+			util::TextReader 	reader(_strUrlFilename);
 			util::BaseResponse 	response;
 			setInitialReading(true);
 			urls = reader.getUrls(response);
@@ -73,12 +86,31 @@ bool MainModel::readUrlFromFile(std::string filename)
 	{
 		LOG_ERROR << "An error occured: " << ex.what();
 		return false;
-
 	}
 
 	return true;
 }
 
+bool MainModel::writeUrls(Mitrais::util::SaveModeEnum enum_)
+{
+	switch(enum_)
+	{
+		case Mitrais::util::SaveModeEnum::SAVE_TO_FILE:
+		{
+			writeUrlToFile("bla", true);
+			break;
+		}
+		case Mitrais::util::SaveModeEnum::SAVE_TO_DB:
+		{
+			writeUrlToDatabase("bla");
+			break;
+		}
+		default:
+		{
+			LOG_WARN << "not save method set!";
+		}
+	}
+}
 void MainModel::writeUrlToFile(std::string filename, bool isSaveAsHtml)
 {
 	util::TextWriter writer(filename);
@@ -99,21 +131,24 @@ std::vector<Mitrais::util::UrlTarget> MainModel::findUrls(Mitrais::util::UrlTarg
 	return lexer.findUrls(url);
 }
 
-void MainModel::stopCrawling()
+bool MainModel::stopCrawling()
 {
 	//todo
 }
 
-void MainModel::startCrawling(std::vector<Mitrais::util::UrlTarget> urls)
+bool MainModel::startCrawling(std::vector<Mitrais::util::UrlTarget> urls)
 {
 	util::WebCrawler crawler;
 	std::string result;
+	bool isError = false;
 
 	for(auto& url : urls)
 	{
 		url.Status = Mitrais::util::UrlTargetStatus::START;
 
-		if (crawler.getContent(url, true))
+		crawler.getContent(url, isError);
+
+		if (isError)
 			url.Status = Mitrais::util::UrlTargetStatus::DONE;
 		else
 			url.Status = Mitrais::util::UrlTargetStatus::ERROR;
@@ -121,5 +156,7 @@ void MainModel::startCrawling(std::vector<Mitrais::util::UrlTarget> urls)
 		//seach deeper URLS
 		url.SubUrlList = findUrls(url);
 	}
+
+	return isError;
 
 }

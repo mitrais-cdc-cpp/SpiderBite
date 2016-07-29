@@ -85,16 +85,16 @@ void MainPresenter::setSaveClicked_Callback()
 void MainPresenter::setQuitClicked_Callback()
 {
 	LOG_INFO << "setQuitClicked_Callback()";
+	this->applicationStopCallback();
 }
 
 void MainPresenter::setOpenClicked_Callback()
 {
 	LOG_INFO << "setOpenClicked_Callback()";
-	string url;
 
 	_view->showOpenDialog();
 
-	if(_model->readUrlFromFile(_view->getFilename()))
+	if(_model->readUrls(_view->getFilename()))
 	{
 		for(auto const& target: _model->getUrls())
 		{
@@ -113,6 +113,7 @@ void MainPresenter::setOpenClicked_Callback()
 void MainPresenter::setStopClicked_Callback()
 {
 	LOG_INFO << "setStopClicked_Callback()";
+	_model->stopCrawling();
 }
 
 void MainPresenter::setStartClicked_Callback()

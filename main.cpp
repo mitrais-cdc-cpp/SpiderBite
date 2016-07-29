@@ -27,21 +27,7 @@ int main(int argc, char* argv[])
 	MainPresenter presenter(MainView::getInstance(), MainModel::getInstance());
 	presenter.registerEvents();
 	MainModel::getInstance()->run();
-
-//	ThreadHelper helper;
-//	helper.executeTaskAsync(3);
-
-//	ConfigSettings settings("a","b",1,SAVE_TO_DB,"e");
-//	std::string filename(boost::archive::tmpdir());
-//	filename += "/sett.xml";
-//
-//	XMLHelper helper;
-//	helper.save_schedule(settings, filename.c_str());
-//
-//	ConfigSettings conf;
-//	helper.restore_schedule(conf, filename.c_str());
-//	cout << conf;
-
+	MainModel::getInstance()->stop();
 	return 0;
 }
 
