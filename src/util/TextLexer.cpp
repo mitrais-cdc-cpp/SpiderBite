@@ -125,6 +125,24 @@ std::vector<std::string> Mitrais::util::TextLexer::findUrls(std::string content)
 	return findUrls();
 }
 
+std::vector<Mitrais::util::UrlTarget> Mitrais::util::TextLexer::findUrls(Mitrais::util::UrlTarget url)
+{
+	std::vector<Mitrais::util::UrlTarget> urls;
+	setContent(url.Content);
+
+	for(const auto& name : 	findUrls())
+	{
+		Mitrais::util::UrlTarget url;
+		url.Url = name;
+		url.Protocol = Mitrais::util::UrlTargetProtocol::UNKNOWN;
+		url.Status = Mitrais::util::UrlTargetStatus::NONE;
+
+		urls.push_back(url);
+	}
+
+	return urls;
+}
+
 /*
  * findUrls function with parameter to get vector of URL target also get response message
  * @params content

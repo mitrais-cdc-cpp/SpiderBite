@@ -193,7 +193,7 @@ namespace Mitrais
 				string data = "";
 
 				// crawl the web and save into buffer
-				crawler_.getContent(target.Url, data);
+				crawler_.getContent(target, true);
 
 				//insert into buffer
 				buff_.insertContentToBuffer(data);
@@ -250,7 +250,7 @@ namespace Mitrais
 					string data = "";
 
 					// crawl the web and save into buffer
-					crawler.getContent(target.Url, data);
+					crawler.getContent(target, true);
 					//insert into buffer
 					buff.insertContentToBuffer(data);
 

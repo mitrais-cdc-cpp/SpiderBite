@@ -33,10 +33,10 @@ void MainPresenter::registerEventsModel()
 {
 	LOG_INFO << "registerEventsModel()";
 	_model->whenApplicationStarts( [this]{ this->applicationStartCallback(); });
-	//_model->whenApplicationStop( [this]{ this->applicationStopCallback(); });
-	//_model->whenCrawlingStart( [this]{ this->crawlingStartCallback(); });
-	//_model->whenCrawlingStop( [this]{ this->crawlingStopCallback(); });
-	//_model->whenCrawlingRunning( [this]{ this->crawlingRunningCallback(); });
+	_model->whenApplicationStop( [this]{ this->applicationStopCallback(); });
+	_model->whenCrawlingStart( [this]{ this->crawlingStartCallback(); });
+	_model->whenCrawlingStop( [this]{ this->crawlingStopCallback(); });
+	_model->whenCrawlingRunning( [this]{ this->crawlingRunningCallback(); });
 }
 
 void MainPresenter::applicationStartCallback()
@@ -55,11 +55,11 @@ void MainPresenter::crawlingStartCallback()
 }
 void MainPresenter::crawlingStopCallback()
 {
-
+	//TBD inform the gui....
 }
 void MainPresenter::crawlingRunningCallback()
 {
-
+	//TBD update the gui....
 }
 
 void MainPresenter::registerEvents()
@@ -90,21 +90,24 @@ void MainPresenter::setQuitClicked_Callback()
 void MainPresenter::setOpenClicked_Callback()
 {
 	LOG_INFO << "setOpenClicked_Callback()";
+	string url;
 
 	_view->showOpenDialog();
 
-	auto targets = _model->readUrlFromFile(
-			_view->getFilename()
-			);
-
-	string url;
-
-	for(auto const& target: targets)
+	if(_model->readUrlFromFile(_view->getFilename()))
 	{
-		urls.push_back(target.Url);
-	}
+		for(auto const& target: _model->getUrls())
+		{
+			urls.push_back(target.Url);
+		}
 
-	_view->displayFileContent(urls);
+		LOG_INFO << "send url collection to view";
+		_view->displayFileContent(urls);
+	}
+	else
+	{
+		LOG_INFO << "couldnt read urls from file";
+	}
 }
 
 void MainPresenter::setStopClicked_Callback()
@@ -115,7 +118,9 @@ void MainPresenter::setStopClicked_Callback()
 void MainPresenter::setStartClicked_Callback()
 {
 	LOG_INFO << "setStartClicked_Callback()";
+	_model->startCrawling(_model->getUrls());
 }
+
 
 void MainPresenter::setSettingViewClicked_Callback()
 {

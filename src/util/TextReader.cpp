@@ -237,22 +237,7 @@ bool TextReader::checkDuplicateUrl(std::string url, UrlTarget& target)
 UrlTarget TextReader::getUrl(string url)
 {
 	UrlTarget target;
-
 	Poco::URI uri(url);
-
-	// get the protocol/schema (http, https, ftp)
-	std::string protocol = uri.getScheme();
-
-	// check if there is a protocol or not
-	if (!protocol.empty())
-	{
-		target.Protocol = protocol;
-	}
-	else
-	{
-		// set "http" as default protocol
-		target.Protocol = _defaultProtocol;
-	}
 
 	// get the host name and also the authority or port (if exist, example : www.mitrais.com:8080)
 	target.Url = uri.getAuthority();
@@ -270,11 +255,8 @@ UrlTarget TextReader::getUrl(string url)
 		target.Url += pathOrSubpage;
 	}
 
-	// set the latest url position as the url
-	target.LatestUrlPosition = target.Url;
-
 	// set the target as NONE
-	target.Status = NONE;
+	target.Status = UrlTargetStatus::NONE;
 
 	return target;
 }
@@ -286,26 +268,12 @@ UrlTarget TextReader::getUrl(string url)
  */
 bool TextReader::isUrlExist(UrlTarget target)
 {
-//	vector<UrlTarget>::iterator it;
-//
-//	it = std::find(_targets.begin(), _targets.end(), target);
-//
-//	if (it !=_targets.end())
-//	{
-//		// if found (there is duplication)
-//		return true;
-//	}
-//
-//	// not found
-//	return false;
-
 	// looping manual to search the equal value since could not use std::find
 	if (_targets.size() > 0)
 	{
 		for(auto const& existingUrl:_targets)
 		{
-			if ((existingUrl.Protocol.compare(target.Protocol) == 0) &&
-				(existingUrl.Url.compare(target.Url) == 0))
+			if ((existingUrl.Protocol == target.Protocol) && (existingUrl.Url.compare(target.Url) == 0))
 			{
 				return true;
 			}

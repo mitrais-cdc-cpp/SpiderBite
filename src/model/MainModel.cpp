@@ -12,6 +12,7 @@ using namespace Mitrais::Model;
 MainModel* MainModel::m_instance = nullptr;
 
 MainModel::MainModel()
+: _bInitialReadingDone(false)
 {}
 
 MainModel::~MainModel()
@@ -56,11 +57,26 @@ void MainModel::run()
 	onApplicationStarts();
 }
 
-std::vector<Mitrais::util::UrlTarget> MainModel::readUrlFromFile(std::string filename)
+bool MainModel::readUrlFromFile(std::string filename)
 {
-	util::TextReader reader(filename);
-	util::BaseResponse response;
-	return reader.getUrls(response);
+	try
+	{
+		if(!_bInitialReadingDone)
+		{
+			util::TextReader 	reader(filename);
+			util::BaseResponse 	response;
+			setInitialReading(true);
+			urls = reader.getUrls(response);
+		}
+	}
+	catch(std::exception& ex)
+	{
+		LOG_ERROR << "An error occured: " << ex.what();
+		return false;
+
+	}
+
+	return true;
 }
 
 void MainModel::writeUrlToFile(std::string filename, bool isSaveAsHtml)
@@ -77,27 +93,33 @@ void MainModel::writeUrlToDatabase(std::string filename)
 	writer.writeToDatabase(response);
 }
 
-std::vector<std::string> MainModel::findUrls(std::string content)
+std::vector<Mitrais::util::UrlTarget> MainModel::findUrls(Mitrais::util::UrlTarget url)
 {
-	util::TextLexer lexer(content);
-	util::BaseResponse response;
-	return lexer.findUrls(response);
+	util::TextLexer lexer;
+	return lexer.findUrls(url);
 }
 
-void MainModel::clearBuffer(vector<std::string> stringBuffer)
+void MainModel::stopCrawling()
 {
-	util::TextBuffer buffer(stringBuffer);
-	buffer.clearBuffer();
+	//todo
 }
 
-void MainModel::insertContentToBuffer(vector<std::string> stringBuffer ,string content)
-{
-	util::TextBuffer buffer(stringBuffer);
-	buffer.insertContentToBuffer(content);
-}
-
-void MainModel::crawlContent(const std::string& url, std::string& result)
+void MainModel::startCrawling(std::vector<Mitrais::util::UrlTarget> urls)
 {
 	util::WebCrawler crawler;
-	crawler.getContent(url, result);
+	std::string result;
+
+	for(auto& url : urls)
+	{
+		url.Status = Mitrais::util::UrlTargetStatus::START;
+
+		if (crawler.getContent(url, true))
+			url.Status = Mitrais::util::UrlTargetStatus::DONE;
+		else
+			url.Status = Mitrais::util::UrlTargetStatus::ERROR;
+
+		//seach deeper URLS
+		url.SubUrlList = findUrls(url);
+	}
+
 }

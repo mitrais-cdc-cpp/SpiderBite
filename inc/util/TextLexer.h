@@ -9,6 +9,7 @@
 #include <iterator>
 
 #include "BaseResponse.h"
+#include "UrlTarget.h"
 
 using namespace std;
 
@@ -27,6 +28,7 @@ public:
 	std::vector<string> findUrls();
 	std::vector<string> findUrls(BaseResponse& response);
 	std::vector<std::string> findUrls(std::string content);
+	std::vector<UrlTarget> findUrls(UrlTarget url);
 	std::vector<std::string> findUrls(std::string content, BaseResponse& response);
 
 private:

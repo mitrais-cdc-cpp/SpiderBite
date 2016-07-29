@@ -6,6 +6,7 @@
 #include <vector>
 
 #include "UrlTargetStatus.h"
+#include "UrlTargetProtocol.h"
 
 namespace Mitrais {
 namespace util {
@@ -15,13 +16,15 @@ namespace util {
  */
 struct UrlTarget
 {
-	std::string Protocol;           // protocol type (http, https, ftp)
-	std::string Url;				// valid URL address as string
-	std::string LatestUrlPosition;	// TBD
-	UrlTargerStatus Status;			// current status of crawling process for URL address
-	std::vector<UrlTarget> SubUrlList;
+
+	std::string Url;					// valid URL address as string
+	std::string Content;				// crawled content
 	int Deepness = 0;
 
+	UrlTargetProtocol Protocol;     	// protocol type (http, https, ftp)
+	UrlTargetStatus Status;				// current status of crawling process for URL address
+
+	std::vector<UrlTarget> SubUrlList; //sublist of URL withing content
 
 	/**
 	 * Get current URL

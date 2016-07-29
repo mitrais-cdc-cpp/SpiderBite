@@ -12,7 +12,7 @@
 #include <string>
 #include <curl/curl.h>
 
-#include "TextBuffer.h"
+#include "UrlTarget.h"
 #include "Logger.h"
 
 using namespace std;
@@ -30,10 +30,12 @@ public:
 	WebCrawler();
 	~WebCrawler();
 
-	void getContent(const std::string& strURL_, std::string& result);
-	void getContent(const std::string& strURL_, std::string& result_, bool isHTTPS_);
+	bool getContent(UrlTarget url_, bool isHTTPS_);
+
 
 private:
+
+	std::string getContent(const std::string& strURL_, bool isHTTPS_, bool& _isError);
 	std::string addPrefixAndSufixUrl(const std::string& url);
 };
 

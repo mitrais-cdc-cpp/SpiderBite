@@ -8,13 +8,15 @@ namespace util {
  * Enumeration to show the status of the
  * crawling process for a given URL address
  */
-enum UrlTargerStatus {
+enum class UrlTargetStatus
+{
+	ERROR,	 //!< ERROR
 	NONE,    //!< NONE
 	START,   //!< START
 	CRAWLING,//!< CRAWLING
 	PAUSE,   //!< PAUSE
 	STOP,    //!< STOP
-	DONE     //!< DONE
+	DONE,    //!< DONE
 };
 
 } /* namespace util */
