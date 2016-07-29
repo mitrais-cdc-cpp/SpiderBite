@@ -20,20 +20,26 @@ void MainPresenter::registerEventsView()
 {
 	LOG_INFO << "registerEventsView()";
 
-	_view->onSaveClicked( [this]{ this->setSaveClicked_Callback(); });
-	_view->onQuitClicked( [this]{ this->setQuitClicked_Callback(); });
-	_view->onOpenClicked( [this]{ this->setOpenClicked_Callback(); });
+	//main
 	_view->onStopClicked( [this]{ this->setStopClicked_Callback(); });
 	_view->onStartClicked( [this]{this->setStartClicked_Callback(); });
 
-	_view->onSettingViewClicked( [this]{ this->setSettingViewClicked_Callback(); });
+	//Menu
+	_view->onOpenClicked( [this]{ this->setOpenMenuClicked_Callback(); });
+	_view->onSaveClicked( [this]{ this->setSaveMenuClicked_Callback(); });
+	_view->onSettingViewClicked( [this]{ this->setSettingMenuClicked_Callback(); });
+	_view->onQuitClicked( [this]{ this->setQuitMenuClicked_Callback(); });
 }
 
 void MainPresenter::registerEventsModel()
 {
 	LOG_INFO << "registerEventsModel()";
+
+	//start/stop application
 	_model->whenApplicationStarts( [this]{ this->applicationStartCallback(); });
 	_model->whenApplicationStop( [this]{ this->applicationStopCallback(); });
+
+	//crawling
 	_model->whenCrawlingStart( [this]{ this->crawlingStartCallback(); });
 	_model->whenCrawlingStop( [this]{ this->crawlingStopCallback(); });
 	_model->whenCrawlingRunning( [this]{ this->crawlingRunningCallback(); });
@@ -76,19 +82,32 @@ void MainPresenter::registerEvents()
 }
 
 
+///
+/// MainView
+///
 
-void MainPresenter::setSaveClicked_Callback()
+void MainPresenter::setStopClicked_Callback()
+{
+	LOG_INFO << "setStopClicked_Callback()";
+	_model->stopCrawling();
+}
+
+void MainPresenter::setStartClicked_Callback()
+{
+	LOG_INFO << "setStartClicked_Callback()";
+	_model->startCrawling(_model->getUrls());
+}
+
+///
+/// MainMenu
+///
+
+void MainPresenter::setSaveMenuClicked_Callback()
 {
 	LOG_INFO << "setSaveClicked_Callback()";
 }
 
-void MainPresenter::setQuitClicked_Callback()
-{
-	LOG_INFO << "setQuitClicked_Callback()";
-	this->applicationStopCallback();
-}
-
-void MainPresenter::setOpenClicked_Callback()
+void MainPresenter::setOpenMenuClicked_Callback()
 {
 	LOG_INFO << "setOpenClicked_Callback()";
 
@@ -110,22 +129,20 @@ void MainPresenter::setOpenClicked_Callback()
 	}
 }
 
-void MainPresenter::setStopClicked_Callback()
-{
-	LOG_INFO << "setStopClicked_Callback()";
-	_model->stopCrawling();
-}
-
-void MainPresenter::setStartClicked_Callback()
-{
-	LOG_INFO << "setStartClicked_Callback()";
-	_model->startCrawling(_model->getUrls());
-}
-
-
-void MainPresenter::setSettingViewClicked_Callback()
+void MainPresenter::setSettingMenuClicked_Callback()
 {
 	LOG_INFO << "setSettingViewClicked_Callback()";
 	_view->openSettingView();
 }
+
+void MainPresenter::setQuitMenuClicked_Callback()
+{
+	LOG_INFO << "setQuitClicked_Callback()";
+	this->applicationStopCallback();
+}
+
+///
+/// SettingView
+///
+
 
