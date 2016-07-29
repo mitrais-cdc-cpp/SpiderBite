@@ -43,8 +43,6 @@ namespace Mitrais
 			static void startClicked(GtkWidget *button, GtkTextBuffer *buffer);
 			static void settingClicked();
 
-			void build();
-			void start();
 			void clearTextBox();
 			void setButtonAndMenuDisability();
 			void setStringToTextBox(std::string str);
@@ -52,9 +50,14 @@ namespace Mitrais
 			std::string getStringFromTextBuffer();
 			inline std::string getFilename(){ return _fileName; }
 
+			void build();
+			void start();
 			void openSettingView();
 			void showOpenDialog();
 			void showSaveDialog();
+			void closeMainView();
+			void stopCrawlingProcess();
+			void disableControlsWhenStartClicked();
 			void displayFileContent(std::vector<std::string> urls);
 		private:
 			MainView();
@@ -62,6 +65,9 @@ namespace Mitrais
 			SettingView* _settingView;
 			void setTextBuffer(std::string str);
 			void setMessageToStatusbar(std::string message);
+			void setTextViewEditability(bool isEditable);
+			void setTextViewCursorVisibility(bool isVisible);
+			void setWidgetEnablement(GtkWidget* widget, bool isEnable);
 
 			GtkTextBuffer* _textBuffer;
 			GtkWidget* _window;

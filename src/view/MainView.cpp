@@ -90,7 +90,28 @@ void MainView::settingClicked()
 
 void MainView::openSettingView()
 {
+	LOG_INFO << "Setting Clicked";
 	_settingView->activateUI();
+}
+
+void MainView::closeMainView()
+{
+	LOG_INFO << "Program terminated";
+	gtk_widget_destroy(GTK_WIDGET(NULL));
+}
+
+void MainView::stopCrawlingProcess()
+{
+	LOG_INFO << "Stop clicked";
+
+	// disable stop button
+	gtk_widget_set_sensitive (_stopBtn, FALSE);
+
+	// TODO : Azis, stop the web crawler process and update the status
+
+	// enable start button
+	gtk_widget_set_sensitive (_startBtn, TRUE);
+	LOG_INFO << "Web crawling stopped";
 }
 
 void MainView::displayFileContent(std::vector<std::string> urls)
@@ -107,6 +128,14 @@ void MainView::displayFileContent(std::vector<std::string> urls)
 	}
 
 	setStringToTextBox(text);
+}
+
+void MainView::disableControlsWhenStartClicked()
+{
+	setTextViewEditability(FALSE);
+	setTextViewCursorVisibility(FALSE);
+	clearTextBox();
+	setWidgetEnablement(_startBtn, FALSE);
 }
 
 void MainView::showOpenDialog()
@@ -165,21 +194,36 @@ void MainView::setButtonAndMenuDisability()
 	if (_fileName.empty())
 	{
 		// disable start and stop button
-		gtk_widget_set_sensitive (_startBtn, FALSE);
-		gtk_widget_set_sensitive (_stopBtn, FALSE);
+		setWidgetEnablement(_startBtn, FALSE);
+		setWidgetEnablement(_stopBtn, FALSE);
 
 		// disable save menu
-		gtk_widget_set_sensitive(_save, FALSE);
+		setWidgetEnablement(_save, FALSE);
 	}
 	else
 	{
 		// enable start and stop button
-		gtk_widget_set_sensitive (_startBtn, TRUE);
-		gtk_widget_set_sensitive (_stopBtn, FALSE);
+		setWidgetEnablement(_startBtn, TRUE);
+		setWidgetEnablement(_stopBtn, FALSE);
 
 		// enable save menu
-		gtk_widget_set_sensitive(_save, TRUE);
+		setWidgetEnablement(_save, TRUE);
 	}
+}
+
+void MainView::setTextViewEditability(bool isEditable)
+{
+	gtk_text_view_set_editable (GTK_TEXT_VIEW (_txtBox), isEditable);
+}
+
+void MainView::setTextViewCursorVisibility(bool isVisible)
+{
+	gtk_text_view_set_cursor_visible (GTK_TEXT_VIEW (_txtBox), isVisible);
+}
+
+void MainView::setWidgetEnablement(GtkWidget* widget, bool isEnable)
+{
+	gtk_widget_set_sensitive (widget, isEnable);
 }
 
 void MainView::setMessageToStatusbar(std::string message)
