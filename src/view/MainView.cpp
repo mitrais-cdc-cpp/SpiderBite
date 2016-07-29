@@ -310,7 +310,7 @@ void MainView::build()
 
 	gtk_widget_show_all(_window);
 
-	_settingView = PropertyUI::getInstance();
+	_settingView = SettingView::getInstance();
 }
 
 void MainView::start()

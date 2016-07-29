@@ -158,7 +158,7 @@ void SettingView::onOpenClicked()
  * params argc an integer
  * params argv an array of chars pointer
  */
-void SettingView::activateUI(int argc, char *argv[])
+void SettingView::activateUI()
 {
 	LOG_INFO << "Property UI activated";
 

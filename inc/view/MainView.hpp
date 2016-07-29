@@ -59,7 +59,7 @@ namespace Mitrais
 		private:
 			MainView();
 			GtkTextBuffer* getPTextBuffer(GtkWidget* widget);
-			PropertyUI* _settingView;
+			SettingView* _settingView;
 			void setTextBuffer(std::string str);
 			void setMessageToStatusbar(std::string message);
 
