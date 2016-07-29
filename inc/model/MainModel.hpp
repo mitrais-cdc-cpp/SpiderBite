@@ -13,6 +13,8 @@
 #include "../util/UrlTarget.h"
 #include "../util/TextReader.h"
 #include "../util/TextWriter.h"
+#include "../util/TextBuffer.h"
+#include "../util/TextLexer.h"
 
 namespace Mitrais
 {
@@ -31,7 +33,11 @@ namespace Mitrais
 
 			void run();
 			std::vector<Mitrais::util::UrlTarget> readUrlFromFile(std::string filename);
-			void writeUrlToFile(std::string fileName, std::vector<Mitrais::util::UrlTarget> urls);
+			void writeUrlToFile(std::string filename, bool isSaveAsHtml);
+			void writeUrlToDatabase(std::string filename);
+			std::vector<std::string> findUrls(std::string content);
+			void clearBuffer(vector<std::string> stringBuffer);
+			void insertContentToBuffer(vector<std::string> stringBuffer ,string content);
 
 			void whenApplicationStarts(CallbackFunction callback);
 

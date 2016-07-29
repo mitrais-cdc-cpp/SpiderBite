@@ -42,3 +42,36 @@ std::vector<Mitrais::util::UrlTarget> MainModel::readUrlFromFile(std::string fil
 	util::BaseResponse response;
 	return reader.getUrls(response);
 }
+
+void MainModel::writeUrlToFile(std::string filename, bool isSaveAsHtml)
+{
+	util::TextWriter writer(filename);
+	util::BaseResponse response;
+	writer.writeToFile(response, isSaveAsHtml);
+}
+
+void MainModel::writeUrlToDatabase(std::string filename)
+{
+	util::TextWriter writer(filename);
+	util::BaseResponse response;
+	writer.writeToDatabase(response);
+}
+
+std::vector<std::string> MainModel::findUrls(std::string content)
+{
+	util::TextLexer lexer(content);
+	util::BaseResponse response;
+	return lexer.findUrls(response);
+}
+
+void MainModel::clearBuffer(vector<std::string> stringBuffer)
+{
+	util::TextBuffer buffer(stringBuffer);
+	buffer.clearBuffer();
+}
+
+void MainModel::insertContentToBuffer(vector<std::string> stringBuffer ,string content)
+{
+	util::TextBuffer buffer(stringBuffer);
+	buffer.insertContentToBuffer(content);
+}
