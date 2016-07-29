@@ -91,7 +91,7 @@ bool MainModel::readUrlFromFile()
 	return true;
 }
 
-bool MainModel::writeUrls(Mitrais::util::SaveModeEnum enum_)
+void MainModel::writeUrls(Mitrais::util::SaveModeEnum enum_)
 {
 	switch(enum_)
 	{

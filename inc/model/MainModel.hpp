@@ -41,7 +41,7 @@ namespace Mitrais
 			bool startCrawling(std::vector<Mitrais::util::UrlTarget> urls);
 			bool stopCrawling();
 			bool readUrls(std::string filename);
-			bool writeUrls(Mitrais::util::SaveModeEnum enum_);
+			void writeUrls(Mitrais::util::SaveModeEnum enum_);
 
 			//registered events
 			void whenApplicationStarts(CallbackFunction callback);
@@ -70,7 +70,7 @@ namespace Mitrais
 
 			//helper
 			std::vector<Mitrais::util::UrlTarget> findUrls(Mitrais::util::UrlTarget url);
-			bool readUrlFromFile(std::string filename);
+			bool readUrlFromFile();
 			bool readUrlFromDatabase();
 			void writeUrlToFile(std::string filename, bool isSaveAsHtml);
 			void writeUrlToDatabase(std::string filename);
