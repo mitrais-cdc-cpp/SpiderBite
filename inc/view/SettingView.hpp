@@ -20,11 +20,11 @@ namespace UI {
 
 	typedef std::function<void()> CallbackFunction;
 
-	class PropertyUI
+	class SettingView
 	{
 	public:
-		virtual ~PropertyUI();
-		static PropertyUI* getInstance();
+		virtual ~SettingView();
+		static SettingView* getInstance();
 
 		//Public interface
 		void quit();
@@ -48,15 +48,15 @@ namespace UI {
 	private:
 
 		//Arguments nested class
-		class PropertyUIArgs;
-		std::shared_ptr<PropertyUIArgs> _args;
+		class SettingViewArgs;
+		std::shared_ptr<SettingViewArgs> _args;
 
 		//private ctor
-		PropertyUI(std::shared_ptr<PropertyUI::PropertyUIArgs> args_);
-		PropertyUI();
+		SettingView(std::shared_ptr<SettingView::SettingViewArgs> args_);
+		SettingView();
 
 		//Singleton self
-		static PropertyUI* _self;
+		static SettingView* _self;
 
 		//Signals from gtk+
 		static void onSaveConfigurationClicked();
