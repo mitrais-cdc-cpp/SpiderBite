@@ -16,6 +16,7 @@ MainView::MainView()
 
 MainView::~MainView()
 {
+	gtk_widget_destroy(_window);
 	delete m_instance;
 }
 
@@ -112,9 +113,7 @@ void MainView::showOpenDialog()
 {
 	LOG_INFO << "Open menu clicked";
 
-	GtkWidget *dialog;
-
-	dialog = gtk_file_chooser_dialog_new ("Choose file..",
+	GtkWidget* dialog = gtk_file_chooser_dialog_new ("Choose file..",
 		 GTK_WINDOW(_window),
 		 GTK_FILE_CHOOSER_ACTION_OPEN,
 		 ("_Cancel"), GTK_RESPONSE_CANCEL,
@@ -125,10 +124,38 @@ void MainView::showOpenDialog()
 	{
 		_fileName = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
 		LOG_INFO << "URL file loaded:" +_fileName;
-//		pushMessage("File loaded:" + _fileName);
+		setMessageToStatusbar("File loaded:" + _fileName);
 	}
 
 	setButtonAndMenuDisability();
+
+	gtk_widget_destroy (dialog);
+}
+
+void MainView::showSaveDialog()
+{
+	LOG_INFO << "Save Clicked";
+
+	GtkWidget* dialog = gtk_file_chooser_dialog_new ("Save File",
+										  GTK_WINDOW(_window),
+										  GTK_FILE_CHOOSER_ACTION_SAVE,
+										  ("_Cancel"),
+										  GTK_RESPONSE_CANCEL,
+										  ("_Save"),
+										  GTK_RESPONSE_ACCEPT,
+										  NULL);
+	GtkFileChooser* chooser = GTK_FILE_CHOOSER (dialog);
+
+	gtk_file_chooser_set_do_overwrite_confirmation (chooser, TRUE);
+
+	gtk_file_chooser_set_current_name (chooser, ("new url"));
+
+	guint res = gtk_dialog_run (GTK_DIALOG (dialog));
+	if (res == GTK_RESPONSE_ACCEPT)
+	  {
+		_fileName = gtk_file_chooser_get_filename (chooser);
+//		saveToFile(filename);
+	  }
 
 	gtk_widget_destroy (dialog);
 }
@@ -153,6 +180,13 @@ void MainView::setButtonAndMenuDisability()
 		// enable save menu
 		gtk_widget_set_sensitive(_save, TRUE);
 	}
+}
+
+void MainView::setMessageToStatusbar(std::string message)
+{
+	gtk_statusbar_push (GTK_STATUSBAR (_statusBar),
+			gtk_statusbar_get_context_id(GTK_STATUSBAR (_statusBar), ""),
+			message.c_str());
 }
 
 GtkTextBuffer* MainView::getPTextBuffer(GtkWidget* widget)
@@ -272,15 +306,12 @@ void MainView::build()
 	setButtonAndMenuDisability();
 
 	/* Create status bar */
-	GtkWidget *status_bar = gtk_statusbar_new();
-	gtk_box_pack_start (GTK_BOX (vbox), status_bar, FALSE, FALSE, 0);
-	gtk_widget_show (status_bar);
-
-	gint context_id = gtk_statusbar_get_context_id(GTK_STATUSBAR (status_bar), "Status bar");
+	_statusBar = gtk_statusbar_new();
+	gtk_box_pack_start (GTK_BOX (vbox), _statusBar, FALSE, FALSE, 0);
 
 	gtk_widget_show_all(_window);
 
-	_settingView = PropertyUI::getInstance();
+	_settingView = SettingView::getInstance();
 }
 
 void MainView::start()

@@ -28,12 +28,32 @@ MainModel* MainModel::getInstance()
 
 void MainModel::whenApplicationStarts(CallbackFunction callback)
 {
-	cb = callback;
+	onApplicationStarts = callback;
+}
+
+void MainModel::whenApplicationStop(CallbackFunction callback)
+{
+	onApplicationStop = callback;
+}
+
+void MainModel::whenCrawlingStart(CallbackFunction callback)
+{
+	onCrawlingStart = callback;
+}
+
+void MainModel::whenCrawlingStop(CallbackFunction callback)
+{
+	onCrawlingStop = callback;
+}
+
+void MainModel::whenCrawlingRunning(CallbackFunction callback)
+{
+	onCrawlingRunning = callback;
 }
 
 void MainModel::run()
 {
-	cb();
+	onApplicationStarts();
 }
 
 std::vector<Mitrais::util::UrlTarget> MainModel::readUrlFromFile(std::string filename)
@@ -41,4 +61,43 @@ std::vector<Mitrais::util::UrlTarget> MainModel::readUrlFromFile(std::string fil
 	util::TextReader reader(filename);
 	util::BaseResponse response;
 	return reader.getUrls(response);
+}
+
+void MainModel::writeUrlToFile(std::string filename, bool isSaveAsHtml)
+{
+	util::TextWriter writer(filename);
+	util::BaseResponse response;
+	writer.writeToFile(response, isSaveAsHtml);
+}
+
+void MainModel::writeUrlToDatabase(std::string filename)
+{
+	util::TextWriter writer(filename);
+	util::BaseResponse response;
+	writer.writeToDatabase(response);
+}
+
+std::vector<std::string> MainModel::findUrls(std::string content)
+{
+	util::TextLexer lexer(content);
+	util::BaseResponse response;
+	return lexer.findUrls(response);
+}
+
+void MainModel::clearBuffer(vector<std::string> stringBuffer)
+{
+	util::TextBuffer buffer(stringBuffer);
+	buffer.clearBuffer();
+}
+
+void MainModel::insertContentToBuffer(vector<std::string> stringBuffer ,string content)
+{
+	util::TextBuffer buffer(stringBuffer);
+	buffer.insertContentToBuffer(content);
+}
+
+void MainModel::crawlContent(const std::string& url, std::string& result)
+{
+	util::WebCrawler crawler;
+	crawler.getContent(url, result);
 }

@@ -43,6 +43,7 @@ SettingView::SettingView()
 }
 SettingView::~SettingView()
 {
+	gtk_widget_destroy(form_MainForm);
 }
 
 SettingView* SettingView::getInstance()
@@ -156,7 +157,7 @@ void SettingView::onOpenClicked()
  * params argc an integer
  * params argv an array of chars pointer
  */
-void SettingView::activateUI(int argc, char *argv[])
+void SettingView::activateUI()
 {
 	LOG_INFO << "Property UI activated";
 

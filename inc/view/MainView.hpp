@@ -45,8 +45,8 @@ namespace Mitrais
 
 			void build();
 			void start();
-			void setButtonAndMenuDisability();
 			void clearTextBox();
+			void setButtonAndMenuDisability();
 			void setStringToTextBox(std::string str);
 			void appendStringToTextBox(std::string str);
 			std::string getStringFromTextBuffer();
@@ -54,15 +54,18 @@ namespace Mitrais
 
 			void openSettingView();
 			void showOpenDialog();
+			void showSaveDialog();
 			void displayFileContent(std::vector<std::string> urls);
 		private:
 			MainView();
 			GtkTextBuffer* getPTextBuffer(GtkWidget* widget);
 			SettingView* _settingView;
 			void setTextBuffer(std::string str);
+			void setMessageToStatusbar(std::string message);
 
 			GtkTextBuffer* _textBuffer;
 			GtkWidget* _window;
+			GtkWidget* _statusBar;
 			GtkWidget* _txtBox;
 			GtkWidget* _startBtn;
 			GtkWidget* _stopBtn;

@@ -353,43 +353,7 @@ namespace Mitrais
 		 */
 		static void onSaveClicked(GtkWidget *widget, GtkWidget *window)
 		{
-			LOG_INFO << "Save Clicked";
 
-			GtkWidget *dialog;
-			GtkFileChooser *chooser;
-			GtkFileChooserAction action = GTK_FILE_CHOOSER_ACTION_SAVE;
-			gint res;
-
-			dialog = gtk_file_chooser_dialog_new ("Save File",
-			                                      GTK_WINDOW(window),
-			                                      action,
-			                                      ("_Cancel"),
-			                                      GTK_RESPONSE_CANCEL,
-			                                      ("_Save"),
-			                                      GTK_RESPONSE_ACCEPT,
-			                                      NULL);
-			chooser = GTK_FILE_CHOOSER (dialog);
-
-			gtk_file_chooser_set_do_overwrite_confirmation (chooser, TRUE);
-
-//			if (user_edited_a_new_document)
-			  gtk_file_chooser_set_current_name (chooser,
-			                                     ("new url"));
-//			else
-//			  gtk_file_chooser_set_filename (chooser,
-//			                                 convertStringToPChar(_filePath));
-
-			res = gtk_dialog_run (GTK_DIALOG (dialog));
-			if (res == GTK_RESPONSE_ACCEPT)
-			  {
-			    char *filename;
-
-			    filename = gtk_file_chooser_get_filename (chooser);
-			    saveToFile(filename);
-			    g_free (filename);
-			  }
-
-			gtk_widget_destroy (dialog);
 		}
 
 		/**
