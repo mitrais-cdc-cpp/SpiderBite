@@ -7,7 +7,7 @@
 
 #include "../../inc/view/MainUI.h"
 
-#include "../../inc/view/PropertyUI.hpp"
+#include "../../inc/view/SettingView.hpp"
 
 namespace Mitrais
 {
@@ -89,28 +89,7 @@ namespace Mitrais
 		*/
 		void displayFileContent()
 		{
-			//set textview editable
-			gtk_text_view_set_editable (GTK_TEXT_VIEW (text_view), TRUE);
-			gtk_text_view_set_cursor_visible (GTK_TEXT_VIEW (text_view), TRUE);
 
-			// clear the buffer before begin the process
-			gtk_text_buffer_set_text (_buffer, "", -1);
-
-			util::TextReader reader(_filePath);
-			util::BaseResponse response;
-			_targets = reader.getUrls(response);
-
-			gchar* text;
-			string url;
-
-			for(auto const& target: _targets)
-			{
-				url += (target.Url + "\n");
-			}
-
-			text = convertStringToPChar(url);
-			_buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (text_view));
-			gtk_text_buffer_set_text (_buffer, text, -1);
 		}
 
 		/**
@@ -320,12 +299,6 @@ namespace Mitrais
 			LOG_INFO << "Web crawling stopped";
 		}
 
-		void OpenDialog()
-		{
-
-			_view.OpenDialog();
-		}
-
 		/**
 		 * Callback method for open menu
 		 * params button a GtkWidget pointer
@@ -333,33 +306,7 @@ namespace Mitrais
 		 */
 		static void onOpenClicked(GtkWidget *widget, GtkWidget *window)
 		{
-			LOG_INFO << "Open menu clicked";
 
-			GtkWidget *dialog;
-
-			dialog = gtk_file_chooser_dialog_new ("Choose file..",
-			     GTK_WINDOW(window),
-			     GTK_FILE_CHOOSER_ACTION_OPEN,
-				 ("_Cancel"), GTK_RESPONSE_CANCEL,
-				 ("_Open"), GTK_RESPONSE_ACCEPT,
-			     NULL);
-
-		   if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT)
-		   {
-				char *filename;
-
-				filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
-				_filePath = string(filename);
-				g_free (filename);
-
-				LOG_INFO << "URL file loaded:" +_filePath;
-				pushMessage("File loaded:" + _filePath);
-		   }
-
-		   setButtonAndMenuDisability();
-		   displayFileContent();
-
-		   gtk_widget_destroy (dialog);
 		}
 
 		/**

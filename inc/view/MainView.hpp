@@ -11,12 +11,14 @@
 #include <gtk/gtk.h>
 #include <functional>
 #include <iostream>
+#include "SettingView.hpp"
+#include "../util/Logger.h"
 
 namespace Mitrais
 {
 	namespace View
 	{
-		typedef std::function<void(std::string)> CallbackFunctionWithArgString;
+		typedef std::function<void()> CallbackFunction;
 
 		class MainView
 		{
@@ -32,7 +34,7 @@ namespace Mitrais
 			void onOpenClicked(CallbackFunction callback);
 			void onStopClicked(CallbackFunction callback);
 			void onStartClicked(CallbackFunction callback);
-			void onSettingClicked(CallbackFunction callback);
+			void onSettingViewClicked(CallbackFunction callback);
 
 			static void saveClicked(GtkWidget *widget, GtkWidget *window);
 			static void quitClicked(GtkWidget *widget, gpointer data);
@@ -48,18 +50,25 @@ namespace Mitrais
 			void setStringToTextBox(std::string str);
 			void appendStringToTextBox(std::string str);
 			std::string getStringFromTextBuffer();
+			inline std::string getFilename(){ return _fileName; }
+
+			void openSettingView();
+			void showOpenDialog();
+			void displayFileContent(std::vector<std::string> urls);
 		private:
 			MainView();
 			GtkTextBuffer* getPTextBuffer(GtkWidget* widget);
+			PropertyUI* _settingView;
 			void setTextBuffer(std::string str);
 
 			GtkTextBuffer* _textBuffer;
+			GtkWidget* _window;
 			GtkWidget* _txtBox;
 			GtkWidget* _startBtn;
 			GtkWidget* _stopBtn;
 			GtkWidget* _save;
 
-			std::string _filePath;
+			std::string _fileName;
 
 			static MainView* m_instance;
 

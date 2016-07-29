@@ -9,10 +9,7 @@
 #include "../../inc/util/Logger.h"
 #include "../../inc/util/SaveModeEnum.h"
 
-using namespace Mitrais::UI;
-
-
-
+using namespace Mitrais::View;
 
 class SettingView::SettingViewArgs
 {
@@ -166,7 +163,6 @@ void SettingView::activateUI(int argc, char *argv[])
 	LOG_INFO << "Property UI activated";
 
 	//gint context_id;
-	gtk_init (&argc, &argv);
 
 	//call my helpers
 	CreateMainForm();
