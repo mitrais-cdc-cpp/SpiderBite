@@ -43,6 +43,7 @@ SettingView::SettingView()
 }
 SettingView::~SettingView()
 {
+	gtk_widget_destroy(form_MainForm);
 }
 
 SettingView* SettingView::getInstance()

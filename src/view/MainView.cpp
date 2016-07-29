@@ -16,6 +16,7 @@ MainView::MainView()
 
 MainView::~MainView()
 {
+	gtk_widget_destroy(_window);
 	delete m_instance;
 }
 
