@@ -25,6 +25,7 @@ void MainPresenter::registerEventsView()
 	_view->onOpenClicked( [this]{ this->setOpenClicked_Callback(); });
 	_view->onStopClicked( [this]{ this->setStopClicked_Callback(); });
 	_view->onStartClicked( [this]{this->setStartClicked_Callback(); });
+
 	_view->onSettingViewClicked( [this]{ this->setSettingViewClicked_Callback(); });
 }
 
@@ -32,12 +33,33 @@ void MainPresenter::registerEventsModel()
 {
 	LOG_INFO << "registerEventsModel()";
 	_model->whenApplicationStarts( [this]{ this->applicationStartCallback(); });
+	//_model->whenApplicationStop( [this]{ this->applicationStopCallback(); });
+	//_model->whenCrawlingStart( [this]{ this->crawlingStartCallback(); });
+	//_model->whenCrawlingStop( [this]{ this->crawlingStopCallback(); });
+	//_model->whenCrawlingRunning( [this]{ this->crawlingRunningCallback(); });
 }
 
 void MainPresenter::applicationStartCallback()
 {
 	_view->build();
 	_view->start();
+}
+
+void MainPresenter::applicationStopCallback()
+{
+}
+
+void MainPresenter::crawlingStartCallback()
+{
+
+}
+void MainPresenter::crawlingStopCallback()
+{
+
+}
+void MainPresenter::crawlingRunningCallback()
+{
+
 }
 
 void MainPresenter::registerEvents()

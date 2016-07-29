@@ -16,8 +16,6 @@ public:
 	~MainPresenter();
 
 	void registerEvents();
-	void registerEventsView();
-	void registerEventsModel();
 
 	//View
 	void setSaveClicked_Callback();
@@ -28,9 +26,19 @@ public:
 	void setSettingViewClicked_Callback();
 
 	void applicationStartCallback();
+	void applicationStopCallback();
+	void crawlingStartCallback();
+	void crawlingStopCallback();
+	void crawlingRunningCallback();
 
 	//Model
+
 private:
+
+	void registerEventsView();
+	void registerEventsModel();
+
+
 	std::vector<std::string> urls;
 	View::MainView* _view;
 	Model::MainModel* _model;

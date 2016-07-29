@@ -94,8 +94,6 @@ static void entry_activate (GtkEntry *entry, GtkLabel *label)
 	gtk_label_set_text (label, entry_in);
 }
 
-
-
 /**
  * LoadConfigToForm to collect all values from config file,
  * set it to setting form when its loaded.
