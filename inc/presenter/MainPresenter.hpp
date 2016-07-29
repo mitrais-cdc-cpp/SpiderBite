@@ -17,13 +17,16 @@ public:
 
 	void registerEvents();
 
-	//View
-	void setSaveClicked_Callback();
-	void setQuitClicked_Callback();
-	void setOpenClicked_Callback();
+	//Main
 	void setStopClicked_Callback();
 	void setStartClicked_Callback();
-	void setSettingViewClicked_Callback();
+
+	//Menu
+	void setOpenMenuClicked_Callback();
+	void setSettingMenuClicked_Callback();
+	void setQuitMenuClicked_Callback();
+	void setSaveMenuClicked_Callback();
+
 
 	void applicationStartCallback();
 	void applicationStopCallback();
