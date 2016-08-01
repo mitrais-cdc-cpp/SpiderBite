@@ -58,6 +58,21 @@ void MainView::onSettingViewClicked(CallbackFunction callback)
 	whenSettingClicked = callback;
 }
 
+void MainView::SaveConfiguration(CallbackFunction cb_SaveConfigurationClicked_)
+{
+	cb_SaveConfigurationClicked = cb_SaveConfigurationClicked_;
+}
+
+void MainView::OpenClicked(CallbackFunction cb_OpenClicked_)
+{
+	cb_OpenClicked = cb_OpenClicked_;
+}
+
+void MainView::QuitClicked(CallbackFunction cb_QuitClicked_)
+{
+	cb_QuitClicked = cb_QuitClicked_;
+}
+
 void MainView::saveClicked(GtkWidget *widget, GtkWidget *window)
 {
 	MainView::getInstance()->whenSaveClicked();
@@ -86,6 +101,24 @@ void MainView::startClicked(GtkWidget* button, GtkTextBuffer* buffer)
 void MainView::settingClicked()
 {
 	MainView::getInstance()->whenSettingClicked();
+}
+
+void MainView::onSaveConfigurationClicked()
+{
+	LOG_INFO << "onSaveConfigurationClicked()";
+	MainView::getInstance()->cb_SaveConfigurationClicked();
+}
+
+void MainView::onQuitClicked ()
+{
+	LOG_INFO << "onQuitClicked()";
+	MainView::getInstance()->cb_QuitClicked();
+}
+
+void MainView::onOpenClicked()
+{
+	LOG_INFO << "onOpenClicked()";
+	MainView::getInstance()->cb_OpenClicked();
 }
 
 void MainView::openSettingView()
@@ -356,6 +389,10 @@ void MainView::build()
 	gtk_widget_show_all(_window);
 
 	_settingView = SettingView::getInstance();
+	// Connect the events for SettingView
+	g_signal_connect (G_OBJECT (_settingView->btn_Save), "clicked",G_CALLBACK(onSaveConfigurationClicked), _settingView->form_MainForm);
+	g_signal_connect (G_OBJECT (_settingView->btn_SelectPath), "clicked", G_CALLBACK(onOpenClicked), _settingView->form_MainForm);
+	g_signal_connect (G_OBJECT (_settingView->btn_Cancel), "clicked",G_CALLBACK (onQuitClicked), _settingView->form_MainForm);
 }
 
 void MainView::start()

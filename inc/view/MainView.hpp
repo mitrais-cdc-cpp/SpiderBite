@@ -29,6 +29,7 @@ namespace Mitrais
 
 			static MainView* getInstance();
 
+			// MainView callback
 			void onSaveClicked(CallbackFunction callback);
 			void onQuitClicked(CallbackFunction callback);
 			void onOpenClicked(CallbackFunction callback);
@@ -36,12 +37,23 @@ namespace Mitrais
 			void onStartClicked(CallbackFunction callback);
 			void onSettingViewClicked(CallbackFunction callback);
 
+			// SettingView callback
+			void SaveConfiguration(CallbackFunction cb_SaveConfigurationClicked_);
+			void QuitClicked(CallbackFunction cb_OpenClicked_);
+			void OpenClicked(CallbackFunction cb_QuitClicked_);
+
+			// MainView Events
 			static void saveClicked(GtkWidget *widget, GtkWidget *window);
 			static void quitClicked(GtkWidget *widget, gpointer data);
 			static void openClicked(GtkWidget *widget, GtkWidget *window);
 			static void stopClicked(GtkWidget *button, GtkTextBuffer *buffer);
 			static void startClicked(GtkWidget *button, GtkTextBuffer *buffer);
 			static void settingClicked();
+
+			// SettingView Events
+			static void onSaveConfigurationClicked();
+			static void onQuitClicked();
+			static void onOpenClicked();
 
 			void clearTextBox();
 			void setButtonAndMenuDisability();
@@ -87,6 +99,11 @@ namespace Mitrais
 			CallbackFunction whenStopClicked;
 			CallbackFunction whenStartClicked;
 			CallbackFunction whenSettingClicked;
+
+			//Callback function pointers
+			CallbackFunction cb_SaveConfigurationClicked;
+			CallbackFunction cb_OpenClicked;
+			CallbackFunction cb_QuitClicked;
 		};
 	}
 }

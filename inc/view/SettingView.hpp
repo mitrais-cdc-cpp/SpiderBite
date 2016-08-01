@@ -38,11 +38,6 @@ namespace View {
 		int getCrawlingDeepness();
 		Mitrais::util::SaveModeEnum getSaveMode();
 
-		//Events to register
-		void SaveButtonClicked(CallbackFunction cb_SaveButtonClicked);
-		void CancelButtonClicked(CallbackFunction cb_CancelButtonClicked);
-		void CloseClicked(CallbackFunction cb_OpenForm);
-
 	private:
 
 		//Arguments nested class
@@ -61,7 +56,6 @@ namespace View {
 		static void onCancelButtonClicked();
 		static void onOpenDialogClicked();
 		static void onCloseForm();
-
 
 		//UI Helper
 		void CreateGuiElements();
@@ -96,14 +90,12 @@ namespace View {
 		GtkWidget* btn_Save;
 		GtkWidget* btn_Cancel;
 
-		//Callback function pointers
-		CallbackFunction cb_OpenDialogClicked;
-		CallbackFunction cb_SaveButtonClicked;
-		CallbackFunction cb_CancelButtonClicked;
-		CallbackFunction cb_CloseForm;
 
 		//others
 		bool _bIsCreated;
+
+		friend class MainView;
+
 	};
 }} //namespace Mitrais::UI
 

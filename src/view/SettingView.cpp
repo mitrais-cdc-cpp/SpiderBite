@@ -118,43 +118,25 @@ void SettingView::setConfiguration(std::string& connection,
 	SetPropertyUIArgsToPropertyUI(isActive);
 }
 
-void SettingView::SaveButtonClicked(CallbackFunction cb_SaveButtonClicked_)
-{
-	cb_SaveButtonClicked = cb_SaveButtonClicked_;
-}
-
-void SettingView::CancelButtonClicked(CallbackFunction cb_CancelButtonClicked_)
-{
-	cb_CancelButtonClicked = cb_CancelButtonClicked_;
-}
-
-void SettingView::CloseClicked(CallbackFunction cb_QuitClicked_)
-{
-	cb_CloseForm = cb_QuitClicked_;
-}
 
 void SettingView::onCloseForm()
 {
 	LOG_INFO << "onQuitClicked()";
-	SettingView::getInstance()->cb_CloseForm();
 }
 
 void SettingView::onOpenDialogClicked()
 {
 	LOG_INFO << "onSaveButtonClicked()";
-	SettingView::getInstance()->cb_OpenDialogClicked();
 }
 
 void SettingView::onSaveButtonClicked()
 {
 	LOG_INFO << "onSaveButtonClicked()";
-	SettingView::getInstance()->cb_SaveButtonClicked();
 }
 
 void SettingView::onCancelButtonClicked()
 {
 	LOG_INFO << "onCancelButtonClicked()";
-	SettingView::getInstance()->cb_CancelButtonClicked();
 }
 
 void SettingView::OpenForm()
@@ -207,6 +189,7 @@ void SettingView::ConnectSignals()
 	g_signal_connect (G_OBJECT (btn_Save), "clicked",G_CALLBACK(SettingView::onSaveButtonClicked), form_MainForm);
 	g_signal_connect (G_OBJECT (btn_SelectPath), "clicked", G_CALLBACK(SettingView::onOpenDialogClicked), form_MainForm);
 	g_signal_connect (G_OBJECT (btn_Cancel), "clicked",G_CALLBACK (SettingView::onCloseForm), form_MainForm);
+
 }
 
 void SettingView::CreateMainForm()
