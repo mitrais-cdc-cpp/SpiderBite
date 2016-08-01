@@ -296,16 +296,30 @@ bool TextReader::isUrlExist(const vector<UrlTarget>& existingUrls, const UrlTarg
 {
 	if (existingUrls.size() > 0)
 	{
-		auto it = std::find_if(existingUrls.begin(), existingUrls.end(), [&currentUrl](const UrlTarget& url){return url.Protocol.compare(currentUrl.Protocol) == 0 && url.Url.compare(currentUrl.Url) == 0;});
+//		auto it = std::find_if(existingUrls.begin(), existingUrls.end(), [&currentUrl](const UrlTarget& url){return url.Protocol.compare(currentUrl.Protocol) == 0 && url.Url.compare(currentUrl.Url) == 0;});
+//
+//		if (it != existingUrls.end())
+//		{
+//			return true;
+//		}
+//
+//		if ((*it).SubUrlList.size() > 0)
+//		{
+//			return util::TextReader::isUrlExist((*it).SubUrlList, currentUrl);
+//		}
 
-		if (it != existingUrls.end())
+		for(auto const& existingUrl:existingUrls)
 		{
-			return true;
-		}
+			if ((existingUrl.Protocol.compare(currentUrl.Protocol) == 0) &&
+				(existingUrl.Url.compare(currentUrl.Url) == 0))
+			{
+				return true;
+			}
 
-		if ((*it).SubUrlList.size() > 0)
-		{
-			return util::TextReader::isUrlExist((*it).SubUrlList, currentUrl);
+			if (existingUrl.SubUrlList.size() > 0)
+			{
+				return util::TextReader::isUrlExist(existingUrl.SubUrlList, currentUrl);
+			}
 		}
 	}
 
