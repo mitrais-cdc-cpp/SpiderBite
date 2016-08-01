@@ -97,6 +97,7 @@ namespace View {
 		GtkWidget* btn_Cancel;
 
 		//Callback function pointers
+		CallbackFunction cb_OpenDialogClicked;
 		CallbackFunction cb_SaveButtonClicked;
 		CallbackFunction cb_CancelButtonClicked;
 		CallbackFunction cb_CloseForm;

@@ -136,8 +136,13 @@ bool MainModel::stopCrawling()
 	//todo
 }
 
-bool MainModel::startCrawling(std::vector<Mitrais::util::UrlTarget> urls, int iDeep_)
+bool MainModel::startCrawling(std::vector<Mitrais::util::UrlTarget>& urls, int iDeep_)
 {
+	std::vector<Mitrais::util::UrlTarget> urls2;
+	Mitrais::util::UrlTarget a;
+	a.Url = "http://www.google.com";
+
+
 	util::WebCrawler crawler;
 	std::string result;
 	bool isError = false;
@@ -147,21 +152,21 @@ bool MainModel::startCrawling(std::vector<Mitrais::util::UrlTarget> urls, int iD
 		else
 			++iDeep_;
 
-	for(auto& url : urls)
+	for(std::vector<Mitrais::util::UrlTarget>::iterator i = urls.begin(); i != urls.end(); ++i)
 	{
-		url.Status = Mitrais::util::UrlTargetStatus::START;
+		(*i).Status = Mitrais::util::UrlTargetStatus::START;
 
-		crawler.getContent(url, isError);
+		crawler.getContent((*i), isError);
 
-		if (isError)
-			url.Status = Mitrais::util::UrlTargetStatus::DONE;
+		if (!isError)
+			(*i).Status = Mitrais::util::UrlTargetStatus::DONE;
 		else
-			url.Status = Mitrais::util::UrlTargetStatus::ERROR;
+			(*i).Status = Mitrais::util::UrlTargetStatus::ERROR;
 
 		//seach deeper URLS
-		url.SubUrlList = findUrls(url);
+		(*i).SubUrlList = findUrls((*i));
 
-		startCrawling(url.SubUrlList, iDeep_);
+		startCrawling((*i).SubUrlList, iDeep_);
 	}
 
 

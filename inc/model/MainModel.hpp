@@ -39,7 +39,7 @@ namespace Mitrais
 			void stop();
 
 			//public interface;
-			bool startCrawling(std::vector<Mitrais::util::UrlTarget> urls, int iDeep_);
+			bool startCrawling(std::vector<Mitrais::util::UrlTarget>& urls, int iDeep_);
 			bool stopCrawling();
 			bool readUrls(std::string filename);
 			void writeUrls(Mitrais::util::SaveModeEnum enum_);
@@ -54,7 +54,7 @@ namespace Mitrais
 			//Getter
 			inline std::string getUrlFilename() { return _strUrlFilename; }
 			inline bool getInitialReading() { return _bInitialReadingDone; }
-			inline std::vector<Mitrais::util::UrlTarget> getUrls() { return urls; }
+			inline std::vector<Mitrais::util::UrlTarget>& getUrls() { return urls; }
 
 		private:
 			MainModel();

@@ -139,6 +139,12 @@ void SettingView::onCloseForm()
 	SettingView::getInstance()->cb_CloseForm();
 }
 
+void SettingView::onOpenDialogClicked()
+{
+	LOG_INFO << "onSaveButtonClicked()";
+	SettingView::getInstance()->cb_OpenDialogClicked();
+}
+
 void SettingView::onSaveButtonClicked()
 {
 	LOG_INFO << "onSaveButtonClicked()";
