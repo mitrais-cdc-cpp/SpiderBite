@@ -17,6 +17,7 @@
 #include "../util/TextLexer.h"
 #include "../util/WebCrawler.h"
 #include "../util/SaveModeEnum.h"
+#include "../util/Configuration.h"
 
 namespace Mitrais
 {
@@ -38,7 +39,7 @@ namespace Mitrais
 			void stop();
 
 			//public interface;
-			bool startCrawling(std::vector<Mitrais::util::UrlTarget> urls);
+			bool startCrawling(std::vector<Mitrais::util::UrlTarget> urls, int iDeep_);
 			bool stopCrawling();
 			bool readUrls(std::string filename);
 			void writeUrls(Mitrais::util::SaveModeEnum enum_);
@@ -79,6 +80,7 @@ namespace Mitrais
 			std::string _strUrlFilename;
 			bool _bInitialReadingDone;
 			std::vector<Mitrais::util::UrlTarget> urls;
+			Mitrais::util::Configuration _config;
 		};
 	}
 }
