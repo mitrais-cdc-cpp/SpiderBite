@@ -91,7 +91,7 @@ void MainView::settingClicked()
 void MainView::openSettingView()
 {
 	LOG_INFO << "Setting Clicked";
-	_settingView->activateUI();
+	_settingView->OpenForm();
 }
 
 void MainView::closeMainView()

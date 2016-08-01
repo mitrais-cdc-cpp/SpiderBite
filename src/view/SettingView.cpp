@@ -118,68 +118,72 @@ void SettingView::setConfiguration(std::string& connection,
 	SetPropertyUIArgsToPropertyUI(isActive);
 }
 
-
-void SettingView::SaveConfiguration(CallbackFunction cb_SaveConfigurationClicked_)
+void SettingView::SaveButtonClicked(CallbackFunction cb_SaveButtonClicked_)
 {
-	cb_SaveConfigurationClicked = cb_SaveConfigurationClicked_;
+	cb_SaveButtonClicked = cb_SaveButtonClicked_;
 }
 
-void SettingView::OpenClicked(CallbackFunction cb_OpenClicked_)
+void SettingView::CancelButtonClicked(CallbackFunction cb_CancelButtonClicked_)
 {
-	cb_OpenClicked = cb_OpenClicked_;
+	cb_CancelButtonClicked = cb_CancelButtonClicked_;
 }
 
-void SettingView::QuitClicked(CallbackFunction cb_QuitClicked_)
+void SettingView::CloseClicked(CallbackFunction cb_QuitClicked_)
 {
-	cb_QuitClicked = cb_QuitClicked_;
+	cb_CloseForm = cb_QuitClicked_;
 }
 
-void SettingView::onSaveConfigurationClicked()
-{
-	LOG_INFO << "onSaveConfigurationClicked()";
-	SettingView::getInstance()->cb_SaveConfigurationClicked();
-}
-
-void SettingView::onQuitClicked ()
+void SettingView::onCloseForm()
 {
 	LOG_INFO << "onQuitClicked()";
-	SettingView::getInstance()->cb_QuitClicked();
+	SettingView::getInstance()->cb_CloseForm();
 }
 
-void SettingView::onOpenClicked()
+void SettingView::onSaveButtonClicked()
 {
-	LOG_INFO << "onOpenClicked()";
-	SettingView::getInstance()->cb_OpenClicked();
+	LOG_INFO << "onSaveButtonClicked()";
+	SettingView::getInstance()->cb_SaveButtonClicked();
 }
 
-/**
- * Activates the UI
- * params argc an integer
- * params argv an array of chars pointer
- */
-void SettingView::activateUI()
+void SettingView::onCancelButtonClicked()
+{
+	LOG_INFO << "onCancelButtonClicked()";
+	SettingView::getInstance()->cb_CancelButtonClicked();
+}
+
+void SettingView::OpenForm()
 {
 	LOG_INFO << "Property UI activated";
 
 	//gint context_id;
 
-	//call my helpers
-	CreateMainForm();
-	CreateGuiElements();
-	ConnectSignals();
-	CreateGrid();
+	if(!_bIsCreated)
+	{
+		//call my helpers
+		CreateMainForm();
+		CreateGuiElements();
+		ConnectSignals();
+		CreateGrid();
+
+		_bIsCreated = true;
+	}
 
 	// show myself
-	show();
+	Show();
 }
 
-void SettingView::show()
+void SettingView::CloseForm()
+{
+	Quit();
+}
+
+void SettingView::Show()
 {
 	gtk_widget_show_all(form_MainForm);
 	gtk_main();
 }
 
-void SettingView::quit()
+void SettingView::Quit()
 {
 	gtk_widget_destroy(GTK_WIDGET(form_MainForm));
 }
@@ -194,12 +198,10 @@ void SettingView::ConnectSignals()
 	g_signal_connect (GTK_SPIN_BUTTON(stb_CrawlingDepth), "activate", G_CALLBACK(entry_activate), label_CrawlingDepth);
 	g_signal_connect (GTK_SWITCH(switch_SaveInFolder), "activate", G_CALLBACK(entry_activate), label_SaveInFolder);
 
-	g_signal_connect (G_OBJECT (btn_Save), "clicked",G_CALLBACK(SettingView::onSaveConfigurationClicked), form_MainForm);
-	g_signal_connect (G_OBJECT (btn_SelectPath), "clicked", G_CALLBACK(SettingView::onOpenClicked), form_MainForm);
-	g_signal_connect (G_OBJECT (btn_Cancel), "clicked",G_CALLBACK (SettingView::onQuitClicked), form_MainForm);
-
+	g_signal_connect (G_OBJECT (btn_Save), "clicked",G_CALLBACK(SettingView::onSaveButtonClicked), form_MainForm);
+	g_signal_connect (G_OBJECT (btn_SelectPath), "clicked", G_CALLBACK(SettingView::onOpenDialogClicked), form_MainForm);
+	g_signal_connect (G_OBJECT (btn_Cancel), "clicked",G_CALLBACK (SettingView::onCloseForm), form_MainForm);
 }
-
 
 void SettingView::CreateMainForm()
 {
@@ -211,7 +213,6 @@ void SettingView::CreateMainForm()
 	// set resizeable false
 	gtk_window_set_resizable(GTK_WINDOW(form_MainForm), FALSE);
 }
-
 
 void SettingView::CreateGrid()
 {
@@ -241,7 +242,6 @@ void SettingView::CreateGrid()
 	// add grid to window container
 	gtk_container_add(GTK_CONTAINER(form_MainForm), grid);
 }
-
 
 void SettingView::CreateGuiElements()
 {

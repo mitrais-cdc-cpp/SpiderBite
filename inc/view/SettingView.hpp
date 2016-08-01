@@ -27,9 +27,8 @@ namespace View {
 		static SettingView* getInstance();
 
 		//Public interface
-		void quit();
-		void show();
-		void activateUI();
+		void OpenForm();
+		void CloseForm();
 
 		//getter/setter
 		void setConfiguration(std::string& connection,std::string& logfilename,std::string& pathtolocaldir, int deepness, Mitrais::util::SaveModeEnum savemode);
@@ -40,10 +39,9 @@ namespace View {
 		Mitrais::util::SaveModeEnum getSaveMode();
 
 		//Events to register
-		void SaveConfiguration(CallbackFunction cb_SaveConfigurationClicked_);
-		void QuitClicked(CallbackFunction cb_OpenClicked_);
-		void OpenClicked(CallbackFunction cb_QuitClicked_);
-
+		void SaveButtonClicked(CallbackFunction cb_SaveButtonClicked);
+		void CancelButtonClicked(CallbackFunction cb_CancelButtonClicked);
+		void CloseClicked(CallbackFunction cb_OpenForm);
 
 	private:
 
@@ -59,9 +57,11 @@ namespace View {
 		static SettingView* _self;
 
 		//Signals from gtk+
-		static void onSaveConfigurationClicked();
-		static void onQuitClicked();
-		static void onOpenClicked();
+		static void onSaveButtonClicked();
+		static void onCancelButtonClicked();
+		static void onOpenDialogClicked();
+		static void onCloseForm();
+
 
 		//UI Helper
 		void CreateGuiElements();
@@ -70,6 +70,8 @@ namespace View {
 		void ConnectSignals();
 		void SetPropertyUIArgsToPropertyUI(bool isSaveInFolderActive);
 		void OpenDialog();
+		void Show();
+		void Quit();
 
 		GtkWidget* form_MainForm;			//MainForm
 		GtkWidget* grid;					//GridView
@@ -95,9 +97,12 @@ namespace View {
 		GtkWidget* btn_Cancel;
 
 		//Callback function pointers
-		CallbackFunction cb_SaveConfigurationClicked;
-		CallbackFunction cb_OpenClicked;
-		CallbackFunction cb_QuitClicked;
+		CallbackFunction cb_SaveButtonClicked;
+		CallbackFunction cb_CancelButtonClicked;
+		CallbackFunction cb_CloseForm;
+
+		//others
+		bool _bIsCreated;
 	};
 }} //namespace Mitrais::UI
 
