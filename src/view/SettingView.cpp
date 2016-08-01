@@ -118,40 +118,6 @@ void SettingView::setConfiguration(std::string& connection,
 	SetPropertyUIArgsToPropertyUI(isActive);
 }
 
-
-void SettingView::SaveConfiguration(CallbackFunction cb_SaveConfigurationClicked_)
-{
-	cb_SaveConfigurationClicked = cb_SaveConfigurationClicked_;
-}
-
-void SettingView::OpenClicked(CallbackFunction cb_OpenClicked_)
-{
-	cb_OpenClicked = cb_OpenClicked_;
-}
-
-void SettingView::QuitClicked(CallbackFunction cb_QuitClicked_)
-{
-	cb_QuitClicked = cb_QuitClicked_;
-}
-
-void SettingView::onSaveConfigurationClicked()
-{
-	LOG_INFO << "onSaveConfigurationClicked()";
-	SettingView::getInstance()->cb_SaveConfigurationClicked();
-}
-
-void SettingView::onQuitClicked ()
-{
-	LOG_INFO << "onQuitClicked()";
-	SettingView::getInstance()->cb_QuitClicked();
-}
-
-void SettingView::onOpenClicked()
-{
-	LOG_INFO << "onOpenClicked()";
-	SettingView::getInstance()->cb_OpenClicked();
-}
-
 /**
  * Activates the UI
  * params argc an integer
@@ -193,11 +159,6 @@ void SettingView::ConnectSignals()
 
 	g_signal_connect (GTK_SPIN_BUTTON(stb_CrawlingDepth), "activate", G_CALLBACK(entry_activate), label_CrawlingDepth);
 	g_signal_connect (GTK_SWITCH(switch_SaveInFolder), "activate", G_CALLBACK(entry_activate), label_SaveInFolder);
-
-	g_signal_connect (G_OBJECT (btn_Save), "clicked",G_CALLBACK(SettingView::onSaveConfigurationClicked), form_MainForm);
-	g_signal_connect (G_OBJECT (btn_SelectPath), "clicked", G_CALLBACK(SettingView::onOpenClicked), form_MainForm);
-	g_signal_connect (G_OBJECT (btn_Cancel), "clicked",G_CALLBACK (SettingView::onQuitClicked), form_MainForm);
-
 }
 
 
