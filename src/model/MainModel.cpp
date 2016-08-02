@@ -159,6 +159,7 @@ void MainModel::crawlWebsite(util::WebCrawler &crawler, util::UrlTarget url, int
 	std::string result;
 	bool isError = false;
 	util::ThreadHelper helper;
+	MainModel model;
 
 	if(iDeep_ == _config.getSetting().crawlingDeepness)
 			return;
@@ -173,7 +174,7 @@ void MainModel::crawlWebsite(util::WebCrawler &crawler, util::UrlTarget url, int
 	}
 	else
 	{
-		helper.pushTask(crawler, url);
+		helper.pushTask(model, crawler, url);
 	}
 }
 
@@ -189,7 +190,7 @@ bool MainModel::startCrawling(std::vector<Mitrais::util::UrlTarget> urls)
 		util::ThreadHelper helper;
 		for(auto& url: urls)
 		{
-
+			crawlWebsite(crawler, url, 0);
 		}
 		helper.executeTaskAsync(targetCount);
 	}
