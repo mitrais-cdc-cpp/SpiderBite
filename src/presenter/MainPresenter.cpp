@@ -95,7 +95,7 @@ void MainPresenter::setStopClicked_Callback()
 void MainPresenter::setStartClicked_Callback()
 {
 	LOG_INFO << "setStartClicked_Callback()";
-	_model->startCrawling(_model->getUrls(), 0); // we start from level 0!
+	_model->startCrawling(_model->getUrls());
 }
 
 ///

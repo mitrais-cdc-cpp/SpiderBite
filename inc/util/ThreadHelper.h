@@ -16,7 +16,8 @@
 #include <boost/move/move.hpp>
 #include <unistd.h>
 
-using namespace std;
+#include "WebCrawler.h"
+#include "../model/MainModel.hpp"
 
 namespace Mitrais
 {
@@ -28,6 +29,10 @@ namespace Mitrais
 			ThreadHelper();
 			~ThreadHelper();
 			void executeTaskAsync(const int numOfThreads);
+			void pushTask(
+					Model::MainModel &model,
+					util::WebCrawler &crawler,
+					util::UrlTarget& target);
 
 		private:
 			typedef boost::packaged_task<int> task_t;
@@ -37,14 +42,7 @@ namespace Mitrais
 			boost::asio::io_service ioService;
 			boost::thread_group threads;
 
-			void initializeThreads(
-					boost::asio::io_service &ioService,
-					boost::thread_group &threads,
-					const int numOfThreads);
-
-			void pushTask(
-					boost::asio::io_service& ioService,
-					vector<boost::shared_future<int>>& pendingData);
+			void initializeThreads(const int numOfThreads);
 		};
 	}
 }

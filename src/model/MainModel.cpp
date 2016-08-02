@@ -136,92 +136,67 @@ bool MainModel::stopCrawling()
 	//todo
 }
 
-bool MainModel::startCrawling(std::vector<Mitrais::util::UrlTarget>& urls, int iDeep_)
+int MainModel::test(util::WebCrawler &crawler, util::UrlTarget url)
 {
-	std::vector<Mitrais::util::UrlTarget> urls2;
-	Mitrais::util::UrlTarget a;
-	a.Url = "http://www.google.com";
+	bool isError = false;
+	url.Status = Mitrais::util::UrlTargetStatus::START;
 
+	crawler.getContent(url, isError);
 
-	util::WebCrawler crawler;
+	if (isError)
+		url.Status = Mitrais::util::UrlTargetStatus::DONE;
+	else
+		url.Status = Mitrais::util::UrlTargetStatus::ERROR;
+
+	//seach deeper URLS
+	url.SubUrlList = findUrls(url);
+
+	return 0;
+}
+
+void MainModel::crawlWebsite(util::WebCrawler &crawler, util::UrlTarget url, int iDeep_)
+{
 	std::string result;
 	bool isError = false;
+	util::ThreadHelper helper;
 
 	if(iDeep_ == _config.getSetting().crawlingDeepness)
-			return true;
+			return;
 		else
 			++iDeep_;
 
-	for(std::vector<Mitrais::util::UrlTarget>::iterator i = urls.begin(); i != urls.end(); ++i)
+	// check if the url target status is DONE
+	if (url.Status == Mitrais::util::UrlTargetStatus::DONE)
 	{
-		(*i).Status = Mitrais::util::UrlTargetStatus::START;
-
-		crawler.getContent((*i), isError);
-
-		if (!isError)
-			(*i).Status = Mitrais::util::UrlTargetStatus::DONE;
-		else
-			(*i).Status = Mitrais::util::UrlTargetStatus::ERROR;
-
-		//seach deeper URLS
-		(*i).SubUrlList = findUrls((*i));
-
-		startCrawling((*i).SubUrlList, iDeep_);
+		// continue to the next URL target
+		continue;
 	}
-
-
-
-	return isError;
-
+	else
+	{
+		helper.pushTask(crawler, url);
+	}
 }
 
-//void MainModel::crawlSubUrls(vector<Mitrais::util::UrlTarget> &vecURL_, int iDeep_ = 2)
-//{
-//	Mitrais::util::TextLexer lexer;
-//
-//	Mitrais::util::Configuration config;
-//	if(iDeep_ == config.getSetting().crawlingDeepness)
-//		return;
-//	else
-//		++iDeep_;
-//
-//	for(auto &target: vecURL_)
-//	{
-//		// check if the url target status is DONE
-//		if (target.Status == UrlTargetStatus::DONE)
-//		{
-//			// continue to the next URL target
-//			continue;
-//		}
-//
-//		std::vector<std::string> vec;
-//
-//		// clear data
-//		buff_.clearBuffer();
-//		string data = "";
-//
-//		// set the status into START
-//		target.Status = UrlTargetStatus::START;
-//
-//		// crawl the web and save into buffer
-//		crawler_.getContent(target, false);
-//
-//		// update the status into CRAWLING
-//		target.Status = UrlTargetStatus::CRAWLING;
-//
-//		//insert into buffer
-//		buff_.insertContentToBuffer(data);
-//
-//		// save into file
-//		saveSourceCode(target, buff_);
-//
-//		// update the status into DONE
-//		target.Status = UrlTargetStatus::DONE;
-//
-//		target.SubUrlList = getSubUrlList(data);
-//		target.Deepness = iDeep_;
-//
-//		// Crawl the sub urls
-//		crawlSubUrls(crawler_, buff_, target.SubUrlList, iDeep_);
-//	}
-//}
+bool MainModel::startCrawling(std::vector<Mitrais::util::UrlTarget> urls)
+{
+	util::WebCrawler crawler;
+	std::string result;
+	bool isError = false;
+	int targetCount = urls.size();
+
+	if (targetCount > 0)
+	{
+		util::ThreadHelper helper;
+		for(auto& url: urls)
+		{
+
+		}
+		helper.executeTaskAsync(targetCount);
+	}
+	else
+	{
+		LOG_WARN << "File loaded but no URL targets to crawl.";
+	}
+
+	return isError;
+}
