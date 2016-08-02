@@ -27,7 +27,6 @@ namespace Mitrais
 		public:
 			ThreadHelper();
 			~ThreadHelper();
-			static int test(util::WebCrawler &crawler, util::UrlTarget url);
 			void executeTaskAsync(const int numOfThreads);
 			void pushTask(
 					util::WebCrawler &crawler,

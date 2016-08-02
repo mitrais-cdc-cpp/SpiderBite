@@ -125,11 +125,11 @@ void MainModel::writeUrlToDatabase(std::string filename)
 	writer.writeToDatabase(response);
 }
 
-//std::vector<Mitrais::util::UrlTarget> MainModel::findUrls(Mitrais::util::UrlTarget url)
-//{
-//	util::TextLexer lexer;
-//	return lexer.findUrls(url);
-//}
+std::vector<Mitrais::util::UrlTarget> MainModel::findUrls(Mitrais::util::UrlTarget url)
+{
+	util::TextLexer lexer;
+	return lexer.findUrls(url);
+}
 
 bool MainModel::stopCrawling()
 {
@@ -192,7 +192,7 @@ bool MainModel::startCrawling(std::vector<Mitrais::util::UrlTarget> urls)
 	{
 		for(auto& url: urls)
 		{
-			crawlWebsite(crawler, url, 0);
+			_helper.pushTask(crawler, url);
 		}
 		_helper.executeTaskAsync(targetCount);
 	}

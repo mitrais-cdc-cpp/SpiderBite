@@ -44,31 +44,6 @@ int sleep_print(int seconds)
 	return 0;
 }
 
-int ThreadHelper::test(util::WebCrawler &crawler, util::UrlTarget url)
-{
-	LOG_INFO << "start test";
-	util::TextLexer lexer;
-
-	bool isError = false;
-	url.Status = Mitrais::util::UrlTargetStatus::START;
-
-	crawler.getContent(url, isError);
-
-	if (isError)
-		url.Status = Mitrais::util::UrlTargetStatus::DONE;
-	else
-		url.Status = Mitrais::util::UrlTargetStatus::ERROR;
-
-	//seach deeper URLS
-	url.SubUrlList = lexer.findUrls(url);
-
-	LOG_INFO << "stop test";
-
-	//TODO: save result
-
-	return 0;
-}
-
 /**
  * Push task to a thread
  * @ioService the io service
@@ -83,7 +58,7 @@ void ThreadHelper::pushTask(
 	 */
 
 	ptask_t task = boost::make_shared<task_t>(
-			boost::bind(&ThreadHelper::test, boost::ref(crawler), boost::ref(target))
+			boost::bind(&WebCrawler::crawlWebsite, boost::ref(crawler), boost::ref(target))
 	);
 
 	boost::shared_future<int> fut(task->get_future());

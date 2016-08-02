@@ -73,7 +73,7 @@ namespace Mitrais
 			inline void setUrls(std::vector<Mitrais::util::UrlTarget> value) { urls = value; }
 
 			//helper
-//			std::vector<Mitrais::util::UrlTarget> findUrls(Mitrais::util::UrlTarget url);
+			std::vector<Mitrais::util::UrlTarget> findUrls(Mitrais::util::UrlTarget url);
 			bool readUrlFromFile();
 			bool readUrlFromDatabase();
 			void writeUrlToFile(std::string filename, bool isSaveAsHtml);

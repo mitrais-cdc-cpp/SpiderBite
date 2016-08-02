@@ -14,6 +14,10 @@
 
 #include "UrlTarget.h"
 #include "Logger.h"
+#include "TextLexer.h"
+#include "TextReader.h"
+#include "TextBuffer.h"
+#include "TextWriter.h"
 
 using namespace std;
 
@@ -30,13 +34,17 @@ public:
 	WebCrawler();
 	~WebCrawler();
 
+	string saveSourceCode(util::UrlTarget &target, util::TextBuffer &buff_);
+//	vector<UrlTarget> getSubUrlList(string content);
 	bool getContent(UrlTarget &url_, bool isHTTPS_);
-
+	void crawlSubUrls(WebCrawler &crawler_, util::TextBuffer &buff_, vector<UrlTarget> &vecURL_, int iDeep_);
+	int crawlWebsite(UrlTarget &args);
 
 private:
 
 	std::string getContent(const std::string& strURL_, bool isHTTPS_, bool& _isError);
 	std::string addPrefixAndSufixUrl(const std::string& url);
+	vector<UrlTarget> _targets;
 };
 
 }} // namespace Mitrais::util
