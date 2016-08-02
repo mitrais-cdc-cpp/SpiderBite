@@ -30,7 +30,7 @@ public:
 	WebCrawler();
 	~WebCrawler();
 
-	bool getContent(UrlTarget url_, bool isHTTPS_);
+	bool getContent(UrlTarget &url_, bool isHTTPS_);
 
 
 private:

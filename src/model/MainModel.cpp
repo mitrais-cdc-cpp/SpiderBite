@@ -6,7 +6,6 @@
  */
 
 #include "../../inc/model/MainModel.hpp"
-#include "../../inc/util/ThreadHelper.h"
 
 using namespace Mitrais::Model;
 
@@ -126,41 +125,45 @@ void MainModel::writeUrlToDatabase(std::string filename)
 	writer.writeToDatabase(response);
 }
 
-std::vector<Mitrais::util::UrlTarget> MainModel::findUrls(Mitrais::util::UrlTarget url)
-{
-	util::TextLexer lexer;
-	return lexer.findUrls(url);
-}
+//std::vector<Mitrais::util::UrlTarget> MainModel::findUrls(Mitrais::util::UrlTarget url)
+//{
+//	util::TextLexer lexer;
+//	return lexer.findUrls(url);
+//}
 
 bool MainModel::stopCrawling()
 {
 	//todo
 }
 
-int MainModel::test(util::WebCrawler &crawler, util::UrlTarget url)
-{
-	bool isError = false;
-	url.Status = Mitrais::util::UrlTargetStatus::START;
-
-	crawler.getContent(url, isError);
-
-	if (isError)
-		url.Status = Mitrais::util::UrlTargetStatus::DONE;
-	else
-		url.Status = Mitrais::util::UrlTargetStatus::ERROR;
-
-	//seach deeper URLS
-	url.SubUrlList = findUrls(url);
-
-	return 0;
-}
+//int MainModel::test(util::WebCrawler &crawler, util::UrlTarget url)
+//{
+//	LOG_INFO << "start test";
+//
+//	bool isError = false;
+//	url.Status = Mitrais::util::UrlTargetStatus::START;
+//
+//	crawler.getContent(url, isError);
+//
+//	if (isError)
+//		url.Status = Mitrais::util::UrlTargetStatus::DONE;
+//	else
+//		url.Status = Mitrais::util::UrlTargetStatus::ERROR;
+//
+//	//seach deeper URLS
+//	url.SubUrlList = findUrls(url);
+//
+//	LOG_INFO << "stop test";
+//
+//	return 0;
+//}
 
 void MainModel::crawlWebsite(util::WebCrawler &crawler, util::UrlTarget url, int iDeep_)
 {
+	LOG_INFO << "start crawl website";
+
 	std::string result;
 	bool isError = false;
-	util::ThreadHelper helper;
-	MainModel model;
 
 	if(iDeep_ == _config.getSetting().crawlingDeepness)
 			return;
@@ -170,12 +173,16 @@ void MainModel::crawlWebsite(util::WebCrawler &crawler, util::UrlTarget url, int
 	// check if the url target status is DONE
 	if (url.Status != Mitrais::util::UrlTargetStatus::DONE)
 	{
-		helper.pushTask(model, crawler, url);
+		_helper.pushTask(crawler, url);
 	}
+
+	LOG_INFO << "stop crawl website";
 }
 
 bool MainModel::startCrawling(std::vector<Mitrais::util::UrlTarget> urls)
 {
+	LOG_INFO << "start crawling";
+
 	util::WebCrawler crawler;
 	std::string result;
 	bool isError = false;
@@ -183,17 +190,18 @@ bool MainModel::startCrawling(std::vector<Mitrais::util::UrlTarget> urls)
 
 	if (targetCount > 0)
 	{
-		util::ThreadHelper helper;
 		for(auto& url: urls)
 		{
 			crawlWebsite(crawler, url, 0);
 		}
-		helper.executeTaskAsync(targetCount);
+		_helper.executeTaskAsync(targetCount);
 	}
 	else
 	{
 		LOG_WARN << "File loaded but no URL targets to crawl.";
 	}
+
+	LOG_INFO << "stop crawling";
 
 	return isError;
 }

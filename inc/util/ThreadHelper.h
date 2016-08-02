@@ -17,7 +17,6 @@
 #include <unistd.h>
 
 #include "WebCrawler.h"
-#include "../model/MainModel.hpp"
 
 namespace Mitrais
 {
@@ -28,9 +27,9 @@ namespace Mitrais
 		public:
 			ThreadHelper();
 			~ThreadHelper();
+			static int test(util::WebCrawler &crawler, util::UrlTarget url);
 			void executeTaskAsync(const int numOfThreads);
 			void pushTask(
-					Mitrais::Model::MainModel &model,
 					util::WebCrawler &crawler,
 					util::UrlTarget& target);
 

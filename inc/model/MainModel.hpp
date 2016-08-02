@@ -18,6 +18,7 @@
 #include "../util/WebCrawler.h"
 #include "../util/SaveModeEnum.h"
 #include "../util/Configuration.h"
+#include "../util/ThreadHelper.h"
 
 namespace Mitrais
 {
@@ -39,7 +40,7 @@ namespace Mitrais
 			void stop();
 
 			//public interface;
-			int test(util::WebCrawler &crawler, util::UrlTarget url);
+//			int test(util::WebCrawler &crawler, util::UrlTarget url);
 			void crawlWebsite(util::WebCrawler &crawler, util::UrlTarget url, int iDeep_);
 			bool startCrawling(std::vector<Mitrais::util::UrlTarget> urls);
 			bool stopCrawling();
@@ -72,7 +73,7 @@ namespace Mitrais
 			inline void setUrls(std::vector<Mitrais::util::UrlTarget> value) { urls = value; }
 
 			//helper
-			std::vector<Mitrais::util::UrlTarget> findUrls(Mitrais::util::UrlTarget url);
+//			std::vector<Mitrais::util::UrlTarget> findUrls(Mitrais::util::UrlTarget url);
 			bool readUrlFromFile();
 			bool readUrlFromDatabase();
 			void writeUrlToFile(std::string filename, bool isSaveAsHtml);
@@ -83,6 +84,7 @@ namespace Mitrais
 			bool _bInitialReadingDone;
 			std::vector<Mitrais::util::UrlTarget> urls;
 			Mitrais::util::Configuration _config;
+			Mitrais::util::ThreadHelper _helper;
 		};
 	}
 }

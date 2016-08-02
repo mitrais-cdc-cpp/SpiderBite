@@ -34,7 +34,7 @@ static size_t writeCallback(void *contents, size_t size, size_t nmemb, void* str
 	return size * nmemb;
 }
 
-bool Mitrais::util::WebCrawler::getContent(UrlTarget url_, bool isHTTPS_)
+bool Mitrais::util::WebCrawler::getContent(UrlTarget &url_, bool isHTTPS_)
 {
 	bool HRESULT = true;
 	url_.Content = getContent(url_.Url, isHTTPS_, HRESULT);
