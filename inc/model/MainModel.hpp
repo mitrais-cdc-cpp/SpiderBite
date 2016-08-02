@@ -18,7 +18,6 @@
 #include "../util/WebCrawler.h"
 #include "../util/SaveModeEnum.h"
 #include "../util/Configuration.h"
-#include "../util/ThreadHelper.h"
 
 namespace Mitrais
 {

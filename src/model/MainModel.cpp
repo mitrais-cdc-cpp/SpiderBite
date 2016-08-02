@@ -6,6 +6,7 @@
  */
 
 #include "../../inc/model/MainModel.hpp"
+#include "../../inc/util/ThreadHelper.h"
 
 using namespace Mitrais::Model;
 
@@ -167,12 +168,7 @@ void MainModel::crawlWebsite(util::WebCrawler &crawler, util::UrlTarget url, int
 			++iDeep_;
 
 	// check if the url target status is DONE
-	if (url.Status == Mitrais::util::UrlTargetStatus::DONE)
-	{
-		// continue to the next URL target
-		continue;
-	}
-	else
+	if (url.Status != Mitrais::util::UrlTargetStatus::DONE)
 	{
 		helper.pushTask(model, crawler, url);
 	}

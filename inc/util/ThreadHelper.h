@@ -30,7 +30,7 @@ namespace Mitrais
 			~ThreadHelper();
 			void executeTaskAsync(const int numOfThreads);
 			void pushTask(
-					Model::MainModel &model,
+					Mitrais::Model::MainModel &model,
 					util::WebCrawler &crawler,
 					util::UrlTarget& target);
 
