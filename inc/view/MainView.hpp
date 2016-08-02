@@ -51,9 +51,9 @@ namespace Mitrais
 			static void settingClicked();
 
 			// SettingView Events
-			static void onSaveConfigurationClicked();
-			static void onQuitClicked();
-			static void onOpenClicked();
+			static void onSaveConfigurationClicked(GtkWidget *widget, GtkWidget *window);
+			static void onQuitSettingClicked(GtkWidget *widget, GtkWidget *window);
+			static void onOpenSettingClicked(GtkWidget *widget, GtkWidget *window);
 
 			void clearTextBox();
 			void setButtonAndMenuDisability();

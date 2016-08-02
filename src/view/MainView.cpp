@@ -18,6 +18,7 @@ MainView::~MainView()
 {
 	gtk_widget_destroy(_window);
 	delete m_instance;
+	delete _settingView;
 }
 
 MainView* MainView::getInstance()
@@ -103,19 +104,19 @@ void MainView::settingClicked()
 	MainView::getInstance()->whenSettingClicked();
 }
 
-void MainView::onSaveConfigurationClicked()
+void MainView::onSaveConfigurationClicked(GtkWidget *widget, GtkWidget *window)
 {
 	LOG_INFO << "onSaveConfigurationClicked()";
 	MainView::getInstance()->cb_SaveConfigurationClicked();
 }
 
-void MainView::onQuitClicked ()
+void MainView::onQuitSettingClicked (GtkWidget *widget, GtkWidget *window)
 {
 	LOG_INFO << "onQuitClicked()";
 	MainView::getInstance()->cb_QuitClicked();
 }
 
-void MainView::onOpenClicked()
+void MainView::onOpenSettingClicked(GtkWidget *widget, GtkWidget *window)
 {
 	LOG_INFO << "onOpenClicked()";
 	MainView::getInstance()->cb_OpenClicked();
@@ -388,11 +389,11 @@ void MainView::build()
 
 	gtk_widget_show_all(_window);
 
-	_settingView = SettingView::getInstance();
 	// Connect the events for SettingView
 	g_signal_connect (G_OBJECT (_settingView->btn_Save), "clicked",G_CALLBACK(onSaveConfigurationClicked), _settingView->form_MainForm);
-	g_signal_connect (G_OBJECT (_settingView->btn_SelectPath), "clicked", G_CALLBACK(onOpenClicked), _settingView->form_MainForm);
-	g_signal_connect (G_OBJECT (_settingView->btn_Cancel), "clicked",G_CALLBACK (onQuitClicked), _settingView->form_MainForm);
+	g_signal_connect (G_OBJECT (_settingView->btn_SelectPath), "clicked", G_CALLBACK(onOpenSettingClicked), _settingView->form_MainForm);
+	g_signal_connect (G_OBJECT (_settingView->btn_Cancel), "clicked",G_CALLBACK (onQuitSettingClicked), _settingView->form_MainForm);
+	_settingView = SettingView::getInstance();
 }
 
 void MainView::start()

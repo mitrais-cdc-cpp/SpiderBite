@@ -186,10 +186,6 @@ void SettingView::ConnectSignals()
 	g_signal_connect (GTK_SPIN_BUTTON(stb_CrawlingDepth), "activate", G_CALLBACK(entry_activate), label_CrawlingDepth);
 	g_signal_connect (GTK_SWITCH(switch_SaveInFolder), "activate", G_CALLBACK(entry_activate), label_SaveInFolder);
 
-	g_signal_connect (G_OBJECT (btn_Save), "clicked",G_CALLBACK(SettingView::onSaveButtonClicked), form_MainForm);
-	g_signal_connect (G_OBJECT (btn_SelectPath), "clicked", G_CALLBACK(SettingView::onOpenDialogClicked), form_MainForm);
-	g_signal_connect (G_OBJECT (btn_Cancel), "clicked",G_CALLBACK (SettingView::onCloseForm), form_MainForm);
-
 }
 
 void SettingView::CreateMainForm()
