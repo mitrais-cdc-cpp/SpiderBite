@@ -39,8 +39,8 @@ namespace Mitrais
 
 			// SettingView callback
 			void SaveConfiguration(CallbackFunction cb_SaveConfigurationClicked_);
-			void QuitClicked(CallbackFunction cb_OpenClicked_);
-			void OpenClicked(CallbackFunction cb_QuitClicked_);
+			void QuitSettingClicked(CallbackFunction cb_OpenClicked_);
+			void OpenSettingClicked(CallbackFunction cb_QuitClicked_);
 
 			// MainView Events
 			static void saveClicked(GtkWidget *widget, GtkWidget *window);

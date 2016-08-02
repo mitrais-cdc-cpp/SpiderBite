@@ -64,12 +64,12 @@ void MainView::SaveConfiguration(CallbackFunction cb_SaveConfigurationClicked_)
 	cb_SaveConfigurationClicked = cb_SaveConfigurationClicked_;
 }
 
-void MainView::OpenClicked(CallbackFunction cb_OpenClicked_)
+void MainView::OpenSettingClicked(CallbackFunction cb_OpenClicked_)
 {
 	cb_OpenClicked = cb_OpenClicked_;
 }
 
-void MainView::QuitClicked(CallbackFunction cb_QuitClicked_)
+void MainView::QuitSettingClicked(CallbackFunction cb_QuitClicked_)
 {
 	cb_QuitClicked = cb_QuitClicked_;
 }
