@@ -10,7 +10,10 @@
 
 #include <functional>
 #include <iostream>
+#include <boost/thread.hpp>
+
 #include "../util/UrlTarget.h"
+#include "../util/UrlTargetProtocol.h"
 #include "../util/TextReader.h"
 #include "../util/TextWriter.h"
 #include "../util/TextBuffer.h"
@@ -41,11 +44,14 @@ namespace Mitrais
 
 			//public interface;
 //			int test(util::WebCrawler &crawler, util::UrlTarget url);
-			void crawlWebsite(util::WebCrawler &crawler, util::UrlTarget url, int iDeep_);
 			bool startCrawling(std::vector<Mitrais::util::UrlTarget> urls);
 			bool stopCrawling();
 			bool readUrls(std::string filename);
 			void writeUrls(Mitrais::util::SaveModeEnum enum_);
+			static const char* toString(util::UrlTargetProtocol v);
+			static string saveSourceCode(util::UrlTarget &target, util::TextBuffer &buff_);
+			static void crawlSubUrls(util::WebCrawler &crawler_, util::TextBuffer &buff_, vector<util::UrlTarget> &vecURL_, int iDeep_);
+			static int crawlWebsite(util::UrlTarget &target);
 
 			//registered events
 			void whenApplicationStarts(CallbackFunction callback);
