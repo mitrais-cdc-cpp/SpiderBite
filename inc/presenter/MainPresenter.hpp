@@ -15,7 +15,7 @@ public:
 	MainPresenter(View::MainView* view_, Model::MainModel* model_);
 	~MainPresenter();
 
-	void registerEvents();
+
 
 	//Main
 	void setStopClicked_Callback();
@@ -26,6 +26,12 @@ public:
 	void setSettingMenuClicked_Callback();
 	void setQuitMenuClicked_Callback();
 	void setSaveMenuClicked_Callback();
+
+	//SettingsView
+	void setSVSaveClicked_Callback();
+	void setSVCancelClicked_Callback();
+	void setSVCloseClicked_Callback();
+	void setSVOpenDialogClicked_Callback();
 
 
 	void applicationStartCallback();
@@ -38,6 +44,7 @@ public:
 
 private:
 
+	void registerEvents();
 	void registerEventsView();
 	void registerEventsModel();
 

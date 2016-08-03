@@ -59,6 +59,56 @@ void MainView::onSettingViewClicked(CallbackFunction callback)
 	whenSettingClicked = callback;
 }
 
+
+
+
+
+
+
+void MainView::onSVSaveClicked(CallbackFunction callback)
+{
+	SettingView::getInstance()->onSaveClicked(callback);
+}
+
+void MainView::onSVCancelClicked(CallbackFunction callback)
+{
+	SettingView::getInstance()->onCancelClicked(callback);
+}
+
+void MainView::onSVOpenDialogClicked(CallbackFunction callback)
+{
+	SettingView::getInstance()->onOpenDialogClicked(callback);
+}
+
+void MainView::onSVCloseClicked(CallbackFunction callback)
+{
+	SettingView::getInstance()->onCloseClicked(callback);
+}
+
+
+void MainView::onSettingFormCloseForm()
+{
+	LOG_INFO << "onSettingFormCloseForm()";
+	SettingView::getInstance()->Hide();
+}
+
+void MainView::onSettingFormOpenDialogClicked()
+{
+	LOG_INFO << "onSettingFormOpenDialogClicked()";
+	SettingView::getInstance()->OpenDialog();
+}
+
+void MainView::onSettingFormSaveButtonClicked()
+{
+	LOG_INFO << "onSettingFormSaveButtonClicked()";
+}
+
+void MainView::onSettingFormCancelButtonClicked()
+{
+	LOG_INFO << "onSettingFormCancelButtonClicked()";
+	SettingView::getInstance()->Hide();
+}
+
 void MainView::SaveConfiguration(CallbackFunction cb_SaveConfigurationClicked_)
 {
 	cb_SaveConfigurationClicked = cb_SaveConfigurationClicked_;
@@ -73,6 +123,9 @@ void MainView::QuitSettingClicked(CallbackFunction cb_QuitClicked_)
 {
 	cb_QuitClicked = cb_QuitClicked_;
 }
+
+
+
 
 void MainView::saveClicked(GtkWidget *widget, GtkWidget *window)
 {

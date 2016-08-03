@@ -30,6 +30,13 @@ namespace View {
 		void OpenForm();
 		void CloseForm();
 
+		//SettingsView callback
+		void onSaveClicked(CallbackFunction callback);
+		void onCancelClicked(CallbackFunction callback);
+		void onCloseClicked(CallbackFunction callback);
+		void onOpenDialogClicked(CallbackFunction callback);
+
+
 		//getter/setter
 		void setConfiguration(std::string& connection,std::string& logfilename,std::string& pathtolocaldir, int deepness, Mitrais::util::SaveModeEnum savemode);
 		std::string getConnectionString();
@@ -51,11 +58,16 @@ namespace View {
 		//Singleton self
 		static SettingView* _self;
 
+		CallbackFunction whenSaveClicked;
+		CallbackFunction whenCancelClicked;
+		CallbackFunction whenOpenDialogClicked;
+		CallbackFunction whenCloseClicked;
+
 		//Signals from gtk+
 		static void onSaveButtonClicked();
 		static void onCancelButtonClicked();
-		static void onOpenDialogClicked();
-		static void onCloseForm();
+		static void onOpenDialogButtonClicked();
+		static void onQuitButtonClicked();
 
 		//UI Helper
 		void CreateGuiElements();
@@ -65,6 +77,7 @@ namespace View {
 		void SetPropertyUIArgsToPropertyUI(bool isSaveInFolderActive);
 		void OpenDialog();
 		void Show();
+		void Hide();
 		void Quit();
 
 		GtkWidget* form_MainForm;			//MainForm

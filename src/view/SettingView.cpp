@@ -38,9 +38,10 @@ public:
 };
 
 
-SettingView::SettingView()
+SettingView::SettingView() : _args( new SettingView::SettingViewArgs() )
 {
 }
+
 SettingView::~SettingView()
 {
 	gtk_widget_destroy(form_MainForm);
@@ -53,7 +54,7 @@ SettingView* SettingView::getInstance()
 	if(!_self)
 	{
 		_self = new SettingView();
-		//_args = std::make_shared<PropertyUIArgs>( new PropertyUIArgs() );
+		//_args = ;
 	}
 
 	return _self;
@@ -118,26 +119,52 @@ void SettingView::setConfiguration(std::string& connection,
 	SetPropertyUIArgsToPropertyUI(isActive);
 }
 
-
-void SettingView::onCloseForm()
+void SettingView::onSaveClicked(CallbackFunction callback)
 {
-	LOG_INFO << "onQuitClicked()";
+	whenSaveClicked = callback;
+}
+void SettingView::onCancelClicked(CallbackFunction callback)
+{
+	whenCancelClicked = callback;
+}
+void SettingView::onOpenDialogClicked(CallbackFunction callback)
+{
+	whenOpenDialogClicked = callback;
+}
+void SettingView::onCloseClicked(CallbackFunction callback)
+{
+	whenCloseClicked = callback;
 }
 
-void SettingView::onOpenDialogClicked()
+
+
+
+void SettingView::onQuitButtonClicked()
+{
+	LOG_INFO << "onQuitClicked()";
+	SettingView::getInstance()->whenCloseClicked();
+}
+
+void SettingView::onOpenDialogButtonClicked()
 {
 	LOG_INFO << "onSaveButtonClicked()";
+	SettingView::getInstance()->whenOpenDialogClicked();
 }
 
 void SettingView::onSaveButtonClicked()
 {
 	LOG_INFO << "onSaveButtonClicked()";
+	SettingView::getInstance()->whenSaveClicked();
 }
 
 void SettingView::onCancelButtonClicked()
 {
 	LOG_INFO << "onCancelButtonClicked()";
+	SettingView::getInstance()->whenCancelClicked();
 }
+
+
+
 
 void SettingView::OpenForm()
 {
@@ -162,13 +189,18 @@ void SettingView::OpenForm()
 
 void SettingView::CloseForm()
 {
-	Quit();
+	Hide();
 }
 
 void SettingView::Show()
 {
 	gtk_widget_show_all(form_MainForm);
 	gtk_main();
+}
+
+void SettingView::Hide()
+{
+	gtk_widget_hide(form_MainForm);
 }
 
 void SettingView::Quit()
@@ -186,6 +218,9 @@ void SettingView::ConnectSignals()
 	g_signal_connect (GTK_SPIN_BUTTON(stb_CrawlingDepth), "activate", G_CALLBACK(entry_activate), label_CrawlingDepth);
 	g_signal_connect (GTK_SWITCH(switch_SaveInFolder), "activate", G_CALLBACK(entry_activate), label_SaveInFolder);
 
+	g_signal_connect (G_OBJECT (btn_Save), "clicked",G_CALLBACK(onSaveButtonClicked), form_MainForm);
+	g_signal_connect (G_OBJECT (btn_SelectPath), "clicked", G_CALLBACK(onOpenDialogButtonClicked), form_MainForm);
+	g_signal_connect (G_OBJECT (btn_Cancel), "clicked",G_CALLBACK (onCancelButtonClicked), form_MainForm);
 }
 
 void SettingView::CreateMainForm()
@@ -283,7 +318,9 @@ void SettingView::OpenDialog()
 											 NULL );
 
    if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT)
-	   _args->_strPathToLocalDirectory = std::string(gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog)));
+   {
+	  _args->_strPathToLocalDirectory = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
+   }
 
    gtk_entry_set_text(GTK_ENTRY(tb_LocalSavePath), _args->_strPathToLocalDirectory.c_str());
    gtk_widget_destroy (dialog);

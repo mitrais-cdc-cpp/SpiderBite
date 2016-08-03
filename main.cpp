@@ -25,7 +25,6 @@ int main(int argc, char* argv[])
 
 	gtk_init(&argc, &argv);
 	MainPresenter presenter(MainView::getInstance(), MainModel::getInstance());
-	presenter.registerEvents();
 	MainModel::getInstance()->run();
 	MainModel::getInstance()->stop();
 	return 0;

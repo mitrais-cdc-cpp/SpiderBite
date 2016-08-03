@@ -29,6 +29,13 @@ void MainPresenter::registerEventsView()
 	_view->onSaveClicked( [this]{ this->setSaveMenuClicked_Callback(); });
 	_view->onSettingViewClicked( [this]{ this->setSettingMenuClicked_Callback(); });
 	_view->onQuitClicked( [this]{ this->setQuitMenuClicked_Callback(); });
+
+	//SettingsView
+	_view->onSVSaveClicked( [this]{ this->setSVSaveClicked_Callback(); });
+	_view->onSVCancelClicked( [this]{ this->setSVCancelClicked_Callback(); });
+	_view->onSVOpenDialogClicked( [this]{ this->setSVOpenDialogClicked_Callback(); });
+	_view->onSVCloseClicked( [this]{ this->setSVCloseClicked_Callback(); });
+
 }
 
 void MainPresenter::registerEventsModel()
@@ -144,5 +151,29 @@ void MainPresenter::setQuitMenuClicked_Callback()
 ///
 /// SettingView
 ///
+void MainPresenter::setSVSaveClicked_Callback()
+{
+	LOG_INFO << "setSVSaveClicked_Callback()";
+	_view->onSettingFormSaveButtonClicked();
+}
+
+void MainPresenter::setSVCancelClicked_Callback()
+{
+	LOG_INFO << "setSVCancelClicked_Callback()";
+	_view->onSettingFormCancelButtonClicked();
+}
+
+void MainPresenter::setSVCloseClicked_Callback()
+{
+	LOG_INFO << "setSVOpenDialogClicked_Callback()";
+	_view->onSettingFormCloseForm();
+}
+
+void MainPresenter::setSVOpenDialogClicked_Callback()
+{
+	LOG_INFO << "setSVOpenDialogClicked_Callback()";
+	_view->onSettingFormOpenDialogClicked();
+}
+
 
 

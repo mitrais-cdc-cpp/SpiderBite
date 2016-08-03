@@ -37,6 +37,12 @@ namespace Mitrais
 			void onStartClicked(CallbackFunction callback);
 			void onSettingViewClicked(CallbackFunction callback);
 
+			// MainView -> SettingsView callback
+			void onSVSaveClicked(CallbackFunction callback);
+			void onSVCancelClicked(CallbackFunction callback);
+			void onSVCloseClicked(CallbackFunction callback);
+			void onSVOpenDialogClicked(CallbackFunction callback);
+
 			// SettingView callback
 			void SaveConfiguration(CallbackFunction cb_SaveConfigurationClicked_);
 			void QuitSettingClicked(CallbackFunction cb_OpenClicked_);
@@ -71,6 +77,15 @@ namespace Mitrais
 			void stopCrawlingProcess();
 			void disableControlsWhenStartClicked();
 			void displayFileContent(std::vector<std::string> urls);
+
+			//delegtes to SettingForm
+			void onSettingFormCloseForm();
+			void onSettingFormOpenDialogClicked();
+			void onSettingFormSaveButtonClicked();
+			void onSettingFormCancelButtonClicked();
+
+
+
 		private:
 			MainView();
 			GtkTextBuffer* getPTextBuffer(GtkWidget* widget);
