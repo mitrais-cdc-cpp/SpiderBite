@@ -10,6 +10,8 @@
 
 #include "BaseResponse.h"
 #include "Logger.h"
+#include "UrlTarget.h"
+#include "TextReader.h"
 
 namespace Mitrais {
 namespace util {
@@ -23,14 +25,15 @@ public:
 	~TextLexer();
 
 	void setContent(std::string content);
-	std::vector<string> findUrls();
-	std::vector<string> findUrls(BaseResponse& response);
-	std::vector<std::string> findUrls(std::string content);
-	std::vector<std::string> findUrls(std::string content, BaseResponse& response);
+	std::vector<UrlTarget> findUrls(const vector<UrlTarget>& existingUrls);
+	std::vector<UrlTarget> findUrls(BaseResponse& response, const vector<UrlTarget>& existingUrls);
+	std::vector<UrlTarget> findUrls(std::string content, const vector<UrlTarget>& existingUrls);
+	std::vector<UrlTarget> findUrls(std::string content, BaseResponse& response, const vector<UrlTarget>& existingUrls);
 
 private:
 	std::string _content;
-	std::vector<string> readContent();
+	std::vector<UrlTarget> _existingUrls;
+	std::vector<UrlTarget> readContent();
 	std::string getUrl(std::string hyperlink);
 };
 

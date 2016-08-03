@@ -1,11 +1,14 @@
 #include "../inc/TextLexer.h"
 
-
+namespace Mitrais
+{
+namespace util
+{
 
 /*
  * TextLexer default constructor
  */
-Mitrais::util::TextLexer::TextLexer()
+TextLexer::TextLexer()
 {
 
 }
@@ -14,7 +17,7 @@ Mitrais::util::TextLexer::TextLexer()
  * TextLexer constructor with parameter
  * @params content
  */
-Mitrais::util::TextLexer::TextLexer(std::string content)
+TextLexer::TextLexer(std::string content)
 : _content(content)
 {
 
@@ -23,7 +26,7 @@ Mitrais::util::TextLexer::TextLexer(std::string content)
 /*
  * TextLexer desctructor
  */
-Mitrais::util::TextLexer::~TextLexer()
+TextLexer::~TextLexer()
 {
 
 }
@@ -31,7 +34,7 @@ Mitrais::util::TextLexer::~TextLexer()
 /*
  * setContent function to set the content
  */
-void Mitrais::util::TextLexer::setContent(std::string content)
+void TextLexer::setContent(std::string content)
 {
 	// set the file path
 	_content = content;
@@ -42,9 +45,11 @@ void Mitrais::util::TextLexer::setContent(std::string content)
  * read from file that has been set the file path
  * @returns  urls
  */
-std::vector<std::string> Mitrais::util::TextLexer::findUrls()
+std::vector<UrlTarget> TextLexer::findUrls(const vector<UrlTarget>& existingUrls)
 {
-	std::vector<std::string> urls;
+	_existingUrls = existingUrls;
+
+	std::vector<UrlTarget> urls;
 
 	// check the content
 	bool isContentEmpty = _content.empty();
@@ -61,9 +66,11 @@ std::vector<std::string> Mitrais::util::TextLexer::findUrls()
  * findUrls function with parameter to get vector of url target also get response message
  * @returns urls
  */
-std::vector<std::string> Mitrais::util::TextLexer::findUrls(BaseResponse& response)
+std::vector<UrlTarget> TextLexer::findUrls(BaseResponse& response, const vector<UrlTarget>& existingUrls)
 {
-	std::vector<std::string> urls;
+	_existingUrls = existingUrls;
+
+	std::vector<UrlTarget> urls;
 
 	try
 	{
@@ -81,7 +88,7 @@ std::vector<std::string> Mitrais::util::TextLexer::findUrls(BaseResponse& respon
 			response.updateStatus(false);
 
 			// log error message
-			//LOG_ERROR << message;
+			LOG_ERROR << message;
 		}
 
 		// read the file
@@ -118,11 +125,11 @@ std::vector<std::string> Mitrais::util::TextLexer::findUrls(BaseResponse& respon
  * @params content
  * @return urls
  */
-std::vector<std::string> Mitrais::util::TextLexer::findUrls(std::string content)
+std::vector<UrlTarget> TextLexer::findUrls(std::string content, const vector<UrlTarget>& existingUrls)
 {
 	setContent(content);
 
-	return findUrls();
+	return findUrls(existingUrls);
 }
 
 /*
@@ -131,20 +138,20 @@ std::vector<std::string> Mitrais::util::TextLexer::findUrls(std::string content)
  * @params response
  * @return vector<std::string> urls
  */
-std::vector<std::string> Mitrais::util::TextLexer::findUrls(std::string content, BaseResponse& response)
+std::vector<UrlTarget> TextLexer::findUrls(std::string content, BaseResponse& response,const vector<UrlTarget>& existingUrls)
 {
 	setContent(content);
 
-	return findUrls(response);
+	return findUrls(response, existingUrls);
 }
 
 /*
  * readContent function to read the file and save into vector
  * @return urls
  */
-std::vector<std::string> Mitrais::util::TextLexer::readContent()
+std::vector<UrlTarget> TextLexer::readContent()
 {
-	std::vector<std::string> urls;
+	vector<UrlTarget> urls;
 
 	bool isContentEmpty = !_content.empty();
 
@@ -166,6 +173,8 @@ std::vector<std::string> Mitrais::util::TextLexer::readContent()
 	std::string::const_iterator start;
 	std::string::const_iterator end;
 
+	bool isExist = false;
+
 	while(std::getline(wholeContent, line))
 	{
 		start = line.begin();
@@ -175,7 +184,16 @@ std::vector<std::string> Mitrais::util::TextLexer::readContent()
 		{
 			std::string url = string(what[0]);
 
-			urls.push_back(getUrl(url));
+			std::string finalUrl = getUrl(url);
+
+			UrlTarget result = TextReader::getUrl(finalUrl);
+
+			isExist = TextReader::isUrlExist(_existingUrls, result);
+
+			if (!isExist)
+			{
+				urls.push_back(result);
+			}
 		}
 	}
 
@@ -212,3 +230,5 @@ std::string Mitrais::util::TextLexer::getUrl(std::string hyperlink)
 
 	return line;
 }
+
+}}

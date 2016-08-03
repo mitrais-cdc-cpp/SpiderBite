@@ -3,8 +3,12 @@
 /*
  * Get urls record without response
  */
-std::vector<std::string> TestTextLexer::findUrls()
+std::vector<Mitrais::util::UrlTarget> TestTextLexer::findUrls()
 {
+	std::vector<Mitrais::util::UrlTarget> existingUrls;
+	Mitrais::util::UrlTarget target1;
+	existingUrls.push_back(target1);
+
 	std::fstream file("Mitrais.htm");
 	std::string content;
 	content.assign((std::istreambuf_iterator<char>(file) ),
@@ -12,14 +16,18 @@ std::vector<std::string> TestTextLexer::findUrls()
 
 	Mitrais::util::TextLexer lexer(content);
 	file.close();
-	return lexer.findUrls();
+	return lexer.findUrls(existingUrls);
 }
 
 /*
  * Get urls record and the response message
  */
-std::vector<std::string> TestTextLexer::findUrls(Mitrais::util::BaseResponse& response)
+std::vector<Mitrais::util::UrlTarget> TestTextLexer::findUrls(Mitrais::util::BaseResponse& response)
 {
+	std::vector<Mitrais::util::UrlTarget> existingUrls;
+	Mitrais::util::UrlTarget target1;
+	existingUrls.push_back(target1);
+
 	std::fstream file("Mitrais.htm");
 	std::string content;
 	content.assign((std::istreambuf_iterator<char>(file) ),
@@ -27,7 +35,7 @@ std::vector<std::string> TestTextLexer::findUrls(Mitrais::util::BaseResponse& re
 
 	Mitrais::util::TextLexer lexer(content);
 	file.close();
-	return lexer.findUrls(response);
+	return lexer.findUrls(response, existingUrls);
 }
 
 /*
@@ -36,7 +44,7 @@ std::vector<std::string> TestTextLexer::findUrls(Mitrais::util::BaseResponse& re
 void TestTextLexer::testTextLexerStatusTrue()
 {
 	Mitrais::util::BaseResponse response;
-	std::vector<std::string> results = findUrls(response);
+	std::vector<Mitrais::util::UrlTarget> results = findUrls(response);
 	bool status = response.getStatus();
 
 	CPPUNIT_ASSERT(status == true);
@@ -49,7 +57,7 @@ void TestTextLexer::testTextLexerMessageSuccess()
 {
 
 	Mitrais::util::BaseResponse response;
-	std::vector<std::string> results = findUrls(response);
+	std::vector<Mitrais::util::UrlTarget> results = findUrls(response);
 
 	std::string actualMessage = "Success";
 
@@ -75,11 +83,11 @@ void TestTextLexer::testTextLexerMessageSuccess()
 void TestTextLexer::testTextLexerResultOne()
 {
 	Mitrais::util::BaseResponse response;
-	std::vector<std::string> results = findUrls(response);
+	std::vector<Mitrais::util::UrlTarget> results = findUrls(response);
 
-	std::string actualResult = "https://www.linkedin.com/company/mitrais";
+	std::string actualResult = "linkedin.com/company/mitrais";
 
-	int isEqual = results.at(0).compare(actualResult);
+	int isEqual = results.at(0).Url.compare(actualResult);
 
 	CPPUNIT_ASSERT(isEqual == 0);
 }
@@ -90,11 +98,11 @@ void TestTextLexer::testTextLexerResultOne()
 void TestTextLexer::testTextLexerResultTwo()
 {
 	Mitrais::util::BaseResponse response;
-	std::vector<std::string> results = findUrls(response);
+	std::vector<Mitrais::util::UrlTarget> results = findUrls(response);
 
-	std::string actualResult = "https://www.facebook.com/Mitrais";
+	std::string actualResult = "facebook.com/Mitrais";
 
-	int isEqual = results.at(1).compare(actualResult);
+	int isEqual = results.at(1).Url.compare(actualResult);
 
 	CPPUNIT_ASSERT(isEqual == 0);
 }

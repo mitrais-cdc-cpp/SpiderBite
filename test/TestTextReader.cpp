@@ -27,7 +27,7 @@ void TestTextReader::testTextReaderStatusTrue()
 	std::vector<Mitrais::util::UrlTarget> results = getUrls(response);
 	bool status = response.getStatus();
 
-	CPPUNIT_ASSERT(status == true);
+	CPPUNIT_ASSERT(status == 1);
 }
 
 /*
@@ -80,7 +80,7 @@ void TestTextReader::testTextReaderResultOne()
 	Mitrais::util::BaseResponse response;
 	std::vector<Mitrais::util::UrlTarget> results = getUrls(response);
 
-	std::string actualResult = "www.google.com";
+	std::string actualResult = "google.com";
 
 	int isEqual = results.at(0).Url.compare(actualResult);
 
@@ -95,7 +95,7 @@ void TestTextReader::testTextReaderResultTwo()
 	Mitrais::util::BaseResponse response;
 	std::vector<Mitrais::util::UrlTarget> results = getUrls(response);
 
-	std::string actualResult = "http://mitrais.com";
+	std::string actualResult = "mitrais.com";
 
 	int isEqual = results.at(1).Url.compare(actualResult);
 

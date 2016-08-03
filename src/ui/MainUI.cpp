@@ -223,21 +223,9 @@ namespace Mitrais
 			TextLexer lexer;
 
 			// find the urls
-			std::vector<std::string> vec = lexer.findUrls(content);
+			std::vector<util::UrlTarget> vec = lexer.findUrls(content, _targets);
 
-			vector<UrlTarget> sublist;
-			for(auto const& str: vec)
-			{
-				UrlTarget target = util::TextReader::getUrl(str);
-				bool isExist = util::TextReader::isUrlExist(_targets, target);
-
-				if (!isExist)
-				{
-					sublist.push_back(target);
-				}
-			}
-
-			return sublist;
+			return vec;
 		}
 
 		/**

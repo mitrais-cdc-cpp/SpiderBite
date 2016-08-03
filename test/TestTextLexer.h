@@ -22,8 +22,8 @@ public:
 	CPPUNIT_TEST_SUITE_END();
 
 private:
-	std::vector<std::string> findUrls();
-	std::vector<std::string> findUrls(Mitrais::util::BaseResponse& response);
+	std::vector<Mitrais::util::UrlTarget> findUrls();
+	std::vector<Mitrais::util::UrlTarget> findUrls(Mitrais::util::BaseResponse& response);
 	void testTextLexerStatusTrue();
 	void testTextLexerMessageSuccess();
 	void testTextLexerResultOne();
