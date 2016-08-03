@@ -165,7 +165,7 @@ namespace Mitrais
 
 			string strResponse;
 
-			util::TextWriter writer(fileName, buff_.getFullContent());
+			util::TextWriter writer(fileName, buff_.getFullContent(), target);
 			util::BaseResponse responseWrite;
 
 			if(util::Configuration::getSetting().saveTarget == SAVE_TO_FILE)

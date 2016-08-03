@@ -17,8 +17,9 @@ namespace DB
 
 struct Website
 {
-	string 	content;
 	string 	protocolType;
+	string 	url;
+	string 	content;
 	time_t 	createdDate;
 	time_t 	lastUpdated;
 };

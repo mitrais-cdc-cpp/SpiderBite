@@ -15,6 +15,7 @@
 
 #include "BaseResponse.h"
 #include "Logger.h"
+#include "UrlTarget.h"
 #include "../env/mongodao/inc/DoaImpl/SpiderBite/Connector.h"
 #include "Configuration.h"
 
@@ -61,8 +62,26 @@ public:
 	 *
 	 * @params std::string filepath a filepath
 	 * @params std::string content a content
+	 * @params const UrlTarget& target a URL Target
 	 */
 	TextWriter(std::string filepath, std::string content);
+
+	/**
+	 * TextWriter constructor with param
+	 *
+	 * @params std::string filepath a filepath
+	 * @params const UrlTarget& target a URL Target
+	 */
+	TextWriter(std::string filepath, const UrlTarget& target);
+
+	/**
+	 * TextWriter constructor with params
+	 *
+	 * @params std::string filepath a filepath
+	 * @params std::string content a content
+	 * @params const UrlTarget& target a URL Target
+	 */
+	TextWriter(std::string filepath, std::string content, const UrlTarget& target);
 
 	/**
 	 * TextWriter destructor
@@ -84,13 +103,12 @@ private:
 	std::string _content;
 	std::string _file;
 	std::string _protocolType;
+	std::string _url;
 
 	std::ofstream _fileStream;
 
 	std::string replaceAll(std::string subject_, const std::string& old_, const std::string& new_);
 	std::string replaceFirst(std::string subject_, const std::string& old_, const std::string& new_);
-	void getProtocolType();
-
 };
 
 }

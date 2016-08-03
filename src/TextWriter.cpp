@@ -33,7 +33,6 @@ TextWriter::~TextWriter()
 TextWriter::TextWriter(std::string filepath) :
 		_file(filepath)
 {
-	getProtocolType();
 	// log info
 	LOG_INFO << "Set the file path to be save the web crawler result into "+ _file;
 }
@@ -45,12 +44,35 @@ TextWriter::TextWriter(std::string filepath) :
  * @param content a string content
  */
 TextWriter::TextWriter(std::string filepath, std::string content) :
-		_file(filepath),
-			_content(content)
+		_file(filepath), _content(content)
 {
-	// get the protocol type
-	getProtocolType();
+	// log info
+	LOG_INFO << "Set the file path to be save the web crawler result into "+ _file;
+}
 
+/**
+ * TextWriter constructor with param
+ *
+ * @param filepath a string filepath
+ * @params const UrlTarget& target a URL Target
+ */
+TextWriter::TextWriter(std::string filepath, const UrlTarget& target) :
+		_file(filepath), _protocolType(target.Protocol), _url(target.Url)
+{
+	// log info
+	LOG_INFO << "Set the file path to be save the web crawler result into "+ _file;
+}
+
+/**
+ * TextWriter constructor with params
+ *
+ * @param filepath a string filepath
+ * @param content a string content
+ * @params const UrlTarget& target a URL Target
+ */
+TextWriter::TextWriter(std::string filepath, std::string content, const UrlTarget& target) :
+		_file(filepath), _content(content), _protocolType(target.Protocol), _url(target.Url)
+{
 	// log info
 	LOG_INFO << "Set the file path to be save the web crawler result into "+ _file;
 }
@@ -205,8 +227,9 @@ void TextWriter::writeToDatabase(BaseResponse &response)
 		DB::Connector connector(dbHost, dbPort, dbName);
 		DB::Website website;
 
-		website.content = _content;
 		website.protocolType = _protocolType;
+		website.url = _url;
+		website.content = _content;
 
 		connector.Insert(website);
 
@@ -227,18 +250,5 @@ void TextWriter::writeToDatabase(BaseResponse &response)
 		// log error
 		LOG_ERROR << message;
 
-	}
-}
-
-/**
- * Method to get the protocol type from the given url
- */
-void TextWriter::getProtocolType()
-{
-	_protocolType = "http";
-
-	if(_file.find("https://") != std::string::npos)
-	{
-		_protocolType = "https";
 	}
 }
