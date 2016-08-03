@@ -34,6 +34,7 @@ static size_t writeCallback(void *contents, size_t size, size_t nmemb, void* str
 	return size * nmemb;
 }
 
+
 bool Mitrais::util::WebCrawler::getContent(UrlTarget &url_, bool isHTTPS_)
 {
 	bool HRESULT = true;
@@ -93,11 +94,36 @@ string Mitrais::util::WebCrawler::addPrefixAndSufixUrl(const std::string& url)
 	return result;
 }
 
+/**
+ * Convert from enum to string
+ *
+ * @param v
+ * @return
+ */
+const char* Mitrais::util::WebCrawler::toString(util::UrlTargetProtocol v)
+{
+	switch (v)
+	{
+		case UrlTargetProtocol::NONE:   return "none";
+		case UrlTargetProtocol::HTTP:   return "http";
+		case UrlTargetProtocol::HTTPS: return "https";
+		case UrlTargetProtocol::FTP: return "ftp";
+		case UrlTargetProtocol::IMAGE: return "image";
+		default:      return "uknown";
+	}
+}
+
+/**
+ * Save source code after crawling process
+ *
+ * @param target
+ * @param buff_
+ * @return
+ */
 string Mitrais::util::WebCrawler::saveSourceCode(util::UrlTarget &target, util::TextBuffer &buff_)
 {
-//	string fileName = target.Protocol + "." + target.Url;
-//	target.Protocol.
-	string fileName = target.Url;
+	string protocol = toString(target.Protocol);
+	string fileName = protocol + "." + target.Url;
 
 	string strResponse;
 
@@ -172,7 +198,14 @@ string Mitrais::util::WebCrawler::saveSourceCode(util::UrlTarget &target, util::
 //	return sublist;
 //}
 
-
+/**
+ * Crawl sub Url
+ *
+ * @param crawler_
+ * @param buff_
+ * @param vecURL_
+ * @param iDeep_
+ */
 void Mitrais::util::WebCrawler::crawlSubUrls(WebCrawler &crawler_, util::TextBuffer &buff_, vector<UrlTarget> &vecURL_, int iDeep_)
 {
 	Mitrais::util::TextLexer lexer;
@@ -195,11 +228,10 @@ void Mitrais::util::WebCrawler::crawlSubUrls(WebCrawler &crawler_, util::TextBuf
 			continue;
 		}
 
-		std::vector<std::string> vec;
-
 		// clear data
 		buff_.clearBuffer();
-		string data = "";
+//		string data = "";
+		target.Content = "";
 
 		// set the status into START
 		target.Status = Mitrais::util::UrlTargetStatus::START;
@@ -220,7 +252,7 @@ void Mitrais::util::WebCrawler::crawlSubUrls(WebCrawler &crawler_, util::TextBuf
 		target.Status = Mitrais::util::UrlTargetStatus::DONE;
 
 //		target.SubUrlList = getSubUrlList(data);
-		util::TextLexer lexer;
+
 		target.SubUrlList = lexer.findUrls(target);
 		target.Deepness = iDeep_;
 
@@ -229,6 +261,12 @@ void Mitrais::util::WebCrawler::crawlSubUrls(WebCrawler &crawler_, util::TextBuf
 	}
 }
 
+/**
+ * crawl website
+ *
+ * @param args
+ * @return
+ */
 int Mitrais::util::WebCrawler::crawlWebsite(UrlTarget &args)
 {
 	 util::UrlTarget *target;
@@ -256,7 +294,8 @@ int Mitrais::util::WebCrawler::crawlWebsite(UrlTarget &args)
 
 		  // clear data
 		  buff.clearBuffer();
-		  string data = "";
+//		  string data = "";
+		  target->Content = "";
 
 		  // update the status into START
 		  target->Status = Mitrais::util::UrlTargetStatus::START;
