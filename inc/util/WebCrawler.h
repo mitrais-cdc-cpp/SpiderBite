@@ -13,7 +13,6 @@
 #include <curl/curl.h>
 
 #include "UrlTarget.h"
-#include "UrlTargetProtocol.h"
 #include "Logger.h"
 #include "TextLexer.h"
 #include "TextReader.h"
@@ -35,15 +34,10 @@ public:
 	WebCrawler();
 	~WebCrawler();
 
-	const char* toString(util::UrlTargetProtocol v);
 	string saveSourceCode(util::UrlTarget &target, util::TextBuffer &buff_);
-//	vector<UrlTarget> getSubUrlList(string content);
 	bool getContent(UrlTarget &url_, bool isHTTPS_);
-	void crawlSubUrls(WebCrawler &crawler_, util::TextBuffer &buff_, vector<UrlTarget> &vecURL_, int iDeep_);
-	int crawlWebsite(UrlTarget &args);
 
 private:
-
 	std::string getContent(const std::string& strURL_, bool isHTTPS_, bool& _isError);
 	std::string addPrefixAndSufixUrl(const std::string& url);
 	vector<UrlTarget> _targets;

@@ -8,15 +8,7 @@
 #ifndef INC_THREADHELPER_H_
 #define INC_THREADHELPER_H_
 
-#include <boost/shared_ptr.hpp>
-#include <boost/make_shared.hpp>
 #include <boost/thread.hpp>
-#include <boost/bind.hpp>
-#include <boost/asio.hpp>
-#include <boost/move/move.hpp>
-#include <unistd.h>
-
-#include "WebCrawler.h"
 
 namespace Mitrais
 {
@@ -25,22 +17,24 @@ namespace Mitrais
 		class ThreadHelper
 		{
 		public:
-			ThreadHelper();
-			~ThreadHelper();
-			void executeTaskAsync(const int numOfThreads);
-			void pushTask(
-					util::WebCrawler &crawler,
-					util::UrlTarget& target);
+			ThreadHelper() {}
+			~ThreadHelper() {}
+			template<typename function, typename arg>
+			void executeAsyncBoost(function func, arg urls)
+			{
+				int size = urls.size();
+				boost::thread p[size];
 
-		private:
-			typedef boost::packaged_task<int> task_t;
-			typedef boost::shared_ptr<task_t> ptask_t;
+				for(int i=0; i<size; i++)
+				{
+					p[i]=boost::thread(func, urls[i]);
+				}
 
-			vector<boost::shared_future<int>> pendingData;
-			boost::asio::io_service ioService;
-			boost::thread_group threads;
-
-			void initializeThreads(const int numOfThreads);
+				for(int i=0; i<size; i++)
+				{
+					p[i].join();
+				}
+			}
 		};
 	}
 }
