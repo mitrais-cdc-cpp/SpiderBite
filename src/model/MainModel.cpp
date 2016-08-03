@@ -158,7 +158,12 @@ bool MainModel::stopCrawling()
 //	return 0;
 //}
 
-
+/**
+ * Start crawling function
+ *
+ * @param urls
+ * @return
+ */
 bool MainModel::startCrawling(std::vector<Mitrais::util::UrlTarget> urls)
 {
 	LOG_INFO << "start crawling";
