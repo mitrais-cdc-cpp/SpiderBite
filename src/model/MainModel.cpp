@@ -136,27 +136,30 @@ bool MainModel::stopCrawling()
 	//todo
 }
 
-//int MainModel::test(util::WebCrawler &crawler, util::UrlTarget url)
-//{
-//	LOG_INFO << "start test";
-//
-//	bool isError = false;
-//	url.Status = Mitrais::util::UrlTargetStatus::START;
-//
-//	crawler.getContent(url, isError);
-//
-//	if (isError)
-//		url.Status = Mitrais::util::UrlTargetStatus::DONE;
-//	else
-//		url.Status = Mitrais::util::UrlTargetStatus::ERROR;
-//
-//	//seach deeper URLS
-//	url.SubUrlList = findUrls(url);
-//
-//	LOG_INFO << "stop test";
-//
-//	return 0;
-//}
+/**
+ * Method to check configuration file setting.
+ * If the configuration file is not exist this method will create \n
+ * the default configuration file.
+ */
+void MainModel::checkConfigSetting()
+{
+	if(!boost::filesystem::exists(_configFileName.c_str()))
+	{
+
+		util::ConfigSettings settings("localhost",
+										27017,
+										"SpiderBite",
+										"SpiderBite",
+										1,
+										util::SAVE_TO_DB,
+										"");
+
+		util::XMLHelper helper;
+		helper.saveXML(settings, _configFileName.c_str());
+
+		LOG_INFO << "Default configuration file saved!";
+	}
+}
 
 /**
  * Start crawling function
