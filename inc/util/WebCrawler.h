@@ -12,9 +12,12 @@
 #include <string>
 #include <curl/curl.h>
 
-#include "TextBuffer.h"
-#include "Logger.h"
 #include "UrlTarget.h"
+#include "Logger.h"
+#include "TextLexer.h"
+#include "TextReader.h"
+#include "TextBuffer.h"
+#include "TextWriter.h"
 
 using namespace std;
 
@@ -31,11 +34,13 @@ public:
 	WebCrawler();
 	~WebCrawler();
 
-	void getContent(const util::UrlTarget& strURL_, std::string& result);
-	void getContent(const util::UrlTarget& strURL_, std::string& result_, bool isHTTPS_);
+	string saveSourceCode(util::UrlTarget &target, util::TextBuffer &buff_);
+	bool getContent(UrlTarget &url_, bool isHTTPS_);
 
 private:
-	std::string addPrefixAndSufixUrl(const util::UrlTarget& url);
+	std::string getContent(const std::string& strURL_, bool isHTTPS_, bool& _isError);
+	std::string addPrefixAndSufixUrl(const std::string& url);
+	vector<UrlTarget> _targets;
 };
 
 }} // namespace Mitrais::util

@@ -1,5 +1,5 @@
 #include "TestSocketConnection.h"
-#include "../inc/SocketConnection.h"
+#include "../inc/util/SocketConnection.h"
 
 
 void TestSocketConnection::testSocketConnectionOne()

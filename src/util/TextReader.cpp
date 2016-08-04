@@ -1,4 +1,4 @@
-#include "../inc/TextReader.h"
+#include "../../inc/util/TextReader.h"
 
 namespace Mitrais
 {
@@ -244,21 +244,27 @@ bool TextReader::checkDuplicateUrl(std::string url, UrlTarget& target)
 UrlTarget TextReader::getUrl(string url)
 {
 	UrlTarget target;
-
 	Poco::URI uri(url);
 
 	// get the protocol/schema (http, https, ftp)
 	std::string protocol = uri.getScheme();
 
 	// check if there is a protocol or not
-	if (!protocol.empty())
+	if(protocol.compare("http") == 0)
 	{
-		target.Protocol = protocol;
+		target.Protocol = util::UrlTargetProtocol::HTTP;
+	}
+	else if (protocol.compare("https") == 0)
+	{
+		target.Protocol = util::UrlTargetProtocol::HTTPS;
+	}
+	else if (protocol.compare("ftp") == 0)
+	{
+		target.Protocol = util::UrlTargetProtocol::FTP;
 	}
 	else
 	{
-		// set "http" as default protocol
-		target.Protocol = "http";
+		target.Protocol = util::UrlTargetProtocol::HTTP;
 	}
 
 	// get the host name and also the authority or port (if exist, example : www.mitrais.com:8080)
@@ -277,11 +283,8 @@ UrlTarget TextReader::getUrl(string url)
 		target.Url += pathOrSubpage;
 	}
 
-	// set the latest url position as the url
-	target.LatestUrlPosition = target.Url;
-
 	// set the target as NONE
-	target.Status = NONE;
+	target.Status = UrlTargetStatus::NONE;
 
 	return target;
 }
@@ -310,7 +313,7 @@ bool TextReader::isUrlExist(const vector<UrlTarget>& existingUrls, const UrlTarg
 
 		for(auto const& existingUrl:existingUrls)
 		{
-			if ((existingUrl.Protocol.compare(currentUrl.Protocol) == 0) &&
+			if ((existingUrl.Protocol == currentUrl.Protocol) &&
 				(existingUrl.Url.compare(currentUrl.Url) == 0))
 			{
 				return true;

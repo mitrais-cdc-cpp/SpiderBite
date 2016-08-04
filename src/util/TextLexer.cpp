@@ -1,9 +1,6 @@
-#include "../inc/TextLexer.h"
+#include "../../inc/util/TextLexer.h"
 
-namespace Mitrais
-{
-namespace util
-{
+using namespace Mitrais::util;
 
 /*
  * TextLexer default constructor
@@ -45,7 +42,7 @@ void TextLexer::setContent(std::string content)
  * read from file that has been set the file path
  * @returns  urls
  */
-std::vector<UrlTarget> TextLexer::findUrls(const vector<UrlTarget>& existingUrls)
+std::vector<UrlTarget> TextLexer::findUrls(const std::vector<UrlTarget>& existingUrls)
 {
 	_existingUrls = existingUrls;
 
@@ -66,7 +63,7 @@ std::vector<UrlTarget> TextLexer::findUrls(const vector<UrlTarget>& existingUrls
  * findUrls function with parameter to get vector of url target also get response message
  * @returns urls
  */
-std::vector<UrlTarget> TextLexer::findUrls(BaseResponse& response, const vector<UrlTarget>& existingUrls)
+std::vector<UrlTarget> TextLexer::findUrls(BaseResponse& response, const std::vector<UrlTarget>& existingUrls)
 {
 	_existingUrls = existingUrls;
 
@@ -125,7 +122,7 @@ std::vector<UrlTarget> TextLexer::findUrls(BaseResponse& response, const vector<
  * @params content
  * @return urls
  */
-std::vector<UrlTarget> TextLexer::findUrls(std::string content, const vector<UrlTarget>& existingUrls)
+std::vector<UrlTarget> TextLexer::findUrls(std::string content, const std::vector<UrlTarget>& existingUrls)
 {
 	setContent(content);
 
@@ -138,7 +135,7 @@ std::vector<UrlTarget> TextLexer::findUrls(std::string content, const vector<Url
  * @params response
  * @return vector<std::string> urls
  */
-std::vector<UrlTarget> TextLexer::findUrls(std::string content, BaseResponse& response,const vector<UrlTarget>& existingUrls)
+std::vector<UrlTarget> TextLexer::findUrls(std::string content, BaseResponse& response,const std::vector<UrlTarget>& existingUrls)
 {
 	setContent(content);
 
@@ -204,7 +201,7 @@ std::vector<UrlTarget> TextLexer::readContent()
  * get url fucntion
  * @params hyperlink
  */
-std::string Mitrais::util::TextLexer::getUrl(std::string hyperlink)
+std::string TextLexer::getUrl(std::string hyperlink)
 {
 	// define the regex pattern for the link
 	boost::regex urlRegex{"\"(http|ftp|https|www|gopher|telnet|file)(.*?)\""};
@@ -230,5 +227,3 @@ std::string Mitrais::util::TextLexer::getUrl(std::string hyperlink)
 
 	return line;
 }
-
-}}

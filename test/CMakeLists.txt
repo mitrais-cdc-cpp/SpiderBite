@@ -11,8 +11,8 @@ file(GLOB SOURCES
 	main.cpp	
 	*.h
 	*.cpp
-	../inc/*.h
-	../src/*.cpp)
+	../inc/util/*.h
+	../src/util/*.cpp)
 
 #to take control which files are used, dont go recursive through
 #file(GLOB_RECURSE SOURCES src/*.cpp inc/*.h)

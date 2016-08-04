@@ -5,8 +5,9 @@
  *      Author: adityo_w
  */
 
-#include "../../inc/ui/MainUI.h"
-#include "../../inc/ui/PropertyUI.h"
+#include "../../inc/view/MainUI.h"
+
+#include "../../inc/view/SettingView.hpp"
 
 namespace Mitrais
 {
@@ -115,20 +116,8 @@ namespace Mitrais
 		*/
 		void displayFileContent()
 		{
-			//set textview editable
-			gtk_text_view_set_editable (GTK_TEXT_VIEW (text_view), TRUE);
-			gtk_text_view_set_cursor_visible (GTK_TEXT_VIEW (text_view), TRUE);
-
-			// clear the buffer before begin the process
-			gtk_text_buffer_set_text (_buffer, "", -1);
-
-			util::TextReader reader(_filePath);
-			util::BaseResponse response;
-			_targets = reader.getUrls(response);
-
-			gchar* text;
 			string url;
-
+			gchar *text;
 			if (_filePath.empty())
 			{
 				url = "No selected file, please select a file that contains URL records.";
@@ -139,7 +128,8 @@ namespace Mitrais
 				{
 					for(auto const& target: _targets)
 					{
-						url += target.Protocol +"://"+target.Url + "\n";
+//						url += target.Protocol +"://"+target.Url + "\n";
+						url += "://"+target.Url + "\n";
 					}
 				}
 				else
@@ -161,7 +151,8 @@ namespace Mitrais
 		 */
 		static string saveSourceCode(util::UrlTarget target, util::TextBuffer buff_)
 		{
-			string fileName = target.Protocol + "." + target.Url;
+//			string fileName = target.Protocol + "." + target.Url;
+			string fileName = "." + target.Url;
 
 			string strResponse;
 
@@ -251,7 +242,7 @@ namespace Mitrais
 			for(auto &target: vecURL_)
 			{
 				// check if the url target status is DONE
-				if (target.Status == DONE)
+				if (target.Status == util::UrlTargetStatus::DONE)
 				{
 					string message = target.Url + " has been crawled previously\n";
 					gchar* text;
@@ -271,13 +262,10 @@ namespace Mitrais
 				string data = "";
 
 				// set the status into START
-				target.Status = START;
+				target.Status = util::UrlTargetStatus::START;
 
 				// crawl the web and save into buffer
-				crawler_.getContent(target, data);
-
-				// update the status into CRAWLING
-				target.Status = CRAWLING;
+				crawler_.getContent(target, true);
 
 				//insert into buffer
 				buff_.insertContentToBuffer(data);
@@ -286,7 +274,7 @@ namespace Mitrais
 				saveSourceCode(target, buff_);
 
 				// update the status into DONE
-				target.Status = DONE;
+				target.Status = util::UrlTargetStatus::DONE;
 
 				target.SubUrlList = getSubUrlList(data);
 				target.Deepness = iDeep_;
@@ -313,13 +301,14 @@ namespace Mitrais
 			int deepness = 2;
 
 			//set textview readonly
+			/**
+			 * TODO:
+			 * replce these 4 lines of code below by calling
+			 * disableControlsWhenStartClicked()
+			 */
 			gtk_text_view_set_editable (GTK_TEXT_VIEW (text_view), FALSE);
 			gtk_text_view_set_cursor_visible (GTK_TEXT_VIEW (text_view), FALSE);
-
-			// clear the buffer before begin the process
 			gtk_text_buffer_set_text (buffer, "", -1);
-
-			// disable start button
 			gtk_widget_set_sensitive (button, FALSE);
 			// enable stop button
 			gtk_widget_set_sensitive (_stop_btn, TRUE);
@@ -332,7 +321,7 @@ namespace Mitrais
 				for(auto& target: _targets)
 				{
 					// check if the url target status is DONE
-					if (target.Status == DONE)
+					if (target.Status == util::UrlTargetStatus::DONE)
 					{
 						// show message
 						string message = target.Url + " has been crawled previously.\n";
@@ -353,19 +342,15 @@ namespace Mitrais
 					string data = "";
 
 					// update the status into START
-					target.Status = START;
+					target.Status = util::UrlTargetStatus::START;
 
 					// crawl the web and save into buffer
-					crawler.getContent(target, data);
-
-					// update the status into CRAWLING
-					target.Status = CRAWLING;
-
+					crawler.getContent(target, true);
 					//insert into buffer
 					buff.insertContentToBuffer(data);
 
 					// update the status into DONE
-					target.Status = DONE;
+					target.Status = util::UrlTargetStatus::DONE;
 
 					// save into file
 					saveStatus = saveSourceCode(target, buff);
@@ -375,6 +360,11 @@ namespace Mitrais
 			        // crawl the sub urls
 				    crawlSubUrls(crawler, buff, target.SubUrlList, 0);
 
+				    /**
+				     * TODO:
+				     * replace 3 lines of code below in MVP project
+				     * with appendStringToTextBox() method
+				     */
 					text = convertStringToPChar(saveStatus);
 					gtk_text_buffer_get_end_iter(buffer, &ei);
 					gtk_text_buffer_insert(buffer, &ei, text, -1);
@@ -401,16 +391,6 @@ namespace Mitrais
 		 */
 		static void onStopClicked (GtkWidget *button, GtkTextBuffer *buffer)
 		{
-			LOG_INFO << "Stop clicked";
-
-			// disable stop button
-			gtk_widget_set_sensitive (button, FALSE);
-
-			// TODO : Azis, stop the web crawler process and update the status
-
-			// enable start button
-			gtk_widget_set_sensitive (_start_btn, TRUE);
-			LOG_INFO << "Web crawling stopped";
 		}
 
 		/**
@@ -420,33 +400,7 @@ namespace Mitrais
 		 */
 		static void onOpenClicked(GtkWidget *widget, GtkWidget *window)
 		{
-			LOG_INFO << "Open menu clicked";
 
-			GtkWidget *dialog;
-
-			dialog = gtk_file_chooser_dialog_new ("Choose file..",
-			     GTK_WINDOW(window),
-			     GTK_FILE_CHOOSER_ACTION_OPEN,
-				 ("_Cancel"), GTK_RESPONSE_CANCEL,
-				 ("_Open"), GTK_RESPONSE_ACCEPT,
-			     NULL);
-
-		   if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT)
-		   {
-				char *filename;
-
-				filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
-				_filePath = string(filename);
-				g_free (filename);
-
-				LOG_INFO << "URL file loaded:" +_filePath;
-				pushMessage("File loaded:" + _filePath);
-		   }
-
-		   setButtonAndMenuDisability();
-		   displayFileContent();
-
-		   gtk_widget_destroy (dialog);
 		}
 
 		/**
@@ -455,8 +409,6 @@ namespace Mitrais
 		 */
 		static void onQuitClicked (GtkWidget *widget, gpointer data)
 		{
-			LOG_INFO << "Program terminated";
-			gtk_widget_destroy(GTK_WIDGET(data));
 		}
 
 		/**
@@ -493,43 +445,7 @@ namespace Mitrais
 		 */
 		static void onSaveClicked(GtkWidget *widget, GtkWidget *window)
 		{
-			LOG_INFO << "Save Clicked";
 
-			GtkWidget *dialog;
-			GtkFileChooser *chooser;
-			GtkFileChooserAction action = GTK_FILE_CHOOSER_ACTION_SAVE;
-			gint res;
-
-			dialog = gtk_file_chooser_dialog_new ("Save File",
-			                                      GTK_WINDOW(window),
-			                                      action,
-			                                      ("_Cancel"),
-			                                      GTK_RESPONSE_CANCEL,
-			                                      ("_Save"),
-			                                      GTK_RESPONSE_ACCEPT,
-			                                      NULL);
-			chooser = GTK_FILE_CHOOSER (dialog);
-
-			gtk_file_chooser_set_do_overwrite_confirmation (chooser, TRUE);
-
-//			if (user_edited_a_new_document)
-			  gtk_file_chooser_set_current_name (chooser,
-			                                     ("new url"));
-//			else
-//			  gtk_file_chooser_set_filename (chooser,
-//			                                 convertStringToPChar(_filePath));
-
-			res = gtk_dialog_run (GTK_DIALOG (dialog));
-			if (res == GTK_RESPONSE_ACCEPT)
-			  {
-			    char *filename;
-
-			    filename = gtk_file_chooser_get_filename (chooser);
-			    saveToFile(filename);
-			    g_free (filename);
-			  }
-
-			gtk_widget_destroy (dialog);
 		}
 
 		/**
@@ -539,10 +455,10 @@ namespace Mitrais
 		 */
 		static void onSettingClicked(int argc, char *argv[])
 		{
-			LOG_INFO << "Setting Clicked";
 
-			PropertyUI prop;
-			prop.activateUI(argc, argv);
+			//TODO: refactor MVP
+			//PropertyUI prop;
+			//prop.activateUI(argc, argv);
 		}
 
 		/**
@@ -572,104 +488,6 @@ namespace Mitrais
 		 */
 		void MainUI::activateUI(int argc, char *argv[])
 		{
-			LOG_INFO << "UI activated";
-			GtkWidget *window;
-			GtkWidget *vbox;
-			GtkWidget *hbtn_box;
-			GtkWidget *menubar;
-			GtkWidget *filemenu;
-			GtkWidget *file;
-			GtkWidget *open;
-			GtkWidget *setting;
-			GtkWidget *quit;
-			GtkWidget *scrolled_window;
-
-			//gint context_id;
-
-			gtk_init (&argc, &argv);
-
-			/* Create a Window. */
-			window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-			gtk_window_set_title (GTK_WINDOW (window), "Spiderbite");
-
-			/* Set a decent default size for the window. */
-			gtk_window_set_default_size (GTK_WINDOW (window), 600, 400);
-			g_signal_connect (G_OBJECT (window), "destroy",
-							G_CALLBACK (onQuitClicked),
-							NULL);
-
-			vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 2);
-			gtk_container_add (GTK_CONTAINER (window), vbox);
-
-			/* Create menubar and the menu list itself.*/
-			menubar = gtk_menu_bar_new();
-			filemenu = gtk_menu_new();
-			file = gtk_menu_item_new_with_label("File");
-			open = gtk_menu_item_new_with_label("Open");
-			save = gtk_menu_item_new_with_label("Save");
-			setting = gtk_menu_item_new_with_label("Setting");
-			quit = gtk_menu_item_new_with_label("Quit");
-
-			gtk_menu_shell_append(GTK_MENU_SHELL(filemenu), open);
-			gtk_menu_shell_append(GTK_MENU_SHELL(filemenu), save);
-			gtk_menu_shell_append(GTK_MENU_SHELL(filemenu), setting);
-			gtk_menu_shell_append(GTK_MENU_SHELL(filemenu), quit);
-			gtk_menu_item_set_submenu(GTK_MENU_ITEM(file), filemenu);
-			gtk_menu_shell_append(GTK_MENU_SHELL(menubar), file);
-
-			gtk_box_pack_start(GTK_BOX(vbox), menubar, FALSE, FALSE, 3);
-
-			//Connects GCallback function open_activated to "activate" signal for "open" menu item
-			g_signal_connect(G_OBJECT(open), "activate", G_CALLBACK(onOpenClicked), window);
-			//Connects GCallback function quit_activated to "activate" signal for "save" menu item
-			g_signal_connect(G_OBJECT(save), "activate", G_CALLBACK(onSaveClicked), window);
-			//Connects GCallback function quit_activated to "activate" signal for "setting" menu item
-			g_signal_connect(G_OBJECT(setting), "activate", G_CALLBACK(onSettingClicked), window);
-			//Connects GCallback function quit_activated to "activate" signal for "quit" menu item
-			g_signal_connect(G_OBJECT(quit), "activate", G_CALLBACK(onQuitClicked), window);
-
-			/* Create a multiline text widget. */
-			text_view = gtk_text_view_new ();
-			gtk_text_view_set_editable (GTK_TEXT_VIEW (text_view), FALSE);
-			gtk_text_view_set_cursor_visible (GTK_TEXT_VIEW (text_view), FALSE);
-			gtk_box_pack_start (GTK_BOX (vbox), text_view, TRUE, TRUE, 0);
-
-			/* Obtaining the buffer associated with the widget. */
-			_buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (text_view));
-			/* Set the default buffer text. */
-			gtk_text_buffer_set_text (_buffer, "", -1);
-
-			/* Create a horizontal button box */
-			hbtn_box = gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
-			gtk_button_box_set_layout (GTK_BUTTON_BOX(hbtn_box), GTK_BUTTONBOX_END);
-			gtk_container_add (GTK_CONTAINER (vbox), hbtn_box);
-
-			/* Create a start button. */
-			_start_btn = gtk_button_new_with_label ("Start");
-			gtk_box_pack_start (GTK_BOX (hbtn_box), _start_btn, TRUE, FALSE, 0);
-			g_signal_connect (G_OBJECT (_start_btn), "clicked",G_CALLBACK (onStartClicked),_buffer);
-
-			/* Create a stop button. */
-			_stop_btn = gtk_button_new_with_label ("Stop");
-			gtk_box_pack_start (GTK_BOX (hbtn_box), _stop_btn, TRUE, FALSE, 0);
-			g_signal_connect (G_OBJECT (_stop_btn), "clicked",G_CALLBACK (onStopClicked),_buffer);
-
-
-			// set button and menu disability
-			setButtonAndMenuDisability();
-
-			/* Create status bar */
-			status_bar = gtk_statusbar_new();
-			gtk_box_pack_start (GTK_BOX (vbox), status_bar, FALSE, FALSE, 0);
-			gtk_widget_show (status_bar);
-
-			context_id = gtk_statusbar_get_context_id(GTK_STATUSBAR (status_bar), "Status bar");
-
-			checkParameter(argc, argv);
-
-			gtk_widget_show_all (window);
-
-			gtk_main ();
 		}
 
 

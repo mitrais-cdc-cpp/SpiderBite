@@ -10,7 +10,7 @@
 
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
-#include "../inc/TextBuffer.h"
+#include "../inc/util/TextBuffer.h"
 
 class TestTextBuffer : public CppUnit::TestFixture
 {

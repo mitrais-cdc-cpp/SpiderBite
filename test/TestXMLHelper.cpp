@@ -5,8 +5,8 @@
  *      Author: developer
  */
 
-#include "../inc/XMLHelper.h"
-#include "../inc/Logger.h"
+#include "../inc/util/XMLHelper.h"
+#include "../inc/util/Logger.h"
 #include "TestXMLHelper.h"
 
 using namespace Mitrais::test;

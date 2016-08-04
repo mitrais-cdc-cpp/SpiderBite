@@ -14,7 +14,9 @@ namespace Mitrais {
 		 * Enumeration to select which saving method
 		 * user preferred to store the content
 		 */
-		enum SaveModeEnum {
+		enum SaveModeEnum
+		{
+			NOT_SET,
 			SAVE_TO_FILE,	//!< Save the content to a file
 			SAVE_TO_DB		//!< Save the content to the database
 		};

@@ -5,7 +5,7 @@
  *      Author: developer
  */
 
-#include "../inc/XMLHelper.h"
+#include "../../inc/util/XMLHelper.h"
 
 namespace Mitrais
 {

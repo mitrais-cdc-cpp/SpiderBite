@@ -9,10 +9,16 @@ set(_ECLIPSE_VERSION "4.5")
 
 file(GLOB SOURCES
  main.cpp
- inc/*.h
- inc/ui/*.h
- src/*.cpp
- src/ui/*.cpp)
+ inc/util/*.h
+ inc/util/*.hpp
+ inc/view/*.h
+ inc/view/*.hpp
+ inc/presenter/*.hpp
+ inc/model/*.hpp
+ src/util/*.cpp
+ src/view/*.cpp
+ src/presenter/*.cpp
+ src/model/*.cpp)
 
 message("Following sources found:")
 foreach(a ${SOURCES})
@@ -61,6 +67,8 @@ set(Boost_USE_STATIC_LIBS OFF)
 set(Boost_USE_MULTITHREADED ON)  
 set(Boost_USE_STATIC_RUNTIME OFF) 
 find_package(Boost 1.61 EXACT COMPONENTS system regex date_time thread serialization log log_setup REQUIRED)
+message(STATUS "Boost Version: ${Boost_VERSION_STRING}")
+
 
 ADD_DEFINITIONS(-DBOOST_LOG_DYN_LINK)
 
@@ -90,6 +98,7 @@ find_library(
 # THREADS
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads REQUIRED)
+message(STATUS "Threads Version: ${Threads_VERSION_STRING}")
 
 # CURL
 find_package(CURL REQUIRED)
@@ -141,4 +150,3 @@ if(UNIX)
         COMMAND rm ARGS -rf ${CMAKE_CURRENT_BINARY_DIR}/install_manifest.txt
         TARGET  clean-all)
 endif(UNIX)
-

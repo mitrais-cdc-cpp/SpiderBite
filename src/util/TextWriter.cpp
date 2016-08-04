@@ -5,7 +5,7 @@
  *      Author: Andi_y
  */
 
-#include "../inc/TextWriter.h"
+#include "../../inc/util/TextWriter.h"
 
 using namespace Mitrais::util;
 
@@ -227,7 +227,21 @@ void TextWriter::writeToDatabase(BaseResponse &response)
 		DB::Connector connector(dbHost, dbPort, dbName);
 		DB::Website website;
 
-		website.protocolType = _protocolType;
+		switch (_protocolType)
+		{
+		case util::UrlTargetProtocol::HTTP:
+			website.protocolType = "http";
+			break;
+		case util::UrlTargetProtocol::HTTPS:
+			website.protocolType = "https";
+			break;
+		case util::UrlTargetProtocol::FTP:
+			website.protocolType = "ftp";
+			break;
+		default:
+			website.protocolType = "http";
+		}
+
 		website.url = _url;
 		website.content = _content;
 

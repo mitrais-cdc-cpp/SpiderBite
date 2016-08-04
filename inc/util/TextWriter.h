@@ -16,7 +16,7 @@
 #include "BaseResponse.h"
 #include "Logger.h"
 #include "UrlTarget.h"
-#include "../env/mongodao/inc/DoaImpl/SpiderBite/Connector.h"
+#include "../../env/mongodao/inc/DoaImpl/SpiderBite/Connector.h"
 #include "Configuration.h"
 
 namespace Mitrais{
@@ -102,7 +102,7 @@ public:
 private:
 	std::string _content;
 	std::string _file;
-	std::string _protocolType;
+	UrlTargetProtocol _protocolType;
 	std::string _url;
 
 	std::ofstream _fileStream;

@@ -10,7 +10,7 @@
 
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
-#include "../inc/XMLHelper.h"
+#include "../inc/util/XMLHelper.h"
 
 namespace Mitrais{
 	namespace test{

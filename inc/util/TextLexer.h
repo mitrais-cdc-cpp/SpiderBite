@@ -25,10 +25,10 @@ public:
 	~TextLexer();
 
 	void setContent(std::string content);
-	std::vector<UrlTarget> findUrls(const vector<UrlTarget>& existingUrls);
-	std::vector<UrlTarget> findUrls(BaseResponse& response, const vector<UrlTarget>& existingUrls);
-	std::vector<UrlTarget> findUrls(std::string content, const vector<UrlTarget>& existingUrls);
-	std::vector<UrlTarget> findUrls(std::string content, BaseResponse& response, const vector<UrlTarget>& existingUrls);
+	std::vector<UrlTarget> findUrls(const std::vector<UrlTarget>& existingUrls);
+	std::vector<UrlTarget> findUrls(BaseResponse& response, const std::vector<UrlTarget>& existingUrls);
+	std::vector<UrlTarget> findUrls(std::string content, const std::vector<UrlTarget>& existingUrls);
+	std::vector<UrlTarget> findUrls(std::string content, BaseResponse& response, const std::vector<UrlTarget>& existingUrls);
 
 private:
 	std::string _content;

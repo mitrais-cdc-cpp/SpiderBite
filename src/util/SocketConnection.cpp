@@ -1,4 +1,4 @@
-#include "../inc/SocketConnection.h"
+#include "../../inc/util/SocketConnection.h"
 
 namespace Mitrais
 {

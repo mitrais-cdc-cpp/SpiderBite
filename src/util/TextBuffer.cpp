@@ -5,7 +5,7 @@
  *      Author: developer
  */
 
-#include "../inc/TextBuffer.h"
+#include "../../inc/util/TextBuffer.h"
 
 namespace Mitrais
 {

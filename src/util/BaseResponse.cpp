@@ -1,9 +1,6 @@
-#include "../inc/BaseResponse.h"
+#include "../../inc/util/BaseResponse.h"
 
-namespace Mitrais
-{
-namespace util
-{
+using namespace Mitrais::util;
 
 BaseResponse::BaseResponse() : _status(false)
 {
@@ -50,5 +47,5 @@ void BaseResponse::updateStatus(bool status)
 	_status = status;
 }
 
-} /* namespace util */
-} /* namespace Mitrais */
+/* namespace util */
+/* namespace Mitrais */
