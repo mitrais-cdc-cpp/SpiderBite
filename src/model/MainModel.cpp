@@ -153,8 +153,8 @@ void MainModel::checkConfigSetting()
 										"SpiderBite",
 										"SpiderBite",
 										1,
-										util::SAVE_TO_DB,
-										"");
+										util::SAVE_TO_FILE,
+										"./");
 
 		util::XMLHelper helper;
 		helper.saveXML(settings, _configFileName.c_str());
