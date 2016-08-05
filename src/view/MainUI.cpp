@@ -47,22 +47,6 @@ namespace Mitrais
 		 */
 		void MainUI::checkConfigSetting()
 		{
-			if(!boost::filesystem::exists(_configFileName.c_str()))
-			{
-
-				util::ConfigSettings settings("localhost",
-												27017,
-												"SpiderBite",
-												"SpiderBite",
-												1,
-												SAVE_TO_DB,
-												"");
-
-				util::XMLHelper helper;
-				helper.saveXML(settings, _configFileName.c_str());
-
-				LOG_INFO << "Default configuration file saved!";
-			}
 		}
 
 		/**
@@ -82,7 +66,6 @@ namespace Mitrais
 		 */
 		void pushMessage(std::string message)
 		{
-			gtk_statusbar_push (GTK_STATUSBAR (status_bar), GPOINTER_TO_INT (context_id), convertStringToPChar(message));
 		}
 
 		/*
@@ -90,24 +73,6 @@ namespace Mitrais
 		 */
 		static void setButtonAndMenuDisability()
 		{
-			if (_filePath.empty())
-			{
-				// disable start and stop button
-				gtk_widget_set_sensitive (_start_btn, FALSE);
-				gtk_widget_set_sensitive (_stop_btn, FALSE);
-
-				// disable save menu
-				gtk_widget_set_sensitive(save, FALSE);
-			}
-			else
-			{
-				// enable start and stop button
-				gtk_widget_set_sensitive (_start_btn, TRUE);
-				gtk_widget_set_sensitive (_stop_btn, FALSE);
-
-				// enable save menu
-				gtk_widget_set_sensitive(save, TRUE);
-			}
 		}
 
 
@@ -116,31 +81,6 @@ namespace Mitrais
 		*/
 		void displayFileContent()
 		{
-			string url;
-			gchar *text;
-			if (_filePath.empty())
-			{
-				url = "No selected file, please select a file that contains URL records.";
-			}
-			else
-			{
-				if (_targets.size() > 0)
-				{
-					for(auto const& target: _targets)
-					{
-//						url += target.Protocol +"://"+target.Url + "\n";
-						url += "://"+target.Url + "\n";
-					}
-				}
-				else
-				{
-					url = "There are no valid URL records on " + _filePath;
-				}
-			}
-
-			text = convertStringToPChar(url);
-			_buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (text_view));
-			gtk_text_buffer_set_text (_buffer, text, -1);
 		}
 
 		/**
@@ -151,57 +91,6 @@ namespace Mitrais
 		 */
 		static string saveSourceCode(util::UrlTarget target, util::TextBuffer buff_)
 		{
-//			string fileName = target.Protocol + "." + target.Url;
-			string fileName = "." + target.Url;
-
-			string strResponse;
-
-			util::TextWriter writer(fileName, buff_.getFullContent(), target);
-			util::BaseResponse responseWrite;
-
-			if(util::Configuration::getSetting().saveTarget == SAVE_TO_FILE)
-			{
-				// save into file
-				writer.writeToFile(responseWrite, true);
-			}
-			else
-			{
-				// save to database
-				writer.writeToDatabase(responseWrite);
-			}
-
-			// check the response status
-			if (responseWrite.getStatus())
-			{
-				strResponse = "The "+ fileName + " done!\n"+ "The "+ fileName + " saved";
-				if(util::Configuration::getSetting().saveTarget == SAVE_TO_FILE)
-				{
-					string savePath = util::Configuration::getSetting().pathToLocalDir;
-					if (!savePath.empty())
-					{
-						strResponse += ": "+ savePath +"\/" + fileName +".html\n";
-					}
-					else
-					{
-						strResponse += ": "+ fileName +".html on current application folder\n";
-					}
-				}
-				else
-				{
-					strResponse += " on database\n";
-				}
-
-				LOG_INFO << fileName + " Saved!";
-			}
-			else
-			{
-				strResponse = "Can't connect to: "+ fileName + "n"+
-					   "Skip " + fileName +" target\n"+
-						"----------------------------------------------------------------------------\n";
-				LOG_ERROR << "Can't connect to: "+ fileName;
-			}
-
-			return strResponse;
 		}
 
 		/**
