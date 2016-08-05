@@ -88,7 +88,7 @@ namespace Mitrais
 			//member
 			std::string _strUrlFilename;
 			bool _bInitialReadingDone;
-			std::vector<Mitrais::util::UrlTarget> urls;
+			static std::vector<Mitrais::util::UrlTarget> urls;
 			Mitrais::util::Configuration _config;
 			Mitrais::util::ThreadHelper _helper;
 		};

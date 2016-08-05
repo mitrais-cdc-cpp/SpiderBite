@@ -11,6 +11,8 @@ using namespace Mitrais::Model;
 
 MainModel* MainModel::m_instance = nullptr;
 
+std::vector<Mitrais::util::UrlTarget> MainModel::urls;
+
 MainModel::MainModel()
 : _bInitialReadingDone(false)
 {}
@@ -166,7 +168,7 @@ bool MainModel::stopCrawling()
  */
 bool MainModel::startCrawling(std::vector<Mitrais::util::UrlTarget> urls)
 {
-	LOG_INFO << "start crawling";
+	LOG_INFO << "start crawling thread";
 
 	std::string result;
 	bool isError = false;
@@ -181,7 +183,7 @@ bool MainModel::startCrawling(std::vector<Mitrais::util::UrlTarget> urls)
 		LOG_WARN << "File loaded but no URL targets to crawl.";
 	}
 
-	LOG_INFO << "stop crawling";
+	LOG_INFO << "stop crawling thread";
 
 	return isError;
 }
@@ -214,6 +216,7 @@ const char* MainModel::toString(util::UrlTargetProtocol v)
  */
 string MainModel::saveSourceCode(util::UrlTarget &target, util::TextBuffer &buff_)
 {
+	LOG_INFO << "start save source code";
 	string protocol = toString(target.Protocol);
 	string fileName = protocol + "." + target.Url;
 
@@ -268,28 +271,6 @@ string MainModel::saveSourceCode(util::UrlTarget &target, util::TextBuffer &buff
 	return strResponse;
 }
 
-//vector<Mitrais::util::UrlTarget> Mitrais::util::WebCrawler::getSubUrlList(string content)
-//{
-//	TextLexer lexer;
-//
-//	// find the urls
-//	std::vector<std::string> vec = lexer.findUrls(content);
-//
-//	vector<UrlTarget> sublist;
-//	for(auto const& str: vec)
-//	{
-//		UrlTarget target = Mitrais::util::TextReader::getUrl(str);
-//		bool isExist = Mitrais::util::TextReader::isUrlExist(target);
-//
-//		if (!isExist)
-//		{
-//			sublist.push_back(target);
-//		}
-//	}
-//
-//	return sublist;
-//}
-
 /**
  * Crawl sub Url
  *
@@ -343,8 +324,6 @@ void MainModel::crawlSubUrls(util::WebCrawler &crawler_, util::TextBuffer &buff_
 		// update the status into DONE
 		target.Status = Mitrais::util::UrlTargetStatus::DONE;
 
-//		target.SubUrlList = getSubUrlList(data);
-
 		target.SubUrlList = lexer.findUrls(target.Content, vecURL_);
 		target.Deepness = iDeep_;
 
@@ -354,11 +333,12 @@ void MainModel::crawlSubUrls(util::WebCrawler &crawler_, util::TextBuffer &buff_
 }
 
 /**
- * crawl website
+ * crawl the website
  *
- * @param args
- * @return
+ * @param target
+ * @return int
  */
+
 int MainModel::crawlWebsite(util::UrlTarget &target)
 {
 	 std::string msg = "";
@@ -404,11 +384,14 @@ int MainModel::crawlWebsite(util::UrlTarget &target)
 		  // save into the targeted media
 		  saveSourceCode(target, buff);
 
-//		  target->SubUrlList = lexer.findUrls(*target);
-//
-//		  // crawl the sub urls
-//		  crawlSubUrls(crawler, buff, target->SubUrlList, 0);
+		  target.SubUrlList = lexer.findUrls(target.Content, urls);
+
+		  // crawl the sub urls
+		  crawlSubUrls(crawler, buff, target.SubUrlList, 0);
 	}
+
+	msg = target.Url + " crawling stopped!";
+	LOG_INFO << msg;
 
 	return 0;
 }
