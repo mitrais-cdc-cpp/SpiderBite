@@ -12,6 +12,7 @@
 #include <sys/stat.h>
 #include <functional>
 #include <memory>
+#include <string>
 
 #include "../util/SaveModeEnum.h"
 
@@ -38,12 +39,26 @@ namespace View {
 
 
 		//getter/setter
-		void setConfiguration(std::string& connection,std::string& logfilename,std::string& pathtolocaldir, int deepness, Mitrais::util::SaveModeEnum savemode);
-		std::string getConnectionString();
+		void setConfiguration(std::string& logfilename,
+							std::string& pathtolocaldir,
+							int deepness,
+							Mitrais::util::SaveModeEnum savemode,
+							std::string& dbHost,
+							int& dbPort,
+							std::string& dbName);
+//		std::string getConnectionString();
+		std::string getDbHost();
+		int getDbPort();
+		std::string getDbName();
 		std::string getLogFileName();
 		std::string getPathToLocalDir();
 		int getCrawlingDeepness();
 		Mitrais::util::SaveModeEnum getSaveMode();
+
+		std::string getStringFromTBox(GtkWidget* tbox);
+		int getIntFromTBox(GtkWidget* tbox);
+		bool getBooleanFromSpinBtn(GtkWidget* spinBtn);
+		void closeSettingView();
 
 	private:
 
@@ -85,18 +100,22 @@ namespace View {
 
 		//Textboxes
 		GtkWidget* tb_LocalSavePath;
-		GtkWidget* tb_DbConnectionString;
 		GtkWidget* tb_LogFileName;
+		GtkWidget* tb_DbHost;
+		GtkWidget* tb_DbPort;
+		GtkWidget* tb_DbName;
 
 		GtkWidget* stb_CrawlingDepth;
 		GtkWidget* switch_SaveInFolder;
 
 		//labels
-		GtkWidget* label_DbConnectionString;
 		GtkWidget* label_LogFileName;
 		GtkWidget* label_CrawlingDepth;
 		GtkWidget* label_SaveInFolder;
 		GtkWidget* label_LocalSavePath;
+		GtkWidget* label_DbHost;
+		GtkWidget* label_DbPort;
+		GtkWidget* label_DbName;
 
 		//buttons
 		GtkWidget* btn_SelectPath;

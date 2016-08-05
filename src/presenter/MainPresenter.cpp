@@ -54,6 +54,7 @@ void MainPresenter::registerEventsModel()
 
 void MainPresenter::applicationStartCallback()
 {
+	_model->checkConfigSetting();
 	_view->build();
 	_view->start();
 }

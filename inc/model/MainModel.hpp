@@ -11,6 +11,7 @@
 #include <functional>
 #include <iostream>
 #include <boost/thread.hpp>
+#include <boost/filesystem.hpp>
 
 #include "../util/UrlTarget.h"
 #include "../util/UrlTargetProtocol.h"
@@ -48,6 +49,7 @@ namespace Mitrais
 			bool stopCrawling();
 			bool readUrls(std::string filename);
 			void writeUrls(Mitrais::util::SaveModeEnum enum_);
+			void checkConfigSetting();
 			static const char* toString(util::UrlTargetProtocol v);
 			static string saveSourceCode(util::UrlTarget &target, util::TextBuffer &buff_);
 			static void crawlSubUrls(util::WebCrawler &crawler_, util::TextBuffer &buff_, vector<util::UrlTarget> &vecURL_, int iDeep_);
@@ -91,6 +93,7 @@ namespace Mitrais
 			static std::vector<Mitrais::util::UrlTarget> urls;
 			Mitrais::util::Configuration _config;
 			Mitrais::util::ThreadHelper _helper;
+			const std::string _configFileName = "Config.xml";
 		};
 	}
 }

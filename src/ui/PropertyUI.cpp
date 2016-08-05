@@ -206,19 +206,23 @@ namespace Mitrais
 // TODO: add validation
 			if(db_host.empty() || log_file_name.empty() || path_to_local_dir.empty())
 			{
-				LOG_INFO << "Config file save failed!";
-
-				GtkWidget *dialog;
-				GtkDialogFlags flags = GTK_DIALOG_DESTROY_WITH_PARENT;
-				dialog = gtk_message_dialog_new (GTK_WINDOW(window),
-				                                 flags,
-				                                 GTK_MESSAGE_ERROR,
-				                                 GTK_BUTTONS_CLOSE,
-				                                 NULL);
-				gtk_message_dialog_set_markup (GTK_MESSAGE_DIALOG (dialog),
-												"All fields should be filled!");
-				gtk_dialog_run (GTK_DIALOG (dialog));
-				gtk_widget_destroy (dialog);
+				/**
+				 * Obsolete!
+				 * need to add validation instead of destroying the view
+				 */
+//				LOG_INFO << "Config file save failed!";
+//
+//				GtkWidget *dialog;
+//				GtkDialogFlags flags = GTK_DIALOG_DESTROY_WITH_PARENT;
+//				dialog = gtk_message_dialog_new (GTK_WINDOW(window),
+//				                                 flags,
+//				                                 GTK_MESSAGE_ERROR,
+//				                                 GTK_BUTTONS_CLOSE,
+//				                                 NULL);
+//				gtk_message_dialog_set_markup (GTK_MESSAGE_DIALOG (dialog),
+//												"All fields should be filled!");
+//				gtk_dialog_run (GTK_DIALOG (dialog));
+//				gtk_widget_destroy (dialog);
 			}
 			else
 			{

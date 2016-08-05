@@ -15,26 +15,31 @@ class SettingView::SettingViewArgs
 {
 public:
 
-	SettingViewArgs(std::string& connection,
-					std::string& logfilename,
+	SettingViewArgs(std::string& logfilename,
 					std::string& pathtolocaldir,
 					int deepness,
-					Mitrais::util::SaveModeEnum savemode)
-	: _strConnection(connection)
-	, _strLogFileName(logfilename)
+					Mitrais::util::SaveModeEnum savemode,
+					std::string& dbHost,
+					int& dbPort,
+					std::string& dbName)
+	: _strLogFileName(logfilename)
 	, _strPathToLocalDirectory(pathtolocaldir)
 	, _iCrawlingDeepness(deepness)
 	, _enumSaveMode(savemode)
+	, _strDbHost(dbHost)
+	, _iDbPort(dbPort)
+	, _strDbName(dbName)
 	{}
 
 	SettingViewArgs()
 	{}
-
-	std::string 				_strConnection = "";
 	std::string 				_strLogFileName = "logfile.log";
 	std::string 				_strPathToLocalDirectory = "./";
 	int 						_iCrawlingDeepness = 1;
 	Mitrais::util::SaveModeEnum _enumSaveMode = Mitrais::util::NOT_SET;
+	std::string					_strDbHost = "";
+	int							_iDbPort = 0;
+	std::string					_strDbName = "";
 };
 
 
@@ -45,6 +50,12 @@ SettingView::SettingView() : _args( new SettingView::SettingViewArgs() )
 SettingView::~SettingView()
 {
 	gtk_widget_destroy(form_MainForm);
+}
+
+void SettingView::closeSettingView()
+{
+	LOG_INFO << "Setting View closed";
+	gtk_widget_destroy(GTK_WIDGET(NULL));
 }
 
 SettingView* SettingView::getInstance()
@@ -60,11 +71,21 @@ SettingView* SettingView::getInstance()
 	return _self;
 }
 
-
-std::string SettingView::getConnectionString()
+std::string SettingView::getDbHost()
 {
-	return _args->_strConnection;
+	return _args->_strDbHost;
 }
+
+int SettingView::getDbPort()
+{
+	return _args->_iDbPort;
+}
+
+std::string SettingView::getDbName()
+{
+	return _args->_strDbName;
+}
+
 std::string SettingView::getLogFileName()
 {
 	return _args->_strLogFileName;
@@ -102,17 +123,22 @@ static void entry_activate (GtkEntry *entry, GtkLabel *label)
  *
  * @param config
  */
-void SettingView::setConfiguration(std::string& connection,
+void SettingView::setConfiguration(
 					std::string& logfilename,
 					std::string& pathtolocaldir,
 					int deepness,
-					Mitrais::util::SaveModeEnum savemode)
+					Mitrais::util::SaveModeEnum savemode,
+					std::string& dbHost,
+					int& dbPort,
+					std::string& dbName)
 {
-	_args->_strConnection = connection;
 	_args->_strLogFileName = logfilename;
 	_args->_strPathToLocalDirectory = pathtolocaldir;
 	_args->_iCrawlingDeepness = deepness;
 	_args->_enumSaveMode = savemode;
+	_args->_strDbHost = dbHost;
+	_args->_iDbPort = dbPort;
+	_args->_strDbName = dbName;
 
 	bool isActive = (savemode == Mitrais::util::SAVE_TO_FILE) ? true : false;
 
@@ -211,7 +237,10 @@ void SettingView::Quit()
 void SettingView::ConnectSignals()
 {
 	// callbacks
-	g_signal_connect (GTK_ENTRY(tb_DbConnectionString), "activate", G_CALLBACK(entry_activate), label_DbConnectionString);
+//	g_signal_connect (GTK_ENTRY(tb_DbConnectionString), "activate", G_CALLBACK(entry_activate), label_DbConnectionString);
+	g_signal_connect (GTK_ENTRY(tb_DbHost), "activate", G_CALLBACK(entry_activate), label_DbHost);
+	g_signal_connect (GTK_ENTRY(tb_DbPort), "activate", G_CALLBACK(entry_activate), label_DbPort);
+	g_signal_connect (GTK_ENTRY(tb_DbName), "activate", G_CALLBACK(entry_activate), label_DbName);
 	g_signal_connect (GTK_ENTRY(tb_LogFileName), "activate", G_CALLBACK(entry_activate), label_LogFileName);
 	g_signal_connect (GTK_ENTRY(tb_LocalSavePath), "activate", G_CALLBACK(entry_activate), label_LocalSavePath);
 
@@ -228,7 +257,7 @@ void SettingView::CreateMainForm()
 	form_MainForm	= gtk_window_new (GTK_WINDOW_TOPLEVEL);
 	gtk_window_set_title (GTK_WINDOW (form_MainForm), "Settings");
 	gtk_container_set_border_width (GTK_CONTAINER (form_MainForm), 10);
-	gtk_window_set_default_size (GTK_WINDOW (form_MainForm), 300, 170);
+	gtk_window_set_default_size (GTK_WINDOW (form_MainForm), 300, 300);
 
 	// set resizeable false
 	gtk_window_set_resizable(GTK_WINDOW(form_MainForm), FALSE);
@@ -239,19 +268,25 @@ void SettingView::CreateGrid()
 	grid = gtk_grid_new();
 
 	// attach the grids
-	gtk_grid_attach(GTK_GRID(grid), label_DbConnectionString, 0, 15, 20, 10);
-	gtk_grid_attach(GTK_GRID(grid), tb_DbConnectionString, 20, 15, 20, 10);
-	gtk_grid_attach(GTK_GRID(grid), label_LogFileName, 0, 30, 20, 10);
-	gtk_grid_attach(GTK_GRID(grid), tb_LogFileName, 20, 30, 20, 10);
-	gtk_grid_attach(GTK_GRID(grid), label_CrawlingDepth, 0, 45, 20, 10);
-	gtk_grid_attach(GTK_GRID(grid), stb_CrawlingDepth, 20, 45, 10, 10);
-	gtk_grid_attach(GTK_GRID(grid), label_SaveInFolder, 0, 60, 20, 10);
-	gtk_grid_attach(GTK_GRID(grid), switch_SaveInFolder, 20, 60, 10, 10);
-	gtk_grid_attach(GTK_GRID(grid), label_LocalSavePath, 0, 75, 20, 10);
-	gtk_grid_attach(GTK_GRID(grid), tb_LocalSavePath, 20, 75, 15, 10);
-	gtk_grid_attach(GTK_GRID(grid), btn_SelectPath, 37, 75, 10, 10);
-	gtk_grid_attach(GTK_GRID(grid), btn_Save, 20, 90, 10, 10);
-	gtk_grid_attach(GTK_GRID(grid), btn_Cancel, 30, 90, 10, 10);
+//	gtk_grid_attach(GTK_GRID(grid), label_DbConnectionString, 0, 15, 20, 10);
+//	gtk_grid_attach(GTK_GRID(grid), tb_DbConnectionString, 20, 15, 20, 10);
+	gtk_grid_attach(GTK_GRID(grid), label_DbHost, 0, 15, 20, 10);
+	gtk_grid_attach(GTK_GRID(grid), tb_DbHost, 20, 15, 20, 10);
+	gtk_grid_attach(GTK_GRID(grid), label_DbPort, 0, 30, 20, 10);
+	gtk_grid_attach(GTK_GRID(grid), tb_DbPort, 20, 30, 20, 10);
+	gtk_grid_attach(GTK_GRID(grid), label_DbName, 0, 45, 20, 10);
+	gtk_grid_attach(GTK_GRID(grid), tb_DbName, 20, 45, 20, 10);
+	gtk_grid_attach(GTK_GRID(grid), label_LogFileName, 0, 60, 20, 10);
+	gtk_grid_attach(GTK_GRID(grid), tb_LogFileName, 20, 60, 20, 10);
+	gtk_grid_attach(GTK_GRID(grid), label_CrawlingDepth, 0, 75, 20, 10);
+	gtk_grid_attach(GTK_GRID(grid), stb_CrawlingDepth, 20, 75, 10, 10);
+	gtk_grid_attach(GTK_GRID(grid), label_SaveInFolder, 0, 90, 20, 10);
+	gtk_grid_attach(GTK_GRID(grid), switch_SaveInFolder, 20, 90, 10, 10);
+	gtk_grid_attach(GTK_GRID(grid), label_LocalSavePath, 0, 105, 20, 10);
+	gtk_grid_attach(GTK_GRID(grid), tb_LocalSavePath, 20, 105, 15, 10);
+	gtk_grid_attach(GTK_GRID(grid), btn_SelectPath, 37, 105, 10, 10);
+	gtk_grid_attach(GTK_GRID(grid), btn_Save, 20, 120, 10, 10);
+	gtk_grid_attach(GTK_GRID(grid), btn_Cancel, 30, 120, 10, 10);
 
 	// set spacing between row in grid
 	gtk_grid_set_row_spacing(GTK_GRID(grid), 2);
@@ -266,7 +301,10 @@ void SettingView::CreateGrid()
 void SettingView::CreateGuiElements()
 {
 	//Create Textboxes
-	tb_DbConnectionString	= gtk_entry_new ();
+//	tb_DbConnectionString	= gtk_entry_new ();
+	tb_DbHost = gtk_entry_new ();
+	tb_DbPort = gtk_entry_new();
+	tb_DbName = gtk_entry_new();
 	tb_LogFileName 			= gtk_entry_new ();
 	tb_LocalSavePath 		= gtk_entry_new ();
 
@@ -283,14 +321,20 @@ void SettingView::CreateGuiElements()
 	btn_Cancel 		= gtk_button_new_with_label("Cancel");
 
 	//Create labels
-	label_DbConnectionString 	= gtk_label_new("Database location: ");
+//	label_DbConnectionString 	= gtk_label_new("Database location: ");
+	label_DbHost = gtk_label_new("Database Host : ");
+	label_DbPort = gtk_label_new("Database Port : ");
+	label_DbName = gtk_label_new("Database Name : ");
 	label_LogFileName 			= gtk_label_new("Logfile name: ");
 	label_CrawlingDepth 		= gtk_label_new("Crawling deepness: ");
 	label_SaveInFolder 			= gtk_label_new("Save in folder:" );
 	label_LocalSavePath 		= gtk_label_new("Local saved web path : ");
 
 	// set label to justify left
-	gtk_label_set_xalign(GTK_LABEL(label_DbConnectionString), 0);
+//	gtk_label_set_xalign(GTK_LABEL(label_DbConnectionString), 0);
+	gtk_label_set_xalign(GTK_LABEL(label_DbHost), 0);
+	gtk_label_set_xalign(GTK_LABEL(label_DbPort), 0);
+	gtk_label_set_xalign(GTK_LABEL(label_DbName), 0);
 	gtk_label_set_xalign(GTK_LABEL(label_LogFileName), 0);
 	gtk_label_set_xalign(GTK_LABEL(label_CrawlingDepth), 0);
 	gtk_label_set_xalign(GTK_LABEL(label_SaveInFolder), 0);
@@ -300,7 +344,10 @@ void SettingView::CreateGuiElements()
 
 void SettingView::SetPropertyUIArgsToPropertyUI(bool isSaveInFolderActive)
 {
-	gtk_entry_set_text(GTK_ENTRY(tb_DbConnectionString), _args->_strConnection.c_str());
+//	gtk_entry_set_text(GTK_ENTRY(tb_DbConnectionString), _args->_strConnection.c_str());
+	gtk_entry_set_text(GTK_ENTRY(tb_DbHost), _args->_strDbHost.c_str());
+	gtk_entry_set_text(GTK_ENTRY(tb_DbPort), std::to_string(_args->_iDbPort).c_str());
+	gtk_entry_set_text(GTK_ENTRY(tb_DbName), _args->_strDbName.c_str());
 	gtk_entry_set_text(GTK_ENTRY(tb_LogFileName), _args->_strLogFileName.c_str());
 	gtk_entry_set_text(GTK_ENTRY(tb_LocalSavePath), _args->_strPathToLocalDirectory.c_str());
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(stb_CrawlingDepth), _args->_iCrawlingDeepness);
@@ -326,3 +373,17 @@ void SettingView::OpenDialog()
    gtk_widget_destroy (dialog);
 }
 
+std::string getStringFromTBox(GtkWidget* tbox)
+{
+	return gtk_entry_get_text(GTK_ENTRY(tbox));
+}
+
+int getIntFromTBox(GtkWidget* tbox)
+{
+	return atoi(gtk_entry_get_text(GTK_ENTRY(tbox)));
+}
+
+bool getBooleanFromSpinBtn(GtkWidget* spinBtn)
+{
+	return gtk_switch_get_active(GTK_SWITCH(spinBtn));
+}
