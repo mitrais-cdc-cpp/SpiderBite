@@ -9,19 +9,22 @@
 
 using namespace Mitrais::Model;
 
+// give value or just instantiate static members
 MainModel* MainModel::m_instance = nullptr;
-
 std::vector<Mitrais::util::UrlTarget> MainModel::urls;
 
+// Main model ctor
 MainModel::MainModel()
 : _bInitialReadingDone(false)
 {}
 
+// Main model desc
 MainModel::~MainModel()
 {
 	delete m_instance;
 }
 
+// singleton of m_instance
 MainModel* MainModel::getInstance()
 {
 	if(!m_instance)
@@ -29,49 +32,82 @@ MainModel* MainModel::getInstance()
 	return m_instance;
 }
 
+/**
+ * When app starts callback
+ * @param callback
+ */
 void MainModel::whenApplicationStarts(CallbackFunction callback)
 {
 	onApplicationStarts = callback;
 }
 
+/**
+ * When app stop callback
+ * @param callback
+ */
 void MainModel::whenApplicationStop(CallbackFunction callback)
 {
 	onApplicationStop = callback;
 }
 
+/**
+ * when crawling start callback
+ * @param callback
+ */
 void MainModel::whenCrawlingStart(CallbackFunction callback)
 {
 	onCrawlingStart = callback;
 }
 
+/**
+ * when crawling stop callback
+ * @param callback
+ */
 void MainModel::whenCrawlingStop(CallbackFunction callback)
 {
 	onCrawlingStop = callback;
 }
 
+/**
+ * when crawling running callback
+ * @param callback
+ */
 void MainModel::whenCrawlingRunning(CallbackFunction callback)
 {
 	onCrawlingRunning = callback;
 }
 
+/**
+ * run method to call on app start
+ */
 void MainModel::run()
 {
 	onApplicationStarts();
 }
 
+/**
+ * stop method to call app stop
+ */
 void MainModel::stop()
 {
 	onApplicationStop();
 }
 
+/**
+ * read url from file name
+ * @param filename
+ * @return
+ */
 bool MainModel::readUrls(std::string filename)
 {
 	_strUrlFilename = filename;
 	return readUrlFromFile();
 }
 
-
-
+/**
+ * read url from file and gets the url
+ * @return
+ */
 bool MainModel::readUrlFromFile()
 {
 	try
@@ -93,6 +129,10 @@ bool MainModel::readUrlFromFile()
 	return true;
 }
 
+/**
+ * write the url to database or file
+ * @param enum_
+ */
 void MainModel::writeUrls(Mitrais::util::SaveModeEnum enum_)
 {
 	switch(enum_)
@@ -113,6 +153,12 @@ void MainModel::writeUrls(Mitrais::util::SaveModeEnum enum_)
 		}
 	}
 }
+
+/**
+ * write to file function
+ * @param filename
+ * @param isSaveAsHtml
+ */
 void MainModel::writeUrlToFile(std::string filename, bool isSaveAsHtml)
 {
 	util::TextWriter writer(filename);
@@ -120,6 +166,10 @@ void MainModel::writeUrlToFile(std::string filename, bool isSaveAsHtml)
 	writer.writeToFile(response, isSaveAsHtml);
 }
 
+/**
+ * write url to database function
+ * @param filename
+ */
 void MainModel::writeUrlToDatabase(std::string filename)
 {
 	util::TextWriter writer(filename);
@@ -127,12 +177,21 @@ void MainModel::writeUrlToDatabase(std::string filename)
 	writer.writeToDatabase(response);
 }
 
+/**
+ * find urls method
+ * @param url
+ * @return
+ */
 std::vector<Mitrais::util::UrlTarget> MainModel::findUrls(Mitrais::util::UrlTarget url)
 {
 	util::TextLexer lexer;
 	return lexer.findUrls(url.Content, urls);
 }
 
+/**
+ * stop crawling method
+ * @return
+ */
 bool MainModel::stopCrawling()
 {
 	//todo
@@ -366,7 +425,6 @@ int MainModel::crawlWebsite(util::UrlTarget &target)
 
 		  // clear data
 		  buff.clearBuffer();
-//		  string data = "";
 		  target.Content = "";
 
 		  // update the status into START
