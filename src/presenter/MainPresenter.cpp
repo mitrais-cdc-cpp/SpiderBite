@@ -61,6 +61,7 @@ void MainPresenter::applicationStartCallback()
 
 void MainPresenter::applicationStopCallback()
 {
+	_view->closeMainView();
 }
 
 void MainPresenter::crawlingStartCallback()

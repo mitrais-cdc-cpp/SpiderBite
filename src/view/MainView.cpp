@@ -184,7 +184,7 @@ void MainView::openSettingView()
 void MainView::closeMainView()
 {
 	LOG_INFO << "Program terminated";
-	gtk_widget_destroy(GTK_WIDGET(NULL));
+	gtk_widget_destroy(GTK_WIDGET(_window));
 }
 
 void MainView::stopCrawlingProcess()
@@ -207,7 +207,10 @@ void MainView::displayFileContent(std::vector<std::string> urls)
 	gtk_text_view_set_editable (GTK_TEXT_VIEW (_txtBox), TRUE);
 	gtk_text_view_set_cursor_visible (GTK_TEXT_VIEW (_txtBox), TRUE);
 
+//	clearTextBox();
+
 	std::string text;
+	setStringToTextBox("");
 
 	for(const auto& url : urls)
 	{
