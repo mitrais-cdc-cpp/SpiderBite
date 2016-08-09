@@ -133,18 +133,24 @@ bool MainModel::readUrlFromFile()
  * write the url to database or file
  * @param enum_
  */
-void MainModel::writeUrls(Mitrais::util::SaveModeEnum enum_)
+Mitrais::util::BaseResponse MainModel::writeUrls(std::string filepath, std::string content, const util::UrlTarget& target)
 {
+	util::TextWriter writer(filepath, content, target);
+	util::BaseResponse responseWrite;
+
+	util::SaveModeEnum enum_ = util::Configuration::getSetting().saveTarget;
 	switch(enum_)
 	{
 		case Mitrais::util::SaveModeEnum::SAVE_TO_FILE:
 		{
-			writeUrlToFile("bla", true);
+			// save into file
+			writer.writeToFile(responseWrite, true);
 			break;
 		}
 		case Mitrais::util::SaveModeEnum::SAVE_TO_DB:
 		{
-			writeUrlToDatabase("bla");
+			// save to database
+			writer.writeToDatabase(responseWrite);
 			break;
 		}
 		default:
@@ -152,40 +158,8 @@ void MainModel::writeUrls(Mitrais::util::SaveModeEnum enum_)
 			LOG_WARN << "not save method set!";
 		}
 	}
-}
 
-/**
- * write to file function
- * @param filename
- * @param isSaveAsHtml
- */
-void MainModel::writeUrlToFile(std::string filename, bool isSaveAsHtml)
-{
-	util::TextWriter writer(filename);
-	util::BaseResponse response;
-	writer.writeToFile(response, isSaveAsHtml);
-}
-
-/**
- * write url to database function
- * @param filename
- */
-void MainModel::writeUrlToDatabase(std::string filename)
-{
-	util::TextWriter writer(filename);
-	util::BaseResponse response;
-	writer.writeToDatabase(response);
-}
-
-/**
- * find urls method
- * @param url
- * @return
- */
-std::vector<Mitrais::util::UrlTarget> MainModel::findUrls(Mitrais::util::UrlTarget url)
-{
-	util::TextLexer lexer;
-	return lexer.findUrls(url.Content, urls);
+	return responseWrite;
 }
 
 /**
@@ -284,19 +258,8 @@ string MainModel::saveSourceCode(util::UrlTarget &target, util::TextBuffer &buff
 
 	string strResponse;
 
-	util::TextWriter writer(fileName, buff_.getFullContent(), target);
-	util::BaseResponse responseWrite;
-
-	if(util::Configuration::getSetting().saveTarget == util::SAVE_TO_FILE)
-	{
-		// save into file
-		writer.writeToFile(responseWrite, true);
-	}
-	else
-	{
-		// save to database
-		writer.writeToDatabase(responseWrite);
-	}
+	// write urls
+	util::BaseResponse responseWrite = writeUrls(fileName, buff_.getFullContent(), target);
 
 	// check the response status
 	if (responseWrite.getStatus())
@@ -333,6 +296,39 @@ string MainModel::saveSourceCode(util::UrlTarget &target, util::TextBuffer &buff
 	return strResponse;
 }
 
+void MainModel::proceedCrawl(util::TextBuffer &buff_, util::UrlTarget &target,
+		util::WebCrawler &crawler_, util::TextLexer lexer, vector<util::UrlTarget> &vecURL_,
+		int iDeep_)
+{
+	// clear data
+	buff_.clearBuffer();
+	target.Content = "";
+
+	// set the status into START
+	target.Status = Mitrais::util::UrlTargetStatus::START;
+
+	// crawl the web and save into buffer
+	crawler_.getContent(target, false);
+
+	// update the status into CRAWLING
+	target.Status = Mitrais::util::UrlTargetStatus::CRAWLING;
+
+	//insert into buffer
+	buff_.insertContentToBuffer(target.Content);
+
+	// save into file
+	saveSourceCode(target, buff_);
+
+	// update the status into DONE
+	target.Status = Mitrais::util::UrlTargetStatus::DONE;
+
+	target.SubUrlList = lexer.findUrls(target.Content, vecURL_);
+	target.Deepness = iDeep_;
+
+	// Crawl the sub urls
+	crawlSubUrls(crawler_, buff_, target.SubUrlList, iDeep_);
+}
+
 /**
  * Crawl sub Url
  *
@@ -363,34 +359,8 @@ void MainModel::crawlSubUrls(util::WebCrawler &crawler_, util::TextBuffer &buff_
 			continue;
 		}
 
-		// clear data
-		buff_.clearBuffer();
-//		string data = "";
-		target.Content = "";
-
-		// set the status into START
-		target.Status = Mitrais::util::UrlTargetStatus::START;
-
-		// crawl the web and save into buffer
-		crawler_.getContent(target, false);
-
-		// update the status into CRAWLING
-		target.Status = Mitrais::util::UrlTargetStatus::CRAWLING;
-
-		//insert into buffer
-		buff_.insertContentToBuffer(target.Content);
-
-		// save into file
-		saveSourceCode(target, buff_);
-
-		// update the status into DONE
-		target.Status = Mitrais::util::UrlTargetStatus::DONE;
-
-		target.SubUrlList = lexer.findUrls(target.Content, vecURL_);
-		target.Deepness = iDeep_;
-
-		// Crawl the sub urls
-		crawlSubUrls(crawler_, buff_, target.SubUrlList, iDeep_);
+		// proceed crawl
+		proceedCrawl(buff_, target, crawler_, lexer, vecURL_, iDeep_);
 	}
 }
 
@@ -423,32 +393,8 @@ int MainModel::crawlWebsite(util::UrlTarget &target)
 		  msg = target.Url + " started crawling...!";
 		  LOG_INFO << msg;
 
-		  // clear data
-		  buff.clearBuffer();
-		  target.Content = "";
-
-		  // update the status into START
-		  target.Status = Mitrais::util::UrlTargetStatus::START;
-
-		  // crawl the web and save into buffer
-		  crawler.getContent(target, false);
-
-		  // update the status into CRAWLING
-		  target.Status = Mitrais::util::UrlTargetStatus::CRAWLING;
-
-		  //insert into buffer
-		  buff.insertContentToBuffer(target.Content);
-
-		  // update the status into DONE
-		  target.Status = Mitrais::util::UrlTargetStatus::DONE;
-
-		  // save into the targeted media
-		  saveSourceCode(target, buff);
-
-		  target.SubUrlList = lexer.findUrls(target.Content, urls);
-
-		  // crawl the sub urls
-		  crawlSubUrls(crawler, buff, target.SubUrlList, 0);
+		  // proceed crawl
+		  proceedCrawl(buff, target, crawler, lexer, urls, 0);
 	}
 
 	msg = target.Url + " crawling stopped!";

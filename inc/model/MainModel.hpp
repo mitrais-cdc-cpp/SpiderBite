@@ -48,13 +48,16 @@ namespace Mitrais
 			bool startCrawling(std::vector<Mitrais::util::UrlTarget> urls);
 			bool stopCrawling();
 			bool readUrls(std::string filename);
-			void writeUrls(Mitrais::util::SaveModeEnum enum_);
+			static Mitrais::util::BaseResponse writeUrls(std::string filepath, std::string content, const util::UrlTarget& target);
 			void checkConfigSetting();
 			void saveUrls(std::string fileName, std::string content);
 			static const char* toString(util::UrlTargetProtocol v);
 			static string saveSourceCode(util::UrlTarget &target, util::TextBuffer &buff_);
 			static void crawlSubUrls(util::WebCrawler &crawler_, util::TextBuffer &buff_, vector<util::UrlTarget> &vecURL_, int iDeep_);
 			static int crawlWebsite(util::UrlTarget &target);
+			static void proceedCrawl(util::TextBuffer &buff_, util::UrlTarget &target,
+					util::WebCrawler &crawler_, util::TextLexer lexer, vector<util::UrlTarget> &vecURL_,
+					int iDeep_);
 
 			//registered events
 			void whenApplicationStarts(CallbackFunction callback);
@@ -82,11 +85,8 @@ namespace Mitrais
 			inline void setUrls(std::vector<Mitrais::util::UrlTarget> value) { urls = value; }
 
 			//helper
-			std::vector<Mitrais::util::UrlTarget> findUrls(Mitrais::util::UrlTarget url);
 			bool readUrlFromFile();
 			bool readUrlFromDatabase();
-			void writeUrlToFile(std::string filename, bool isSaveAsHtml);
-			void writeUrlToDatabase(std::string filename);
 
 			//member
 			std::string _strUrlFilename;
