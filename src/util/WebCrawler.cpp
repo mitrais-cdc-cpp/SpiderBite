@@ -46,6 +46,9 @@ bool WebCrawler::getContent(UrlTarget &url_, bool isHTTPS_)
 
 std::string WebCrawler::getContent(UrlTarget& strURL_, bool isHTTPS_, bool& _isError)
 {
+	// update the status into START
+	strURL_.Status = UrlTargetStatus::START;
+
 	std::string url = addPrefixAndSufixUrl(strURL_);
 	std::string result;
 
@@ -59,7 +62,7 @@ std::string WebCrawler::getContent(UrlTarget& strURL_, bool isHTTPS_, bool& _isE
 	curl_easy_setopt(curl, CURLOPT_WRITEDATA, &result);
 	curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, &writeCallback);
 
-	if(isHTTPS_)
+	if(strURL_.Protocol == UrlTargetProtocol::HTTPS)
 	{
 	    curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 1);
 	    curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 1);
@@ -72,9 +75,17 @@ std::string WebCrawler::getContent(UrlTarget& strURL_, bool isHTTPS_, bool& _isE
 	{
 		LOG_ERROR << "cURL_easy_perform() failed: " << string(curl_easy_strerror(res));
 		_isError = true;
+
+		// update the status into DONE
+		strURL_.Status = Mitrais::util::UrlTargetStatus::DONE;
 	}
 	else
+	{
 		_isError = false;
+
+		// update the status into DONE
+		strURL_.Status = Mitrais::util::UrlTargetStatus::ERROR;
+	}
 
 	curl_easy_cleanup(curl);
 	curl_global_cleanup();
