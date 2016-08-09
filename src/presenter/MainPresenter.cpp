@@ -114,6 +114,17 @@ void MainPresenter::setStartClicked_Callback()
 void MainPresenter::setSaveMenuClicked_Callback()
 {
 	LOG_INFO << "setSaveClicked_Callback()";
+
+	_view->showSaveDialog();
+
+	std::string fileName = _view->getFileName();
+	std::string content = _view->getStringFromTextBuffer();
+
+	_model->saveUrls(fileName, content);
+
+	_view->setMessageToStatusbar("Saved into : " + fileName);
+
+	LOG_INFO << "Save file: " + fileName;
 }
 
 void MainPresenter::setOpenMenuClicked_Callback()

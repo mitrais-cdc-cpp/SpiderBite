@@ -77,6 +77,8 @@ namespace Mitrais
 			void stopCrawlingProcess();
 			void disableControlsWhenStartClicked();
 			void displayFileContent(std::vector<std::string> urls);
+			std::string getFileName();
+			void setMessageToStatusbar(std::string message);
 
 			//delegtes to SettingForm
 			void onSettingFormCloseForm();
@@ -91,7 +93,6 @@ namespace Mitrais
 			GtkTextBuffer* getPTextBuffer(GtkWidget* widget);
 			SettingView* _settingView;
 			void setTextBuffer(std::string str);
-			void setMessageToStatusbar(std::string message);
 			void setTextViewEditability(bool isEditable);
 			void setTextViewCursorVisibility(bool isVisible);
 			void setWidgetEnablement(GtkWidget* widget, bool isEnable);

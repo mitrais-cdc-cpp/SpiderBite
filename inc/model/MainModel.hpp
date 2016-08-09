@@ -50,6 +50,7 @@ namespace Mitrais
 			bool readUrls(std::string filename);
 			void writeUrls(Mitrais::util::SaveModeEnum enum_);
 			void checkConfigSetting();
+			void saveUrls(std::string fileName, std::string content);
 			static const char* toString(util::UrlTargetProtocol v);
 			static string saveSourceCode(util::UrlTarget &target, util::TextBuffer &buff_);
 			static void crawlSubUrls(util::WebCrawler &crawler_, util::TextBuffer &buff_, vector<util::UrlTarget> &vecURL_, int iDeep_);

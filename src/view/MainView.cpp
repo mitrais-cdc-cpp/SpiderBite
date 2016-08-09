@@ -59,12 +59,6 @@ void MainView::onSettingViewClicked(CallbackFunction callback)
 	whenSettingClicked = callback;
 }
 
-
-
-
-
-
-
 void MainView::onSVSaveClicked(CallbackFunction callback)
 {
 	SettingView::getInstance()->onSaveClicked(callback);
@@ -84,7 +78,6 @@ void MainView::onSVCloseClicked(CallbackFunction callback)
 {
 	SettingView::getInstance()->onCloseClicked(callback);
 }
-
 
 void MainView::onSettingFormCloseForm()
 {
@@ -123,8 +116,6 @@ void MainView::QuitSettingClicked(CallbackFunction cb_QuitClicked_)
 {
 	cb_QuitClicked = cb_QuitClicked_;
 }
-
-
 
 
 void MainView::saveClicked(GtkWidget *widget, GtkWidget *window)
@@ -455,4 +446,9 @@ void MainView::build()
 void MainView::start()
 {
 	gtk_main();
+}
+
+std::string MainView::getFileName()
+{
+	return _fileName;
 }

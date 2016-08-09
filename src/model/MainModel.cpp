@@ -456,3 +456,15 @@ int MainModel::crawlWebsite(util::UrlTarget &target)
 
 	return 0;
 }
+
+/*
+ * Save the URLs into file
+ *
+ * @param filename
+ */
+void MainModel::saveUrls(std::string fileName, std::string content)
+{
+	util::TextWriter writer(fileName, content);
+	util::BaseResponse response;
+	writer.writeToFile(response, false);
+}
