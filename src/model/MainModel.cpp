@@ -316,23 +316,14 @@ void MainModel::proceedCrawl(util::TextBuffer &buff_, util::UrlTarget &target,
 	buff_.clearBuffer();
 	target.Content = "";
 
-	// set the status into START
-	target.Status = Mitrais::util::UrlTargetStatus::START;
-
 	// crawl the web and save into buffer
 	crawler_.getContent(target, false);
-
-	// update the status into CRAWLING
-	target.Status = Mitrais::util::UrlTargetStatus::CRAWLING;
 
 	//insert into buffer
 	buff_.insertContentToBuffer(target.Content);
 
 	// save into file
 	saveSourceCode(target, buff_);
-
-	// update the status into DONE
-	target.Status = Mitrais::util::UrlTargetStatus::DONE;
 
 	target.SubUrlList = lexer.findUrls(target.Content, vecURL_);
 	target.Deepness = iDeep_;
@@ -419,6 +410,7 @@ int MainModel::crawlWebsite(util::UrlTarget &target)
  * Save the URLs into file
  *
  * @param filename
+ * @param content
  */
 void MainModel::saveUrls(std::string fileName, std::string content)
 {

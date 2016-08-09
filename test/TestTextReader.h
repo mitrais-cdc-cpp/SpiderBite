@@ -5,7 +5,6 @@
 #include <cppunit/extensions/HelperMacros.h>
 
 #include "../inc/util/TextReader.h"
-#include "../inc/util/UrlTarget.h"
 
 class TestTextReader: public CppUnit::TestFixture
 {
