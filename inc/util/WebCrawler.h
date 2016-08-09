@@ -38,13 +38,10 @@ public:
 	bool getContent(UrlTarget &url_, bool isHTTPS_);
 
 private:
-	std::string getContent(const std::string& strURL_, bool isHTTPS_, bool& _isError);
-	std::string addPrefixAndSufixUrl(const std::string& url);
-	vector<UrlTarget> _targets;
+	std::string getContent(util::UrlTarget& strURL_, bool isHTTPS_, bool& _isError);
+	std::string addPrefixAndSufixUrl(const util::UrlTarget& url);
 };
 
 }} // namespace Mitrais::util
-
-
 
 #endif /* INC_WEBCRAWLER_H_ */

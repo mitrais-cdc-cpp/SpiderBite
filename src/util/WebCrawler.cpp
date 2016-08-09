@@ -1,17 +1,19 @@
 #include "../../inc/util/WebCrawler.h"
 #include "../../inc/util/TextLexer.h"
 
+using namespace Mitrais::util;
+
 /**
  * Ctor
  */
-Mitrais::util::WebCrawler::WebCrawler()
+WebCrawler::WebCrawler()
 {
 }
 
 /**
  * Dtor
  */
-Mitrais::util::WebCrawler::~WebCrawler()
+WebCrawler::~WebCrawler()
 {
 
 }
@@ -35,14 +37,14 @@ static size_t writeCallback(void *contents, size_t size, size_t nmemb, void* str
 }
 
 
-bool Mitrais::util::WebCrawler::getContent(UrlTarget &url_, bool isHTTPS_)
+bool WebCrawler::getContent(UrlTarget &url_, bool isHTTPS_)
 {
 	bool HRESULT = true;
-	url_.Content = getContent(url_.Url, isHTTPS_, HRESULT);
+	url_.Content = getContent(url_, isHTTPS_, HRESULT);
 	return HRESULT;
 }
 
-std::string Mitrais::util::WebCrawler::getContent(const std::string& strURL_, bool isHTTPS_, bool& _isError)
+std::string WebCrawler::getContent(UrlTarget& strURL_, bool isHTTPS_, bool& _isError)
 {
 	std::string url = addPrefixAndSufixUrl(strURL_);
 	std::string result;
@@ -82,14 +84,58 @@ std::string Mitrais::util::WebCrawler::getContent(const std::string& strURL_, bo
 
 /*
  * add prefix (http://www.) and also sufix ("//")
- * @param url (string)
+ * @param url (URL Target)
  * @return result with prefix and sufix
  */
-string Mitrais::util::WebCrawler::addPrefixAndSufixUrl(const std::string& url)
+string WebCrawler::addPrefixAndSufixUrl(const util::UrlTarget& url)
 {
 	std::string result;
 
-	result = "http://www." + url + "/";
+	switch (url.Protocol)
+	{
+		case util::UrlTargetProtocol::HTTP:
+			result = "http://";
+			if (url.Url.length() >= 11)
+			{
+				if (url.Url.compare(0, 11, "mitrais.com") == 0)
+				{
+					result += "www.";
+				}
+			}
+			break;
+		case util::UrlTargetProtocol::HTTPS:
+			result = "https://";
+			break;
+		case util::UrlTargetProtocol::FTP:
+			result = "ftp://";
+			break;
+		default:
+			result = "http://";
+			break;
+	}
+
+	result += url.Url;
+
+	std::size_t foundSubPage = url.Url.find("\/");
+
+	if (foundSubPage == std::string::npos)
+	{
+		result += "/";
+	}
+	else
+	{
+		std::string subPageUrl = url.Url.substr(foundSubPage, url.Url.length());
+
+		if (!subPageUrl.empty())
+		{
+			std::size_t foundSubPageExtension = subPageUrl.find(".");
+
+			if (foundSubPageExtension == std::string::npos)
+			{
+				result += "/";
+			}
+		}
+	}
 
 	return result;
 }
