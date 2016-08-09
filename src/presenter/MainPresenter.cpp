@@ -129,6 +129,8 @@ void MainPresenter::setSaveMenuClicked_Callback()
 
 void MainPresenter::setOpenMenuClicked_Callback()
 {
+	urls.clear();
+
 	LOG_INFO << "setOpenClicked_Callback()";
 
 	_view->showOpenDialog();
