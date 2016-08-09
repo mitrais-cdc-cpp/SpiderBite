@@ -181,18 +181,30 @@ void MainModel::checkConfigSetting()
 	if(!boost::filesystem::exists(_configFileName.c_str()))
 	{
 
-		util::ConfigSettings settings("localhost",
-										27017,
-										"SpiderBite",
-										"SpiderBite",
-										1,
-										util::SAVE_TO_FILE,
-										"./");
+		Mitrais::util::ConfigSettings settings("localhost",
+						27017,
+						"SpiderBite",
+						"SpiderBite",
+						1,
+						util::SAVE_TO_FILE,
+						"./");
 
-		util::XMLHelper helper;
-		helper.saveXML(settings, _configFileName.c_str());
+		_xmlHelper.saveXML(settings, _configFileName.c_str());
 
 		LOG_INFO << "Default configuration file saved!";
+	}
+}
+
+Mitrais::util::ConfigSettings* MainModel::loadXMLConfiguration()
+{
+	if(boost::filesystem::exists(_configFileName.c_str()))
+	{
+		LOG_INFO << "Config loaded";
+		_xmlHelper.loadXML(_settings, _configFileName.c_str());
+		return &(_settings);
+	} else {
+		LOG_INFO << "Config not found";
+		return nullptr;
 	}
 }
 

@@ -154,7 +154,7 @@ void MainPresenter::setOpenMenuClicked_Callback()
 void MainPresenter::setSettingMenuClicked_Callback()
 {
 	LOG_INFO << "setSettingViewClicked_Callback()";
-	_view->openSettingView();
+	_view->openSettingView(*(_model->loadXMLConfiguration()));
 }
 
 void MainPresenter::setQuitMenuClicked_Callback()

@@ -192,7 +192,7 @@ void SettingView::onCancelButtonClicked()
 
 
 
-void SettingView::OpenForm()
+void SettingView::OpenForm(Mitrais::util::ConfigSettings conf)
 {
 	LOG_INFO << "Property UI activated";
 
@@ -205,6 +205,14 @@ void SettingView::OpenForm()
 		CreateGuiElements();
 		ConnectSignals();
 		CreateGrid();
+		setConfiguration(
+				conf.logFileName,
+				conf.pathToLocalDir,
+				conf.crawlingDeepness,
+				conf.saveTarget,
+				conf.dbHost,
+				conf.dbPort,
+				conf.dbName);
 
 		_bIsCreated = true;
 	}

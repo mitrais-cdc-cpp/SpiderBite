@@ -163,18 +163,6 @@ namespace Mitrais
 		 */
 		void loadXML(char *filename)
 		{
-			XMLHelper helper;
-			ConfigSettings conf;
-
-			bool isExist = isExisting(string(filename));
-			if (isExist)
-			{
-				LOG_INFO << "Config loaded";
-				helper.loadXML(conf, filename);
-				loadConfigToForm(conf);
-			} else {
-				LOG_INFO << "Config not found";
-			}
 		}
 
 		/**

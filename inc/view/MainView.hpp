@@ -70,7 +70,7 @@ namespace Mitrais
 
 			void build();
 			void start();
-			void openSettingView();
+			void openSettingView(util::ConfigSettings conf);
 			void showOpenDialog();
 			void showSaveDialog();
 			void closeMainView();

@@ -22,6 +22,7 @@
 #include "../util/WebCrawler.h"
 #include "../util/SaveModeEnum.h"
 #include "../util/Configuration.h"
+#include "../util/ConfigSettings.h"
 #include "../util/ThreadHelper.h"
 
 namespace Mitrais
@@ -50,6 +51,7 @@ namespace Mitrais
 			bool readUrls(std::string filename);
 			static Mitrais::util::BaseResponse writeUrls(std::string filepath, std::string content, const util::UrlTarget& target);
 			void checkConfigSetting();
+			util::ConfigSettings* loadXMLConfiguration();
 			void saveUrls(std::string fileName, std::string content);
 			static const char* toString(util::UrlTargetProtocol v);
 			static string saveSourceCode(util::UrlTarget &target, util::TextBuffer &buff_);
@@ -94,6 +96,8 @@ namespace Mitrais
 			static std::vector<Mitrais::util::UrlTarget> urls;
 			Mitrais::util::Configuration _config;
 			Mitrais::util::ThreadHelper _helper;
+			Mitrais::util::ConfigSettings _settings;
+			util::XMLHelper _xmlHelper;
 			const std::string _configFileName = "Config.xml";
 		};
 	}

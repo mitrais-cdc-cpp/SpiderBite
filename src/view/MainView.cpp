@@ -166,10 +166,10 @@ void MainView::onOpenSettingClicked(GtkWidget *widget, GtkWidget *window)
 	MainView::getInstance()->cb_OpenClicked();
 }
 
-void MainView::openSettingView()
+void MainView::openSettingView(util::ConfigSettings conf)
 {
 	LOG_INFO << "Setting Clicked";
-	_settingView->OpenForm();
+	_settingView->OpenForm(conf);
 }
 
 void MainView::closeMainView()

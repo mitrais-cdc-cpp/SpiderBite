@@ -15,6 +15,7 @@
 #include <string>
 
 #include "../util/SaveModeEnum.h"
+#include "../util/ConfigSettings.h"
 
 namespace Mitrais {
 namespace View {
@@ -28,7 +29,7 @@ namespace View {
 		static SettingView* getInstance();
 
 		//Public interface
-		void OpenForm();
+		void OpenForm(util::ConfigSettings conf);
 		void CloseForm();
 
 		//SettingsView callback
