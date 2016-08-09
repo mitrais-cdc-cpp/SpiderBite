@@ -48,6 +48,28 @@ void Mitrais::test::TestTextWriter::testTextWriterTwo()
 	CPPUNIT_ASSERT(isEqual == 0);
 }
 
+void Mitrais::test::TestTextWriter::testWriteToDB()
+{
+	Mitrais::util::TextWriter writer;
+	const std::string dbHost = "localhost";
+	const int dbPort = 27017;
+	const std::string dbName = "SpiderBite";
+	DB::Connector connector(dbHost, dbPort, dbName);
+	DB::Website website;
+
+	std::string content = "This is from unit test textwriter save to DB";
+
+	website.protocolType = "http";
+	website.url = "www.google.com";
+	website.content = content;
+
+	connector.Insert(website);
+
+	bool actual = true;
+	bool result = connector.checkIsExist(content);
+	CPPUNIT_ASSERT(result == actual);
+}
+
 void Mitrais::test::TestTextWriter::testReplaceAll()
 {
 	const std::string& old_ = "/";

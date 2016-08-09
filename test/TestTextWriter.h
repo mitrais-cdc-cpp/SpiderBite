@@ -22,12 +22,14 @@ class TestTextWriter : public CppUnit::TestFixture
 		CPPUNIT_TEST_SUITE(TestTextWriter);
 		CPPUNIT_TEST(testTextWriterOne);
 		CPPUNIT_TEST(testTextWriterTwo);
+		CPPUNIT_TEST(testWriteToDB);
 		CPPUNIT_TEST(testReplaceAll);
 		CPPUNIT_TEST(testReplaceFirst);
 		CPPUNIT_TEST_SUITE_END();
 	private:
 		void testTextWriterOne();
 		void testTextWriterTwo();
+		void testWriteToDB();
 		void testReplaceAll();
 		void testReplaceFirst();
 		bool isExist(std::string filePath);
