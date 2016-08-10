@@ -11,6 +11,8 @@
 
 using namespace Mitrais::View;
 
+SettingView* SettingView::_self = nullptr;
+
 class SettingView::SettingViewArgs
 {
 public:
@@ -42,7 +44,6 @@ public:
 	std::string					_strDbName = "";
 };
 
-
 SettingView::SettingView() : _args( new SettingView::SettingViewArgs() )
 {
 }
@@ -50,12 +51,13 @@ SettingView::SettingView() : _args( new SettingView::SettingViewArgs() )
 SettingView::~SettingView()
 {
 	gtk_widget_destroy(form_MainForm);
+	delete _self;
 }
 
 void SettingView::closeSettingView()
 {
 	LOG_INFO << "Setting View closed";
-	gtk_widget_destroy(GTK_WIDGET(NULL));
+
 }
 
 SettingView* SettingView::getInstance()
