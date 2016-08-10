@@ -398,11 +398,6 @@ bool SettingView::getBooleanFromSpinBtn(GtkWidget* spinBtn)
 	return gtk_switch_get_active(GTK_SWITCH(spinBtn));
 }
 
-void SettingView::getFormSettings()
-{
-//	getStringFromTBox(tb_DbHost);
-}
-
 Mitrais::util::ConfigSettings SettingView::getConfigSettings()
 {
 	const std::string dbHost = getStringFromTBox(tb_DbHost);

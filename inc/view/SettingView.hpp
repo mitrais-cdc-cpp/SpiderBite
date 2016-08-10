@@ -96,7 +96,6 @@ namespace View {
 		void Show();
 		void Hide();
 		void Quit();
-		void getFormSettings();
 
 		GtkWidget* form_MainForm;			//MainForm
 		GtkWidget* grid;					//GridView
