@@ -21,7 +21,8 @@ MainModel::MainModel()
 // Main model desc
 MainModel::~MainModel()
 {
-	delete m_instance;
+//	if(m_instance)
+//		delete m_instance;
 }
 
 // singleton of m_instance

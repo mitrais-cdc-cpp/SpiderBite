@@ -104,6 +104,7 @@ void MainPresenter::setStopClicked_Callback()
 void MainPresenter::setStartClicked_Callback()
 {
 	LOG_INFO << "setStartClicked_Callback()";
+	_view->disableControlsWhenStartClicked();
 	_model->startCrawling(_model->getUrls());
 }
 

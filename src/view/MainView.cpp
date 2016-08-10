@@ -17,7 +17,7 @@ MainView::MainView()
 MainView::~MainView()
 {
 	gtk_widget_destroy(_window);
-	delete m_instance;
+//	delete m_instance;
 	delete _settingView;
 }
 
@@ -136,6 +136,7 @@ void MainView::openClicked(GtkWidget *widget, GtkWidget *window)
 
 void MainView::stopClicked(GtkWidget *button, GtkTextBuffer *buffer)
 {
+	std::cout << "test stop button" << std::endl;
 	MainView::getInstance()->whenStopClicked();
 }
 
@@ -176,7 +177,7 @@ void MainView::openSettingView(util::ConfigSettings conf)
 void MainView::closeMainView()
 {
 	LOG_INFO << "Program terminated";
-	gtk_widget_destroy(GTK_WIDGET(_window));
+	gtk_main_quit();
 }
 
 void MainView::stopCrawlingProcess()
@@ -216,8 +217,9 @@ void MainView::disableControlsWhenStartClicked()
 {
 	setTextViewEditability(FALSE);
 	setTextViewCursorVisibility(FALSE);
-	clearTextBox();
+	//clearTextBox();
 	setWidgetEnablement(_startBtn, FALSE);
+	setWidgetEnablement(_stopBtn, TRUE);
 }
 
 void MainView::showOpenDialog()
@@ -362,7 +364,7 @@ void MainView::build()
 
 	/* Set a decent default size for the window. */
 	gtk_window_set_default_size (GTK_WINDOW (_window), 600, 400);
-	g_signal_connect (G_OBJECT (_window), "destroy",
+	g_signal_connect (G_OBJECT (_window), "delete-event",
 					G_CALLBACK (quitClicked),
 					NULL);
 
