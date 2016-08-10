@@ -135,6 +135,7 @@ void MainView::openClicked(GtkWidget *widget, GtkWidget *window)
 
 void MainView::stopClicked(GtkWidget *button, GtkTextBuffer *buffer)
 {
+	std::cout << "test stop button" << std::endl;
 	MainView::getInstance()->whenStopClicked();
 }
 
@@ -215,8 +216,9 @@ void MainView::disableControlsWhenStartClicked()
 {
 	setTextViewEditability(FALSE);
 	setTextViewCursorVisibility(FALSE);
-	clearTextBox();
+	//clearTextBox();
 	setWidgetEnablement(_startBtn, FALSE);
+	setWidgetEnablement(_stopBtn, TRUE);
 }
 
 void MainView::showOpenDialog()

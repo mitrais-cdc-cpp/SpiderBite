@@ -30,10 +30,11 @@ namespace Mitrais
 					p[i]=boost::thread(func, urls[i]);
 				}
 
-				for(int i=0; i<size; i++)
+				// TODO: Fix the mechanism for joining the thread, for now it still block the GUI
+				/*for(int i=0; i<size; i++)
 				{
 					p[i].join();
-				}
+				}*/
 			}
 		};
 	}
