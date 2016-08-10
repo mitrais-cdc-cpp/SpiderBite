@@ -83,7 +83,7 @@ namespace Mitrais
 			//delegtes to SettingForm
 			void onSettingFormCloseForm();
 			void onSettingFormOpenDialogClicked();
-			void onSettingFormSaveButtonClicked();
+			Mitrais::util::ConfigSettings onSettingFormSaveButtonClicked();
 			void onSettingFormCancelButtonClicked();
 
 

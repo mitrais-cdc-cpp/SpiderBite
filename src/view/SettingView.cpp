@@ -381,17 +381,55 @@ void SettingView::OpenDialog()
    gtk_widget_destroy (dialog);
 }
 
-std::string getStringFromTBox(GtkWidget* tbox)
+std::string SettingView::getStringFromTBox(GtkWidget* tbox)
 {
 	return gtk_entry_get_text(GTK_ENTRY(tbox));
 }
 
-int getIntFromTBox(GtkWidget* tbox)
+int SettingView::getIntFromTBox(GtkWidget* tbox)
 {
 	return atoi(gtk_entry_get_text(GTK_ENTRY(tbox)));
 }
 
-bool getBooleanFromSpinBtn(GtkWidget* spinBtn)
+bool SettingView::getBooleanFromSpinBtn(GtkWidget* spinBtn)
 {
 	return gtk_switch_get_active(GTK_SWITCH(spinBtn));
+}
+
+void SettingView::getFormSettings()
+{
+//	getStringFromTBox(tb_DbHost);
+}
+
+Mitrais::util::ConfigSettings SettingView::getConfigSettings()
+{
+	const std::string dbHost = getStringFromTBox(tb_DbHost);
+	const int dbPort = getIntFromTBox(tb_DbPort);
+	const std::string dbName = getStringFromTBox(tb_DbName);
+	const std::string logFileName = getStringFromTBox(tb_LogFileName);
+	const int crawlingDepth = getIntFromTBox(stb_CrawlingDepth);
+	const bool isSaveInFolder = getBooleanFromSpinBtn(switch_SaveInFolder);
+	const std::string localSavePath = getStringFromTBox(tb_LocalSavePath);
+
+	Mitrais::util::SaveModeEnum saveEnum;
+	if (isSaveInFolder)
+	{
+		saveEnum = Mitrais::util::SAVE_TO_FILE;
+	} else
+	{
+		saveEnum = Mitrais::util::SAVE_TO_DB;
+	}
+
+	Mitrais::util::ConfigSettings settings(
+			dbHost,
+			dbPort,
+			dbName,
+			logFileName,
+			crawlingDepth,
+			saveEnum,
+			localSavePath);
+
+	Hide();
+
+	return settings;
 }

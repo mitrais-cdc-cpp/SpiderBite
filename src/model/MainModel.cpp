@@ -130,8 +130,11 @@ bool MainModel::readUrlFromFile()
 }
 
 /**
- * write the url to database or file
- * @param enum_
+ * Write the urls result from crawling
+ * @param filepath
+ * @param content
+ * @param target
+ * @return
  */
 Mitrais::util::BaseResponse MainModel::writeUrls(std::string filepath, std::string content, const util::UrlTarget& target)
 {
@@ -205,6 +208,20 @@ Mitrais::util::ConfigSettings* MainModel::loadXMLConfiguration()
 	} else {
 		LOG_INFO << "Config not found";
 		return nullptr;
+	}
+}
+
+/**
+ * Save configuration to xml file
+ */
+void MainModel::saveXMLConfiguration(Mitrais::util::ConfigSettings settings)
+{
+	if(boost::filesystem::exists(_configFileName.c_str()))
+	{
+		LOG_INFO << "Config saved";
+		_xmlHelper.saveXML(settings, _configFileName.c_str());
+	} else {
+		LOG_INFO << "Config not found";
 	}
 }
 

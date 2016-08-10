@@ -91,9 +91,10 @@ void MainView::onSettingFormOpenDialogClicked()
 	SettingView::getInstance()->OpenDialog();
 }
 
-void MainView::onSettingFormSaveButtonClicked()
+Mitrais::util::ConfigSettings MainView::onSettingFormSaveButtonClicked()
 {
 	LOG_INFO << "onSettingFormSaveButtonClicked()";
+	return SettingView::getInstance()->getConfigSettings();
 }
 
 void MainView::onSettingFormCancelButtonClicked()

@@ -169,7 +169,7 @@ void MainPresenter::setQuitMenuClicked_Callback()
 void MainPresenter::setSVSaveClicked_Callback()
 {
 	LOG_INFO << "setSVSaveClicked_Callback()";
-	_view->onSettingFormSaveButtonClicked();
+	_model->saveXMLConfiguration(_view->onSettingFormSaveButtonClicked());
 }
 
 void MainPresenter::setSVCancelClicked_Callback()

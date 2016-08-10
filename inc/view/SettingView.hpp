@@ -60,6 +60,7 @@ namespace View {
 		int getIntFromTBox(GtkWidget* tbox);
 		bool getBooleanFromSpinBtn(GtkWidget* spinBtn);
 		void closeSettingView();
+		Mitrais::util::ConfigSettings getConfigSettings();
 
 	private:
 
@@ -95,6 +96,7 @@ namespace View {
 		void Show();
 		void Hide();
 		void Quit();
+		void getFormSettings();
 
 		GtkWidget* form_MainForm;			//MainForm
 		GtkWidget* grid;					//GridView
