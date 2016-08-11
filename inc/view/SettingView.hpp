@@ -39,7 +39,16 @@ namespace View {
 		void onOpenDialogClicked(CallbackFunction callback);
 
 
-		//getter/setter
+		/**
+		 * set config
+		 * @param logfilename
+		 * @param pathtolocaldir
+		 * @param deepness
+		 * @param savemode
+		 * @param dbHost
+		 * @param dbPort
+		 * @param dbName
+		 */
 		void setConfiguration(std::string& logfilename,
 							std::string& pathtolocaldir,
 							int deepness,
@@ -60,7 +69,7 @@ namespace View {
 		int getIntFromTBox(GtkWidget* tbox);
 		bool getBooleanFromSpinBtn(GtkWidget* spinBtn);
 		void closeSettingView();
-		Mitrais::util::ConfigSettings getConfigSettings();
+		void setConfiguration();
 
 	private:
 
