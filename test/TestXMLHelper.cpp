@@ -39,7 +39,7 @@ void TestXMLHelper::testXMLHelperTwo()
 	ConfigSettings newCf;
 
 	helper.loadXML(newCf, fileName.c_str());
-	const string testData = "constring_test";
+	const string testData = "localhost";
 	bool isTrue = newCf.dbHost.compare(testData);
 	CPPUNIT_ASSERT(isTrue == 0);
 }
