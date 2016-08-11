@@ -99,6 +99,8 @@ void MainPresenter::setStopClicked_Callback()
 {
 	LOG_INFO << "setStopClicked_Callback()";
 	_model->stopCrawling();
+	_view->enableControlsWhenStopClicked();
+	_view->setMessageToStatusbar("Crawling stopped");
 }
 
 void MainPresenter::setStartClicked_Callback()
@@ -170,7 +172,18 @@ void MainPresenter::setQuitMenuClicked_Callback()
 void MainPresenter::setSVSaveClicked_Callback()
 {
 	LOG_INFO << "setSVSaveClicked_Callback()";
-	_model->saveXMLConfiguration(_view->onSettingFormSaveButtonClicked());
+	util::ConfigSettings config;
+	_view->onSettingFormSaveButtonClicked();
+
+	config.dbHost = View::SettingView::getInstance()->getDbHost();
+	config.dbPort = View::SettingView::getInstance()->getDbPort();
+	config.dbName = View::SettingView::getInstance()->getDbName();
+	config.logFileName = View::SettingView::getInstance()->getLogFileName();
+	config.crawlingDeepness = View::SettingView::getInstance()->getCrawlingDeepness();
+	config.saveTarget = View::SettingView::getInstance()->getSaveMode();
+	config.pathToLocalDir = View::SettingView::getInstance()->getPathToLocalDir();
+
+	_model->saveXMLConfiguration(config);
 }
 
 void MainPresenter::setSVCancelClicked_Callback()

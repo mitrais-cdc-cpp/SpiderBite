@@ -169,11 +169,17 @@ Mitrais::util::BaseResponse MainModel::writeUrls(std::string filepath, std::stri
 
 /**
  * stop crawling method
- * @return
+ * @return the status
  */
 bool MainModel::stopCrawling()
 {
-	//todo
+	LOG_INFO << "Stop crawling process";
+
+	Mitrais::util::ThreadHelper::setBeRunning(false);
+
+	LOG_INFO << "stop crawling thread";
+
+	return true;
 }
 
 /**
@@ -243,6 +249,7 @@ bool MainModel::startCrawling(std::vector<Mitrais::util::UrlTarget> urls)
 
 	if (targetCount > 0)
 	{
+		Mitrais::util::ThreadHelper::setBeRunning(true);
 		_helper.executeAsyncBoost(crawlWebsite, urls);
 	}
 	else
@@ -331,6 +338,13 @@ void MainModel::proceedCrawl(util::TextBuffer &buff_, util::UrlTarget &target,
 		util::WebCrawler &crawler_, util::TextLexer lexer, vector<util::UrlTarget> &vecURL_,
 		int iDeep_)
 {
+	static bool status = Mitrais::util::ThreadHelper::getBeRunning();
+
+	if (!status)
+	{
+		return;
+	}
+
 	// clear data
 	buff_.clearBuffer();
 	target.Content = "";
@@ -361,6 +375,13 @@ void MainModel::proceedCrawl(util::TextBuffer &buff_, util::UrlTarget &target,
  */
 void MainModel::crawlSubUrls(util::WebCrawler &crawler_, util::TextBuffer &buff_, vector<util::UrlTarget> &vecURL_, int iDeep_)
 {
+	static bool status = Mitrais::util::ThreadHelper::getBeRunning();
+
+	if (!status)
+	{
+		return;
+	}
+
 	Mitrais::util::TextLexer lexer;
 	vector<util::UrlTarget> vecTemp = vecURL_;
 

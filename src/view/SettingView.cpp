@@ -398,15 +398,15 @@ bool SettingView::getBooleanFromSpinBtn(GtkWidget* spinBtn)
 	return gtk_switch_get_active(GTK_SWITCH(spinBtn));
 }
 
-Mitrais::util::ConfigSettings SettingView::getConfigSettings()
+void SettingView::setConfiguration()
 {
-	const std::string dbHost = getStringFromTBox(tb_DbHost);
-	const int dbPort = getIntFromTBox(tb_DbPort);
-	const std::string dbName = getStringFromTBox(tb_DbName);
-	const std::string logFileName = getStringFromTBox(tb_LogFileName);
-	const int crawlingDepth = getIntFromTBox(stb_CrawlingDepth);
-	const bool isSaveInFolder = getBooleanFromSpinBtn(switch_SaveInFolder);
-	const std::string localSavePath = getStringFromTBox(tb_LocalSavePath);
+	std::string dbHost = getStringFromTBox(tb_DbHost);
+	int dbPort = getIntFromTBox(tb_DbPort);
+	std::string dbName = getStringFromTBox(tb_DbName);
+	std::string logFileName = getStringFromTBox(tb_LogFileName);
+	int crawlingDepth = getIntFromTBox(stb_CrawlingDepth);
+	bool isSaveInFolder = getBooleanFromSpinBtn(switch_SaveInFolder);
+	std::string localSavePath = getStringFromTBox(tb_LocalSavePath);
 
 	Mitrais::util::SaveModeEnum saveEnum;
 	if (isSaveInFolder)
@@ -417,16 +417,13 @@ Mitrais::util::ConfigSettings SettingView::getConfigSettings()
 		saveEnum = Mitrais::util::SAVE_TO_DB;
 	}
 
-	Mitrais::util::ConfigSettings settings(
-			dbHost,
-			dbPort,
-			dbName,
-			logFileName,
-			crawlingDepth,
-			saveEnum,
-			localSavePath);
+	_args->_strLogFileName = logFileName;
+	_args->_strPathToLocalDirectory = localSavePath;
+	_args->_iCrawlingDeepness = crawlingDepth;
+	_args->_enumSaveMode = saveEnum;
+	_args->_strDbHost = dbHost;
+	_args->_iDbPort = dbPort;
+	_args->_strDbName = dbName;
 
 	Hide();
-
-	return settings;
 }

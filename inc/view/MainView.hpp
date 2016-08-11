@@ -71,6 +71,7 @@ namespace Mitrais
 			void closeMainView();
 			void stopCrawlingProcess();
 			void disableControlsWhenStartClicked();
+			void enableControlsWhenStopClicked();
 			void displayFileContent(std::vector<std::string> urls);
 			std::string getFileName();
 			void setMessageToStatusbar(std::string message);
@@ -78,7 +79,7 @@ namespace Mitrais
 			//delegtes to SettingForm
 			void onSettingFormCloseForm();
 			void onSettingFormOpenDialogClicked();
-			Mitrais::util::ConfigSettings onSettingFormSaveButtonClicked();
+			void onSettingFormSaveButtonClicked();
 			void onSettingFormCancelButtonClicked();
 
 
