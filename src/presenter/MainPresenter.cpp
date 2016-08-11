@@ -99,6 +99,8 @@ void MainPresenter::setStopClicked_Callback()
 {
 	LOG_INFO << "setStopClicked_Callback()";
 	_model->stopCrawling();
+	_view->enableControlsWhenStopClicked();
+	_view->setMessageToStatusbar("Crawling stopped");
 }
 
 void MainPresenter::setStartClicked_Callback()

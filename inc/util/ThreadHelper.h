@@ -14,11 +14,32 @@ namespace Mitrais
 {
 	namespace util
 	{
+		static bool _beRunning = true;
+
 		class ThreadHelper
 		{
 		public:
-			ThreadHelper() {}
-			~ThreadHelper() {}
+
+			ThreadHelper()
+			{
+
+			}
+
+			~ThreadHelper()
+			{
+
+			}
+
+			static void setBeRunning(bool status)
+			{
+				_beRunning = status;
+			}
+
+			static bool getBeRunning()
+			{
+				return _beRunning;
+			}
+
 			template<typename function, typename arg>
 			void executeAsyncBoost(function func, arg urls)
 			{
