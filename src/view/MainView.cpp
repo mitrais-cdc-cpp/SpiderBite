@@ -59,6 +59,10 @@ void MainView::onSettingViewClicked(CallbackFunction callback)
 	whenSettingClicked = callback;
 }
 
+
+
+
+
 void MainView::onSVSaveClicked(CallbackFunction callback)
 {
 	SettingView::getInstance()->onSaveClicked(callback);
@@ -79,44 +83,7 @@ void MainView::onSVCloseClicked(CallbackFunction callback)
 	SettingView::getInstance()->onCloseClicked(callback);
 }
 
-void MainView::onSettingFormCloseForm()
-{
-	LOG_INFO << "onSettingFormCloseForm()";
-	SettingView::getInstance()->Hide();
-}
 
-void MainView::onSettingFormOpenDialogClicked()
-{
-	LOG_INFO << "onSettingFormOpenDialogClicked()";
-	SettingView::getInstance()->OpenDialog();
-}
-
-Mitrais::util::ConfigSettings MainView::onSettingFormSaveButtonClicked()
-{
-	LOG_INFO << "onSettingFormSaveButtonClicked()";
-	return SettingView::getInstance()->getConfigSettings();
-}
-
-void MainView::onSettingFormCancelButtonClicked()
-{
-	LOG_INFO << "onSettingFormCancelButtonClicked()";
-	SettingView::getInstance()->Hide();
-}
-
-void MainView::SaveConfiguration(CallbackFunction cb_SaveConfigurationClicked_)
-{
-	cb_SaveConfigurationClicked = cb_SaveConfigurationClicked_;
-}
-
-void MainView::OpenSettingClicked(CallbackFunction cb_OpenClicked_)
-{
-	cb_OpenClicked = cb_OpenClicked_;
-}
-
-void MainView::QuitSettingClicked(CallbackFunction cb_QuitClicked_)
-{
-	cb_QuitClicked = cb_QuitClicked_;
-}
 
 
 void MainView::saveClicked(GtkWidget *widget, GtkWidget *window)
@@ -150,6 +117,10 @@ void MainView::settingClicked()
 	MainView::getInstance()->whenSettingClicked();
 }
 
+
+
+
+
 void MainView::onSaveConfigurationClicked(GtkWidget *widget, GtkWidget *window)
 {
 	LOG_INFO << "onSaveConfigurationClicked()";
@@ -167,6 +138,38 @@ void MainView::onOpenSettingClicked(GtkWidget *widget, GtkWidget *window)
 	LOG_INFO << "onOpenClicked()";
 	MainView::getInstance()->cb_OpenClicked();
 }
+
+
+
+
+
+void MainView::onSettingFormCloseForm()
+{
+	LOG_INFO << "onSettingFormCloseForm()";
+	SettingView::getInstance()->Hide();
+}
+
+void MainView::onSettingFormOpenDialogClicked()
+{
+	LOG_INFO << "onSettingFormOpenDialogClicked()";
+	SettingView::getInstance()->OpenDialog();
+}
+
+Mitrais::util::ConfigSettings MainView::onSettingFormSaveButtonClicked()
+{
+	LOG_INFO << "onSettingFormSaveButtonClicked()";
+	return SettingView::getInstance()->getConfigSettings();
+}
+
+void MainView::onSettingFormCancelButtonClicked()
+{
+	LOG_INFO << "onSettingFormCancelButtonClicked()";
+	SettingView::getInstance()->Hide();
+}
+
+
+
+
 
 void MainView::openSettingView(util::ConfigSettings conf)
 {
@@ -200,10 +203,10 @@ void MainView::displayFileContent(std::vector<std::string> urls)
 	gtk_text_view_set_editable (GTK_TEXT_VIEW (_txtBox), TRUE);
 	gtk_text_view_set_cursor_visible (GTK_TEXT_VIEW (_txtBox), TRUE);
 
-//	clearTextBox();
 
 	std::string text;
-	setStringToTextBox("");
+//	setStringToTextBox("");
+//	clearTextBox();
 
 	for(const auto& url : urls)
 	{
@@ -439,11 +442,17 @@ void MainView::build()
 
 	gtk_widget_show_all(_window);
 
-	// Connect the events for SettingView
-	g_signal_connect (G_OBJECT (_settingView->btn_Save), "clicked",G_CALLBACK(onSaveConfigurationClicked), _settingView->form_MainForm);
-	g_signal_connect (G_OBJECT (_settingView->btn_SelectPath), "clicked", G_CALLBACK(onOpenSettingClicked), _settingView->form_MainForm);
-	g_signal_connect (G_OBJECT (_settingView->btn_Cancel), "clicked",G_CALLBACK (onQuitSettingClicked), _settingView->form_MainForm);
 	_settingView = SettingView::getInstance();
+
+	auto settingForm = _settingView->form_MainForm;
+	auto save = _settingView->btn_Save;
+	auto path = _settingView->btn_SelectPath;
+	auto cancel = _settingView->btn_Cancel;
+
+	// Connect the events for SettingView
+	g_signal_connect (G_OBJECT (save), "clicked",G_CALLBACK(onSaveConfigurationClicked), G_OBJECT(settingForm));
+	g_signal_connect (G_OBJECT (path), "clicked", G_CALLBACK(onOpenSettingClicked), G_OBJECT(settingForm));
+	g_signal_connect (G_OBJECT (cancel), "clicked",G_CALLBACK (onQuitSettingClicked), G_OBJECT(settingForm));
 }
 
 void MainView::start()

@@ -113,6 +113,7 @@ bool MainModel::readUrlFromFile()
 {
 	try
 	{
+		setInitialReading(false);
 		if(!_bInitialReadingDone)
 		{
 			util::TextReader 	reader(_strUrlFilename);
