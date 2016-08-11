@@ -374,6 +374,13 @@ void MainModel::proceedCrawl(util::TextBuffer &buff_, util::UrlTarget &target,
  */
 void MainModel::crawlSubUrls(util::WebCrawler &crawler_, util::TextBuffer &buff_, vector<util::UrlTarget> &vecURL_, int iDeep_)
 {
+	static bool status = Mitrais::util::ThreadHelper::getBeRunning();
+
+	if (!status)
+	{
+		return;
+	}
+
 	Mitrais::util::TextLexer lexer;
 	vector<util::UrlTarget> vecTemp = vecURL_;
 
