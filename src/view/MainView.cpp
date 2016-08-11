@@ -136,7 +136,6 @@ void MainView::openClicked(GtkWidget *widget, GtkWidget *window)
 
 void MainView::stopClicked(GtkWidget *button, GtkTextBuffer *buffer)
 {
-	std::cout << "test stop button" << std::endl;
 	MainView::getInstance()->whenStopClicked();
 }
 
@@ -187,8 +186,6 @@ void MainView::stopCrawlingProcess()
 	// disable stop button
 	gtk_widget_set_sensitive (_stopBtn, FALSE);
 
-	// TODO : Azis, stop the web crawler process and update the status
-
 	// enable start button
 	gtk_widget_set_sensitive (_startBtn, TRUE);
 	LOG_INFO << "Web crawling stopped";
@@ -220,6 +217,15 @@ void MainView::disableControlsWhenStartClicked()
 	//clearTextBox();
 	setWidgetEnablement(_startBtn, FALSE);
 	setWidgetEnablement(_stopBtn, TRUE);
+}
+
+void MainView::enableControlsWhenStopClicked()
+{
+	setTextViewEditability(TRUE);
+	setTextViewCursorVisibility(TRUE);
+	setWidgetEnablement(_startBtn, TRUE);
+	setWidgetEnablement(_stopBtn, FALSE);
+	setMessageToStatusbar("Crawling stopped.");
 }
 
 void MainView::showOpenDialog()
